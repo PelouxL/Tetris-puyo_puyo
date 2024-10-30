@@ -1,6 +1,8 @@
 #ifndef TYPE_H
 #define TYPE_H
 
+#define LX 900
+#define LY 800
 #define N 100
 #define M 100
 
@@ -19,6 +21,11 @@ typedef struct{
   int x;
   int y;
 }piece;
+
+typedef struct{
+  char *pseudo;
+  int score;
+}joueur;
 
 #endif
     

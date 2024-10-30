@@ -21,10 +21,19 @@ void aff_etat(grille gr, joueur je){
   
   for( i = 0 ; i < gr.n ; i++ ){
     for( j = 0; j < gr.m ; j++){
-      if(gr.mat[i][j] != 0){
+      switch (gr.mat[i][j]){ /* Choix des couleur en fonction de la valeur de mat[i][j] */
+      case 1:
 	 MLV_draw_filled_rectangle( 200+(j*60), 100+(i*60), 60, 60, MLV_COLOR_RED);
-      }else{	
+	 break;
+      case 2:
+	MLV_draw_filled_rectangle( 200+(j*60), 100+(i*60), 60, 60, MLV_COLOR_GREEN);
+	break;
+      case 3:
+       	MLV_draw_filled_rectangle( 200+(j*60), 100+(i*60), 60, 60, MLV_COLOR_BLUE);
+	break;
+      default:
 	MLV_draw_filled_rectangle( 200+(j*60), 100+(i*60), 60, 60, MLV_COLOR_WHITE);
+	break;
       }
       MLV_draw_rectangle( 200+(j*60), 100+(i*60), 60, 60, MLV_COLOR_GREY);
     }

@@ -17,4 +17,4 @@ affichage_mlv.o: affichage_mlv.c
 	$(CC) $(OPTION) affichage_mlv.c -c
 
 clean:
-	rm -rf *.o *~ main 
+	rm -rf *.o *~  main 

@@ -14,13 +14,17 @@ typedef struct{
 }grille;
 
 typedef struct{
-  int gauche;
-  int droit;
-  int larg;
-  int haut;
+  int couleur;
   int x;
   int y;
-}piece;
+}poyo;
+
+typedef struct{
+  poyo p1;
+  poyo p2;
+  int larg;
+}c_poyo;
+
 
 typedef struct{
   char *pseudo;

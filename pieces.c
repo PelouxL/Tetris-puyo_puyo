@@ -11,5 +11,7 @@ void initialisation(piece * pi){
     pi->haut = 1;
   }else{
     pi->haut = 2;
-  } 
+  }
+  pi->x = 0;
+  pi->y = 0;
 }

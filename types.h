@@ -16,6 +16,8 @@ typedef struct{
   int droit;
   int larg;
   int haut;
+  int x;
+  int y;
 }piece;
 
 #endif

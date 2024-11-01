@@ -17,12 +17,12 @@ typedef struct{
   int couleur;
   int x;
   int y;
+  int pos;
 }poyo;
 
 typedef struct{
   poyo p1;
   poyo p2;
-  int larg;
 }c_poyo;
 
 

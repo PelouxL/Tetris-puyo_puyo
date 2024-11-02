@@ -72,6 +72,10 @@ void avancement_piece(c_poyo * p, grille *gr){
 
 /* a grandement optimiser, il faut gerer chaque poyo independament pour savoir si il peux bouger ( se cogner contreu mur) ou si l'un se separe de l'autre */
 
+/* faire une fonction pour vérifier si elle peux se deplacer */
+
+int p
+
 void deplacement(c_poyo *p,grille * gr){
   if(p -> p1.y < gr -> m - 1  && p -> p1.pos == 0 && gr -> mat[p -> p1.x][p -> p1.y+1] == 0){
     if(MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED ){
@@ -90,7 +94,7 @@ void deplacement(c_poyo *p,grille * gr){
     }
   }
   while (MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_LEFT) == MLV_PRESSED ) {
-    MLV_wait_milliseconds(10);
+    MLV_wait_milliseconds(5);
   }
 }
 

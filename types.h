@@ -23,6 +23,7 @@ typedef struct{
 typedef struct{
   poyo p1;
   poyo p2;
+  int apparait;
 }c_poyo;
 
 

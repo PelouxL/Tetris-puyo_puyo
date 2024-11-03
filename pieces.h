@@ -19,11 +19,16 @@ int disposition(c_poyo p);
 void avancement_piece(c_poyo * p, grille *gr);
 
 /* ces 3 fonctions permettent de verifier si la pieces peux bien se deplacer*/
+
+
 int peux_bouger_gauche(poyo p, grille gr);
 
 int peux_bouger_droite(poyo p, grille gr);
 
 int peux_bouger_bas(poyo p, grille gr);
+
+
+
 
 /* ---- fonction de deplacement ------- */
 
@@ -38,6 +43,10 @@ void deplacement_gauche( c_poyo *p, grille *gr);
 void deplacement_bas( c_poyo *p, grille *gr);
 
 /* --------------------------------- */
+
+
+
+
 /* permet de mouvoir une piece */
 void deplacement(c_poyo * p, grille *gr);
 

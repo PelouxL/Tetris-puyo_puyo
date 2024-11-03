@@ -21,7 +21,6 @@ int main(){
   j.pseudo = "Moi";
   j.score = 1500;
 
-
   
   aff_jeu();
   gr= initialisation_grille(n,m);

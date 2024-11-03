@@ -82,14 +82,16 @@ int disposition(c_poyo p){
 }
 
 
-/* ATTENTION cette fontion ou la fonction de deplacement permet de laisser un poyo seul
-   juste en la cognant contre un mur !!! surement a cause du wait mlv mais a CORRIGER */
-
 void avancement_piece(c_poyo * p, grille *gr){
-  if( peux_bouger_bas(p -> p1, *gr) == 1 && p -> p1.pos == 0 ){
+  int d;
+  d = disposition(*p);
+  if( ( peux_bouger_bas(p -> p1, *gr) == 1  || ( peux_bouger_bas(p -> p1, *gr) == 0 && d == 4 ) ) &&  p -> p1.pos == 0 ){
     gr -> mat[p -> p1.x][p -> p1.y] = 0;
     p -> p1.x += 1;
   }else{
+    if( d%2 == 0){
+      p -> p2.pos = 1;
+    }
     gr -> mat[p -> p1.x][p -> p1.y] = p -> p1.couleur;
     p -> p1.pos = 1;
   }
@@ -98,13 +100,18 @@ void avancement_piece(c_poyo * p, grille *gr){
     gr -> mat[p -> p2.x][p -> p2.y] = 0;
     p -> p2.x += 1;
   }else{
+    if( d%2 == 0 ){
+      p -> p1.pos = 1;
+    }
     p -> p2.pos = 1;
   }
 }
 
 
 /* --------------------------- definition des fonction de deplacement ------------------------- */
-
+/* fonctionne mais toujours le problème du MLV_wait et a voir si ça pose problème plus tard 
+mais je ne gere pas le cas si il y a une case au dessus , àa peut potentiellemnt
+gener lors d'un mouvement de pivot ????? */
 
 void pivot_droit(c_poyo *p, grille *gr){
   int d;
@@ -329,44 +336,3 @@ void deplacement_bas( c_poyo *p, grille *gr){
 
 
 /* -------------------------------- fin des definition de deplacement -------------------------------------*/
-
-/* alors, FONCTIONNE entre grosse guillement, il faut changer sa manière d'empecher qu'avec une pression 4 decalage se fasse */
-
-/* a grandement optimiser, il faut gerer chaque poyo independament pour savoir si il peux bouger ( se cogner contreu mur) ou si l'un se separe de l'autre */
-
-void deplacement(c_poyo *p,grille * gr){
- 
-  if( p -> p1.pos == 0 && p -> p2.pos == 0 ){
-    if( p -> p1.y < gr -> m - 1  && p -> p1.pos == 0 && gr -> mat[p -> p1.x][p -> p1.y+1] == 0 ){
-      if( MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED ){
-	gr -> mat[p -> p1.x][p -> p1.y] = 0;
-	gr -> mat[p -> p2.x][p -> p2.y] = 0;
-	p -> p1.y += 1;
-	p -> p2.y += 1;
-      }
-    }
-    if( p -> p1.y > 0 && p -> p1.pos == 0 ){
-      if( MLV_get_keyboard_state(MLV_KEYBOARD_LEFT) == MLV_PRESSED  && gr -> mat[p -> p1.x][p -> p1.y-1] == 0){
-	gr -> mat[p -> p1.x][p -> p1.y] = 0;
-	gr -> mat[p -> p2.x][p -> p2.y] = 0;
-	p -> p1.y -= 1;
-	p -> p2.y -= 1;
-      }
-    }
-    if( p -> p1.x < gr -> n-1 && p -> p1.pos == 0 && gr -> mat[p -> p1.x+1][p -> p1.y] == 0 ){
-      if( MLV_get_keyboard_state(MLV_KEYBOARD_DOWN) == MLV_PRESSED  && gr -> mat[p -> p1.x][p -> p1.y-1] == 0 ){
-	gr -> mat[p -> p1.x][p -> p1.y] = 0;
-	gr -> mat[p -> p2.x][p -> p2.y] = 0;
-	p -> p1.x += 1;
-	p -> p2.x += 1;
-      }
-    }
-    /*----------- si un poyo est déjà poser alors ---------------*/
-
-    while ( MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_LEFT) == MLV_PRESSED ||  MLV_get_keyboard_state(MLV_KEYBOARD_DOWN) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED ){
-      MLV_wait_milliseconds(5);
-    }
-  } 
-}
-
-

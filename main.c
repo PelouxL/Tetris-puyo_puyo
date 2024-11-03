@@ -46,8 +46,13 @@ int main(){
     aff_grille(gr);
     aff_etat(gr, j);
     
-    printf("%d\n",ok);
+    printf("\n");
+    /*
     deplacement(&tpoyo[ok], &gr);
+    */
+    deplacement_droit(&tpoyo[ok], &gr);
+    deplacement_gauche(&tpoyo[ok], &gr);
+     deplacement_bas(&tpoyo[ok], &gr);
     affiche_c_poyo(&tpoyo[ok]);
     actualisation_poyo(&tpoyo[ok], &gr);
 

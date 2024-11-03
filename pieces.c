@@ -45,14 +45,14 @@ void actualisation_poyo(c_poyo *p, grille *gr){
 
 
 int peux_bouger_droite(poyo p, grille gr){
-  if( gr.mat[p.x][p.y-1] == 0 && p.y < gr.m-1 ){
+  if( gr.mat[p.x][p.y+1] == 0 && p.y < gr.m-1 ){
     return 1;
   }
   return 0;
 }
 
 int peux_bouger_gauche(poyo p, grille gr){
-  if( gr.mat[p.x][p.y+1] == 0 && p.y > 0 ){
+  if( gr.mat[p.x][p.y-1] == 0 && p.y > 0 ){
     return 1;
   }
   return 0;
@@ -103,48 +103,90 @@ void avancement_piece(c_poyo * p, grille *gr){
 }
 
 
-/* ------------------------------- definition des fonction de deplacement ---------------------------- */
+/* --------------------------- definition des fonction de deplacement ------------------------- */
 
 
-void pivot(c_poyo *p, grille *gr){
+void pivot_droit(c_poyo *p, grille *gr){
   int d;
   d = disposition(*p);
-  if( p -> p1.pos == 0 && p -> p2.pos == 0 ){
-    switch ( d )
-      {
-      case 1:
-	if( peux_bouger_bas( p -> p1, *gr)){
+  if( MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED ){
+    if( p -> p1.pos == 0 && p -> p2.pos == 0 ){
+      switch ( d )
+	{
+	case 1:
+	  if( peux_bouger_bas( p -> p1, *gr) == 1 ){
+	    gr -> mat[p -> p2.x][p -> p2.y] = 0;
+	    p -> p2.x = p -> p1.x + 1;
+	    p -> p2.y = p -> p1.y;
+	  }
+	  break;
+	case 2:
+	  if( peux_bouger_droite( p -> p1, *gr) == 1 ){
+	    gr -> mat[p -> p2.x][p -> p2.y] = 0;
+	    p -> p2.x = p -> p1.x;
+	    p -> p2.y = p -> p1.y + 1;
+	  }
+	  break;
+	case 3:
 	  gr -> mat[p -> p2.x][p -> p2.y] = 0;
-	  p -> p2.x = p -> p1.x + 1;
+	  p -> p2.x = p -> p1.x - 1;
 	  p -> p2.y = p -> p1.y;
+	  break;
+	case 4:
+	  if( peux_bouger_gauche( p -> p1, *gr ) == 1 ){
+	    gr -> mat[p -> p2.x][p -> p2.y] = 0;
+	    p -> p2.x = p -> p1.x;
+	    p -> p2.y = p -> p1.y - 1;
+	  }
+	  break;
 	}
-	break;
-      case 2:
-	if( peux_bouger_droite( p -> p1, *gr)){
-	  gr -> mat[p -> p2.x][p -> p2.y] = 0;
-	  p -> p2.x = p -> p1.x;
-	  p -> p2.y = p -> p1.y + 1;
-	}
-	break;
-      case 3:
-	gr -> mat[p -> p2.x][p -> p2.y] = 0;
-	p -> p2.x = p -> p1.x - 1;
-	p -> p2.y = p -> p1.y;
-	break;
-      case 4:
-	if( peux_bouger_gauche( p -> p1, *gr)){
-	  gr -> mat[p -> p2.x][p -> p2.y] = 0;
-	  p -> p2.x = p -> p1.x;
-	  p -> p2.y = p -> p1.y - 1;
-	}
-	break;
-      }
+    }
+  }
+  while ( MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED ){
+    MLV_wait_milliseconds(5);
   }
 }
 
-
-
-
+void pivot_gauche(c_poyo *p, grille *gr){
+  int d;
+  d = disposition(*p);
+  if( MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED ){
+    if( p -> p1.pos == 0 && p -> p2.pos == 0 ){
+      switch ( d )
+	{
+	case 1:
+	  gr -> mat[p -> p2.x][p -> p2.y] = 0;
+	  p -> p2.x = p -> p1.x - 1;
+	  p -> p2.y = p -> p1.y;
+	  break;
+	case 2:
+	  if( peux_bouger_gauche( p -> p1, *gr) == 1){
+	    gr -> mat[p -> p2.x][p -> p2.y] = 0;
+	    p -> p2.x = p -> p1.x;
+	    p -> p2.y = p -> p1.y - 1;
+	  }
+	  break;
+	case 3:
+	  if( peux_bouger_bas( p -> p1, *gr) == 1){
+	    gr -> mat[p -> p2.x][p -> p2.y] = 0;
+	    p -> p2.x = p -> p1.x + 1;
+	    p -> p2.y = p -> p1.y;
+	  }
+	  break;
+	case 4:
+	  if( peux_bouger_droite( p -> p1, *gr) == 1){
+	    gr -> mat[p -> p2.x][p -> p2.y] = 0;
+	    p -> p2.x = p -> p1.x;
+	    p -> p2.y = p -> p1.y + 1;
+	  }
+	  break;
+	}
+    }
+  }
+    while ( MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED ){
+     MLV_wait_milliseconds(5);
+  }
+}
 
 void deplacement_droit( c_poyo *p, grille *gr){
   int d;
@@ -164,9 +206,10 @@ void deplacement_droit( c_poyo *p, grille *gr){
 	  }
 	  break;
 	case 1 :
-	  if( d == 3){
+	  if( d == 1){
 	    ptmp = &p -> p2;
 	  }
+	  printf("%d et %d\n",ptmp -> x, ptmp -> y);
 	  if( peux_bouger_droite( *ptmp, *gr) == 1 ){
 	    gr -> mat[p -> p1.x][p -> p1.y] = 0;
 	    gr -> mat[p -> p2.x][p -> p2.y] = 0;
@@ -292,7 +335,7 @@ void deplacement_bas( c_poyo *p, grille *gr){
 /* a grandement optimiser, il faut gerer chaque poyo independament pour savoir si il peux bouger ( se cogner contreu mur) ou si l'un se separe de l'autre */
 
 void deplacement(c_poyo *p,grille * gr){
-  
+ 
   if( p -> p1.pos == 0 && p -> p2.pos == 0 ){
     if( p -> p1.y < gr -> m - 1  && p -> p1.pos == 0 && gr -> mat[p -> p1.x][p -> p1.y+1] == 0 ){
       if( MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED ){
@@ -317,10 +360,6 @@ void deplacement(c_poyo *p,grille * gr){
 	p -> p1.x += 1;
 	p -> p2.x += 1;
       }
-    }
-  
-    if( MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED ){
-      pivot(p, gr);
     }
     /*----------- si un poyo est déjà poser alors ---------------*/
 

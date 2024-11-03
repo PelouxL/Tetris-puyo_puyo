@@ -46,11 +46,9 @@ int main(){
     aff_etat(gr, j);
     
     printf("\n");
-    deplacement_droit(&tpoyo[ok], &gr);
-    deplacement_gauche(&tpoyo[ok], &gr);
-    deplacement_bas(&tpoyo[ok], &gr);
-    pivot_droit(&tpoyo[ok], &gr);
-    pivot_gauche(&tpoyo[ok], &gr);
+
+    deplacement(&tpoyo[ok], &gr);
+    
     affiche_c_poyo(&tpoyo[ok]);
     actualisation_poyo(&tpoyo[ok], &gr);
 

@@ -28,8 +28,6 @@ int peux_bouger_droite(poyo p, grille gr);
 int peux_bouger_bas(poyo p, grille gr);
 
 
-
-
 /* ---- fonction de deplacement ------- */
 
 void pivot_gauche(c_poyo *p, grille *gr);
@@ -41,6 +39,8 @@ void deplacement_droit( c_poyo *p, grille *gr);
 void deplacement_gauche( c_poyo *p, grille *gr);
 
 void deplacement_bas( c_poyo *p, grille *gr);
+
+void deplacement(c_poyo *p, grille *gr);
 
 /* --------------------------------- */
 

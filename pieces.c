@@ -82,17 +82,19 @@ int disposition(c_poyo p){
 }
 
 
+/* bug d'ecrasement sous condition """ precise """ a faire attention, explicatipon sur feuille et sur portable */
+
+
 void avancement_piece(c_poyo * p, grille *gr){
   int d;
   d = disposition(*p);
-  if( ( peux_bouger_bas(p -> p1, *gr) == 1  || ( peux_bouger_bas(p -> p1, *gr) == 0 && d == 4 ) ) &&  p -> p1.pos == 0 ){
+  if( ( peux_bouger_bas(p -> p1, *gr) == 1  || ( peux_bouger_bas(p -> p1, *gr) == 0  && peux_bouger_bas(p -> p2, *gr) == 1) ) &&  p -> p1.pos == 0 ){
     gr -> mat[p -> p1.x][p -> p1.y] = 0;
     p -> p1.x += 1;
   }else{
     if( d%2 == 0){
       p -> p2.pos = 1;
     }
-    gr -> mat[p -> p1.x][p -> p1.y] = p -> p1.couleur;
     p -> p1.pos = 1;
   }
   
@@ -109,9 +111,6 @@ void avancement_piece(c_poyo * p, grille *gr){
 
 
 /* --------------------------- definition des fonction de deplacement ------------------------- */
-/* fonctionne mais toujours le problème du MLV_wait et a voir si ça pose problème plus tard 
-mais je ne gere pas le cas si il y a une case au dessus , àa peut potentiellemnt
-gener lors d'un mouvement de pivot ????? */
 
 void pivot_droit(c_poyo *p, grille *gr){
   int d;
@@ -148,9 +147,6 @@ void pivot_droit(c_poyo *p, grille *gr){
 	  break;
 	}
     }
-  }
-  while ( MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED ){
-    MLV_wait_milliseconds(5);
   }
 }
 
@@ -189,9 +185,6 @@ void pivot_gauche(c_poyo *p, grille *gr){
 	  break;
 	}
     }
-  }
-    while ( MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED ){
-     MLV_wait_milliseconds(5);
   }
 }
 
@@ -235,9 +228,6 @@ void deplacement_droit( c_poyo *p, grille *gr){
 	ptmp -> y += 1;
       }
     }
-  }
-  while ( MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED ){
-     MLV_wait_milliseconds(5);
   }
 }	
 
@@ -283,9 +273,6 @@ void deplacement_gauche( c_poyo *p, grille *gr){
       }
     }
   }
-  while ( MLV_get_keyboard_state(MLV_KEYBOARD_LEFT) == MLV_PRESSED ){
-     MLV_wait_milliseconds(5);
-  }
 }	
 
 
@@ -329,10 +316,24 @@ void deplacement_bas( c_poyo *p, grille *gr){
       }
     }
   }
-  while ( MLV_get_keyboard_state(MLV_KEYBOARD_DOWN) == MLV_PRESSED ){
-     MLV_wait_milliseconds(5);
+}
+
+void deplacement(c_poyo *p, grille *gr){
+  static int tmp_passer = 0;
+  int tmp_act = MLV_get_time(), attente = 150;
+  if( MLV_get_keyboard_state(MLV_KEYBOARD_DOWN) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_LEFT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED ){
+    if( tmp_act - tmp_passer >= attente){
+      pivot_gauche(p, gr);
+      pivot_droit(p, gr);
+      deplacement_droit(p, gr);
+      deplacement_gauche(p, gr);
+      deplacement_bas(p, gr);
+
+      tmp_passer = tmp_act;
+    }
   }
 }
+
 
 
 /* -------------------------------- fin des definition de deplacement -------------------------------------*/

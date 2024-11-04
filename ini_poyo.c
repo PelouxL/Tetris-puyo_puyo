@@ -1,14 +1,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "types.h"
+#include "pieces.h"
 #include <MLV/MLV_all.h>
 
 
-void affiche_c_poyo(c_poyo * p){
+void affiche_c_poyo(c_poyo *p){
     printf("voici la couleur %d le x %d et le y %d\n p2 %d %d et %d\n", p -> p1.couleur, p -> p1.x, p -> p1.y , p -> p2.couleur, p -> p2.x, p -> p2.y);
 }
 
-void initialisation_cpoyo(c_poyo * cp){
+void initialisation_cpoyo(c_poyo *cp){
     /* 0 = vide , 1 = red, 2 = green, 3 = blue */
     cp -> p1.couleur = (rand()%3)+1;
     cp -> p2.couleur = (rand()%3)+1;
@@ -38,9 +39,17 @@ void decalage_gauche(c_poyo *tpoyo, int n){ /* n correspond a la taille de t */
 }
      
 
-/* void roulement_poyo(c_poyo *tpoyo, int n){ */
-/*     if( tpoyo[0].apparait == 0 ){ */
-/*         tpoyo[0].apparait = 1; */
-/*     } */
+void roulement_poyo(c_poyo *tpoyo, grille *gr, int n){
+    if( tpoyo[0].apparait == 0 ){
+        apparition_piece(&tpoyo[0], gr);
+    }
+    if( tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
+        decalage_gauche(tpoyo, n);
+        initialisation_cpoyo(&tpoyo[n-1]);
+    }
+}
+                             
+    
+    
     
 

@@ -32,6 +32,11 @@ typedef struct{
   int score;
 }joueur;
 
+typedef struct{
+  int x;
+  int y;
+}coordonne;
+
 #endif
     
 	      

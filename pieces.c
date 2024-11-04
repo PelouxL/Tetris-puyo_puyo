@@ -9,14 +9,18 @@
 void apparition_piece(c_poyo * p, grille *gr){
   p -> p1.y = gr -> m/2;
   p -> p2.y = gr -> m/2;
-  gr -> mat[p -> p1.x][p -> p1.y]= p -> p1.couleur;
   p -> apparait = 1;
 }
 
 
 void actualisation_poyo(c_poyo *p, grille *gr){
-  gr -> mat[p -> p1.x][p -> p1.y] = p -> p1.couleur;
-  gr -> mat[p -> p2.x][p -> p2.y] = p -> p2.couleur;
+  if( p -> apparait == 1){
+    gr -> mat[p -> p1.x][p -> p1.y] = p -> p1.couleur;
+    if( p -> p2.y != -1 ){
+      gr -> mat[p -> p2.x][p -> p2.y] = p -> p2.couleur;
+    }
+  }
+  
 } /* pas sur de l'utilité de cette, peux surement être supprimer pour en modif une autre */
 
 int peux_bouger_droite(poyo p, grille gr){
@@ -57,12 +61,12 @@ int disposition(c_poyo p){
 }
 
 
-/* bug d'ecrasement sous condition """ precise """ a faire attention, explicatipon sur feuille et sur portable */
-
-
 void avancement_piece(c_poyo * p, grille *gr){
-  int d;
-  d = disposition(*p);
+  int d = -1;
+  
+  if( p -> p1.pos == 0 && p -> p2.pos == 0){ /* si poyo est seul alors pas connaitre disposition */
+    d = disposition(*p);
+  }
   if( ( peux_bouger_bas(p -> p1, *gr) == 1  || ( peux_bouger_bas(p -> p1, *gr) == 0  && peux_bouger_bas(p -> p2, *gr) == 1 && d == 4 ) ) &&  p -> p1.pos == 0 ){
     gr -> mat[p -> p1.x][p -> p1.y] = 0;
     p -> p1.x += 1;
@@ -73,10 +77,6 @@ void avancement_piece(c_poyo * p, grille *gr){
     p -> p1.pos = 1;
   }
 
-
-  /* p2 s'arrete de descendre pour quel raison ????? */
-
-  
   if( peux_bouger_bas(p -> p2, *gr) == 1 && p -> p2.pos == 0 ){
     gr -> mat[p -> p2.x][p -> p2.y] = 0;
     p -> p2.x += 1;
@@ -188,7 +188,6 @@ void deplacement_droit( c_poyo *p, grille *gr){
 	  if( d == 1){
 	    ptmp = &p -> p2;
 	  }
-	  printf("%d et %d\n",ptmp -> x, ptmp -> y);
 	  if( peux_bouger_droite( *ptmp, *gr) == 1 ){
 	    gr -> mat[p -> p1.x][p -> p1.y] = 0;
 	    gr -> mat[p -> p2.x][p -> p2.y] = 0;
@@ -246,7 +245,7 @@ void deplacement_gauche( c_poyo *p, grille *gr){
       if( p -> p1.pos == 1 && p -> p2.pos == 0 ){
 	ptmp = &p -> p2;
       }
-      if( peux_bouger_gauche( *ptmp, *gr) == 1 ){
+      if( peux_bouger_gauche( *ptmp, *gr ) == 1 ){
 	gr -> mat[ptmp -> x][ptmp -> y] = 0;
 	ptmp -> y -= 1;
       }
@@ -319,3 +318,16 @@ void deplacement(c_poyo *p, grille *gr){
 
 
 /* -------------------------------- fin des definition de deplacement -------------------------------------*/
+
+/*
+int destruction(grille *gr){ renvoie le nombre de poyo detruits 
+  int i, j, suite = 0, couleur;
+  coordonne *position;
+  for( i = 0 ; i < gr -> n ; i++ ){
+    for( j = 0 ; j < gr -> m ; j++ ){
+      if( gr -> mat[i][j] != 0){
+
+	couleur = gr -> mat[i][j];
+	suite++;
+	p
+      */

@@ -9,7 +9,7 @@
 #include "affichage_mlv.h"
 
 int main(){
-  int n = 10, m = 8, tmp_prc, tmp_act, ok = 0;
+  int n = 10, m = 8, tmp_prc, tmp_act;
   grille gr;
   joueur j;
   c_poyo tpoyo[4];
@@ -47,9 +47,6 @@ int main(){
     affiche_c_poyo(&tpoyo[0]);
     actualisation_poyo(&tpoyo[0], &gr);
 
-    if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1){
-      ok++;
-    }
     MLV_actualise_window();
   }
   MLV_wait_seconds(7);

@@ -1,33 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "types.h"
+#include "ini_poyo.h"
 #include <MLV/MLV_all.h>
-
-
-void affiche_c_poyo(c_poyo * p){
-  printf("voici la couleur %d le x %d et le y %d\n p2 %d %d et %d\n", p -> p1.couleur, p -> p1.x, p -> p1.y , p -> p2.couleur, p -> p2.x, p -> p2.y);
-}
-
-void initialisation_cpoyo(c_poyo * cp){
-  /* 0 = vide , 1 = red, 2 = green, 3 = blue */
-  cp -> p1.couleur = (rand()%3)+1;
-  cp -> p2.couleur = (rand()%3)+1;
-  cp -> p1.x = 0; 
-  cp -> p1.y = 0;
-  cp -> p1.pos = 0;
-  cp -> p2.x = -1;
-  cp -> p2.y = -1;
-  cp -> p2.pos = 0;
-  cp -> apparait = 0;
-
-}
-
-void ini_poyo_chaine(c_poyo *tpoyo, int n){
-  int i;
-  for(i = 0 ; i < n ; i++){
-    initialisation_cpoyo(&tpoyo[i]);
-  }
-}
 
 
 /* est appeler une fois lors de la premire apparition d'un poyo */
@@ -35,6 +10,7 @@ void apparition_piece(c_poyo * p, grille *gr){
   p -> p1.y = gr -> m/2;
   p -> p2.y = gr -> m/2;
   gr -> mat[p -> p1.x][p -> p1.y]= p -> p1.couleur;
+  p -> apparait = 1;
 }
 
 
@@ -42,7 +18,6 @@ void actualisation_poyo(c_poyo *p, grille *gr){
   gr -> mat[p -> p1.x][p -> p1.y] = p -> p1.couleur;
   gr -> mat[p -> p2.x][p -> p2.y] = p -> p2.couleur;
 } /* pas sur de l'utilité de cette, peux surement être supprimer pour en modif une autre */
-
 
 int peux_bouger_droite(poyo p, grille gr){
   if( gr.mat[p.x][p.y+1] == 0 && p.y < gr.m-1 ){
@@ -88,7 +63,7 @@ int disposition(c_poyo p){
 void avancement_piece(c_poyo * p, grille *gr){
   int d;
   d = disposition(*p);
-  if( ( peux_bouger_bas(p -> p1, *gr) == 1  || ( peux_bouger_bas(p -> p1, *gr) == 0  && peux_bouger_bas(p -> p2, *gr) == 1) ) &&  p -> p1.pos == 0 ){
+  if( ( peux_bouger_bas(p -> p1, *gr) == 1  || ( peux_bouger_bas(p -> p1, *gr) == 0  && peux_bouger_bas(p -> p2, *gr) == 1 && d == 4 ) ) &&  p -> p1.pos == 0 ){
     gr -> mat[p -> p1.x][p -> p1.y] = 0;
     p -> p1.x += 1;
   }else{
@@ -97,6 +72,10 @@ void avancement_piece(c_poyo * p, grille *gr){
     }
     p -> p1.pos = 1;
   }
+
+
+  /* p2 s'arrete de descendre pour quel raison ????? */
+
   
   if( peux_bouger_bas(p -> p2, *gr) == 1 && p -> p2.pos == 0 ){
     gr -> mat[p -> p2.x][p -> p2.y] = 0;
@@ -320,9 +299,12 @@ void deplacement_bas( c_poyo *p, grille *gr){
 
 void deplacement(c_poyo *p, grille *gr){
   static int tmp_passer = 0;
-  int tmp_act = MLV_get_time(), attente = 150;
+  int tmp_act, attente;
+  tmp_act = MLV_get_time(), attente = 150;
   if( MLV_get_keyboard_state(MLV_KEYBOARD_DOWN) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_LEFT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED ){
-    if( tmp_act - tmp_passer >= attente){
+      
+    if( tmp_act - tmp_passer >= attente ){
+        
       pivot_gauche(p, gr);
       pivot_droit(p, gr);
       deplacement_droit(p, gr);

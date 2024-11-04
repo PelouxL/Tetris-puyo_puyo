@@ -5,14 +5,14 @@
 #include "types.h"
 #include "grille.h"
 #include "pieces.h"
+#include "ini_poyo.h"
 #include "affichage_mlv.h"
 
 int main(){
   int n = 10, m = 8, tmp_prc, tmp_act, ok = 0;
   grille gr;
   joueur j;
-  c_poyo tpoyo[3];
- 
+  c_poyo tpoyo[4];
 
   
   srand(time(NULL));
@@ -25,20 +25,15 @@ int main(){
   aff_jeu();
   gr= initialisation_grille(n,m);
 
-  ini_poyo_chaine(tpoyo, 3);
-  
+  ini_poyo_chaine(tpoyo, 4);
   tmp_prc = MLV_get_time();
   
-  while(ok < 3){
+  while(1){
     tmp_act = MLV_get_time();
-    if( tpoyo[ok].apparait == 0 ){
-      apparition_piece(&tpoyo[ok], &gr);
-      tpoyo[ok].apparait = 1;
-    }
+    roulement_poyo(tpoyo, &gr, 4);
     if( tmp_act - tmp_prc >= 1000){
-      avancement_piece(&tpoyo[ok], &gr);
+      avancement_piece(&tpoyo[0], &gr);
       tmp_prc = tmp_act ;
-    
     }
 
     
@@ -47,12 +42,12 @@ int main(){
     
     printf("\n");
 
-    deplacement(&tpoyo[ok], &gr);
+    deplacement(&tpoyo[0], &gr);
     
-    affiche_c_poyo(&tpoyo[ok]);
-    actualisation_poyo(&tpoyo[ok], &gr);
+    affiche_c_poyo(&tpoyo[0]);
+    actualisation_poyo(&tpoyo[0], &gr);
 
-    if(tpoyo[ok].p1.pos == 1 && tpoyo[ok].p2.pos == 1){
+    if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1){
       ok++;
     }
     MLV_actualise_window();

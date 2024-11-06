@@ -221,7 +221,7 @@ void deplacement_gauche( c_poyo *p, grille *gr){
       switch ( d%2 )
 	{
 	case 0 :
-	  if( peux_bouger_gauche( p->p2, *gr) == 1 &&  peux_bouger_gauche( p->p1, *gr) == 1 ){
+            if( (peux_bouger_gauche( p->p2, *gr) == 1 &&  peux_bouger_gauche( p->p1, *gr) == 1 ) || (peux_bouger_gauche( p->p1, *gr) == 1 && p -> p2.x == -1) ){
 	    gr -> mat[p -> p1.x][p -> p1.y] = 0;
 	    gr -> mat[p -> p2.x][p -> p2.y] = 0;
 	    p -> p2.y -= 1;
@@ -331,3 +331,25 @@ int destruction(grille *gr){ renvoie le nombre de poyo detruits
 	suite++;
 	p
       */
+
+
+
+/* très content de cette fonction */
+void est_a_coter(poyo *p, grille *gr, coordonne *tcoord, int *indice){
+    int i;
+    coordonne tmp;
+    int coord[4][2]={ { -1, 0 }, /* poyo haut */
+                    { 1, 0 },  /* poyo bas */
+                    { 0, -1 }, /* poyo gauche */
+                    { 0, 1} };  /* poyo droit */
+
+    for( i = 0 ; i < 4 ; i++ ){
+        tmp.x = p -> x + coord[i][0];
+        tmp.y = p -> y + coord[i][1];
+    }
+    if( ( tmp.x > 0 && tmp.x < gr -> n - 1 ) && ( tmp.y > 0 && tmp.y < gr -> m - 1 ) && ( gr -> mat[ tmp.x ][ tmp.y ] == p -> couleur ) ){
+        tcoord[*indice] = tmp;
+        *indice += 1;
+    }
+    
+}

@@ -318,38 +318,3 @@ void deplacement(c_poyo *p, grille *gr){
 
 
 /* -------------------------------- fin des definition de deplacement -------------------------------------*/
-
-/*
-int destruction(grille *gr){ renvoie le nombre de poyo detruits 
-  int i, j, suite = 0, couleur;
-  coordonne *position;
-  for( i = 0 ; i < gr -> n ; i++ ){
-    for( j = 0 ; j < gr -> m ; j++ ){
-      if( gr -> mat[i][j] != 0){
-
-	couleur = gr -> mat[i][j];
-	suite++;
-	p
-      */
-
-
-
-/* très content de cette fonction */
-void est_a_coter(poyo *p, grille *gr, coordonne *tcoord, int *indice){
-    int i;
-    coordonne tmp;
-    int coord[4][2]={ { -1, 0 }, /* poyo haut */
-                    { 1, 0 },  /* poyo bas */
-                    { 0, -1 }, /* poyo gauche */
-                    { 0, 1} };  /* poyo droit */
-
-    for( i = 0 ; i < 4 ; i++ ){
-        tmp.x = p -> x + coord[i][0];
-        tmp.y = p -> y + coord[i][1];
-    }
-    if( ( tmp.x > 0 && tmp.x < gr -> n - 1 ) && ( tmp.y > 0 && tmp.y < gr -> m - 1 ) && ( gr -> mat[ tmp.x ][ tmp.y ] == p -> couleur ) ){
-        tcoord[*indice] = tmp;
-        *indice += 1;
-    }
-    
-}

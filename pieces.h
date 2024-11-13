@@ -41,4 +41,5 @@ void deplacement(c_poyo *p, grille *gr);
 /* permet de mouvoir une piece */
 void deplacement(c_poyo * p, grille *gr);
 
+
 #endif

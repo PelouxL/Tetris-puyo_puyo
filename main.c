@@ -7,12 +7,14 @@
 #include "pieces.h"
 #include "ini_poyo.h"
 #include "affichage_mlv.h"
+#include "destruction.h"
 
 int main(){
-  int n = 10, m = 8, tmp_prc, tmp_act;
+  int n = 10, m = 8, tmp_prc, tmp_act,  taille_tcord = 0;
   grille gr;
   joueur j;
   c_poyo tpoyo[4];
+  coordonne tcord[100];
 
   
   srand(time(NULL));
@@ -47,6 +49,13 @@ int main(){
     affiche_c_poyo(&tpoyo[0]);
     actualisation_poyo(&tpoyo[0], &gr);
 
+    if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
+
+	taille_tcord = recup_coord(&tpoyo[0].p1, &gr, tcord);
+	destruction(tcord, &gr, taille_tcord);
+     
+    }
+    
     MLV_actualise_window();
   }
   MLV_wait_seconds(7);

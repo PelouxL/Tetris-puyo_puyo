@@ -5,6 +5,17 @@
 
 
 
+int est_deja_visiter( coordonne *est_visiter, int taille_visiter, coordonne coord){
+    int i;
+    for( i = 0 ; i < taille_visiter ; i++ ){
+        if ( est_visiter[i].x == coord.x && est_visiter[i].y == coord.y ){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+
 void fusion_coord(coordonne *tcord1, coordonne *tcord2, int *taille1, int taille2){
   int i, j, ajout;
 
@@ -15,76 +26,89 @@ void fusion_coord(coordonne *tcord1, coordonne *tcord2, int *taille1, int taille
 	ajout = 0;                  /* si on trouve le meme indice ajout = 0 donc on ajote rien */
       }
     }
-    if( ajout == 1){
+    if( ajout == 1 && *taille1 < 100){
       tcord1[*taille1].x = tcord2[i].x;  /* ajoute = 1 donc on ajoute dans notre tcord 1 */
       tcord1[*taille1].y = tcord2[i].y;
-      (*taille1) +=1;
+      (*taille1)++;
     }
   }
 }
   
 
 /* très content de cette fonction */
-int est_a_coter(poyo *p, grille *gr, coordonne *tcoord){
-  int i, indice = 0;
+int est_a_coter(poyo *p, grille *gr, coordonne *tcoord, coordonne *est_visiter, int taille_visiter){
+    int i, indice = 0;
     coordonne tmp;
-    int coord[4][2]={ { -1, 0 }, /* poyo haut */
-                    { 1, 0 },  /* poyo bas */
-                    { 0, -1 }, /* poyo gauche */
-                    { 0, 1} };  /* poyo droit */
+    int coord[5][2]={
+        { 0, 0 },
+        { -1, 0 }, /* poyo haut */
+        { 1, 0 },  /* poyo bas */
+        { 0, -1 }, /* poyo gauche */
+        { 0, 1} };  /* poyo droit */
 
-    for( i = 0 ; i < 4 ; i++ ){
-      tmp.x = p -> x + coord[i][0];
-      tmp.y = p -> y + coord[i][1];
+    for( i = 0 ; i < 5 ; i++ ){
+        tmp.x = p -> x + coord[i][0];
+        tmp.y = p -> y + coord[i][1];
     
-      if( ( tmp.x > 0 && tmp.x < gr -> n - 1 ) && ( tmp.y > 0 && tmp.y < gr -> m - 1 ) && ( gr -> mat[ tmp.x ][ tmp.y ] == p -> couleur ) ){
-        tcoord[indice] = tmp;
-        indice += 1;
-      }
+        if( ( tmp.x >= 0 && tmp.x < gr -> n ) && ( tmp.y >= 0 && tmp.y < gr -> m  ) && ( gr -> mat[ tmp.x ][ tmp.y ] == p -> couleur ) ){
+
+            
+            if (!est_deja_visiter(est_visiter, taille_visiter, tmp)){
+                
+                printf("Vérification de la case (%d, %d) - ", tmp.x, tmp.y);
+                printf("Couleur trouvée: %d, Couleur cible: %d\n", gr->mat[tmp.x][tmp.y], p->couleur);
+                tcoord[indice] = tmp;
+                indice++;
+            }
+        }
     }
     return indice;
 }
 
+int recup_coord(poyo *p, grille *gr, coordonne *tcord){
+    int taille_nouvelle , taille_visiter = 1, indice = 1, i;
+    coordonne est_visiter[100], nouvelle_coord[100];
+    poyo tmp;
 
-void recup_coord(poyo *p, grille *gr, coordonne *tcord){
-  int taille_nouvelle , taille_visiter = 0, indice = 0, i, j, k, existe = 0;
-  coordonne est_visiter[100], nouvelle_coord[100];
-  poyo tmp;
-  
+    est_visiter[0].x = p -> x;
+    est_visiter[0].y = p -> y;
 
-  est_visiter[taille_visiter].x = p -> x;
-  est_visiter[taille_visiter].y = p -> y;
+    tcord[0].x = est_visiter[0].x;
+    tcord[0].y = est_visiter[0].y;
 
-  tcord[indice].x = p -> x;
-  tcord[indice].y = p ->y;
-  indice += 1;
-  
-  do {
-    taille_nouvelle = 0;
+    do {
+        taille_nouvelle = 0;
+        
+        for( i = 0 ; i < indice ; i++){
+            tmp.x = tcord[i].x;
+            tmp.y = tcord[i].y;
+            tmp.couleur = p -> couleur;
 
-    for( i = 0 ; i < taille_visiter ; i++ ){
-      tmp.x = est_visiter[i].x;
-      tmp.y = est_visiter[i].y;
-      tmp.couleur = p -> couleur;
+            taille_nouvelle = est_a_coter( &tmp, gr, nouvelle_coord, est_visiter, taille_visiter);
+            fusion_coord(tcord, nouvelle_coord, &indice, taille_nouvelle);
 
-      taille_nouvelle = est_a_coter(&tmp, gr, nouvelle_coord);
-      
-      fusion_coord(tcord, nouvelle_coord, &indice, taille_nouvelle);
+            fusion_coord(est_visiter, nouvelle_coord, &taille_visiter, taille_nouvelle);
+            
+        }
+            
+    } while( taille_nouvelle > 0 && indice < 100 );
+        
+    /* faireen sorte d'appeler est a coter qui devrais renvoyer sa coordonnée + celle 
+       des cases adjacentes de même couleur. La rappeler tant que on n'a pas de nouvelle
+       coordonne ne se trouvant pas dasn est visiter */     
 
-      for( j = 0 ; j < taille_nouvelle ; j++ ){
-	existe = 0;
-	for( k = 0 ; k < taille_visiter ; k++ ){
-	  if( nouvelle_coord[j].x == est_visiter[k].x && nouvelle_coord[j].y == est_visiter[k].y ){
-	    existe = 1;
-	  }
-	}
-	if( existe == 0 ){
-	  est_visiter[taille_visiter] = nouvelle_coord[j];
-	  taille_visiter += 1;
-	}
-      }
+    return indice;
+}
+
+
+/* penser a comment gerer le score */
+void destruction(coordonne *tcord, grille *gr, int taille_t){
+    int i;
+    if( taille_t >= 4 ){
+        printf("Destruction d'un groupe de %d Poyos.\n", taille_t);
+        for( i = 0 ; i < taille_t ; i++){
+             printf("(%d, %d)\n", tcord[i].x, tcord[i].y);
+            gr -> mat[tcord[i].x][tcord[i].y] = 0;
+        }
     }
-    
-  }while ( taille_nouvelle > 0);
-
 }

@@ -1,10 +1,14 @@
-#ifnef _DESTRUCTION_H_
+#ifndef _DESTRUCTION_H_
 #define _DESTRUCTION_H_
+
+void est_deja_visiter(coordonne *est_visiter, int taille_visiter, coordonne coord);
 
 void fusion_coord(coordonne *tcord1, coordonne *tcord2, int *taille1, int taille2);
 
-int est_a_coter(poyo *p, grille *gr, coordonne *tcoord);
+int est_a_coter(poyo *p, grille *gr, coordonne *tcoord, coordonne *est_visiter, int taille_visite);
 
-void recup_coord(poyo *p, grille *gr, coordonne *tcord);
+int recup_coord(poyo *p, grille *gr, coordonne *tcord);
+
+void destruction(coordonne *tcord, grille *gr, int taille_t);
 
 #endif

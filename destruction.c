@@ -70,12 +70,13 @@ int recup_coord(poyo *p, grille *gr, coordonne *tcord){
     coordonne est_visiter[100], nouvelle_coord[100];
     poyo tmp;
 
+    
     est_visiter[0].x = p -> x;
     est_visiter[0].y = p -> y;
 
     tcord[0].x = est_visiter[0].x;
     tcord[0].y = est_visiter[0].y;
-
+    
     do {
         taille_nouvelle = 0;
         
@@ -102,7 +103,7 @@ int recup_coord(poyo *p, grille *gr, coordonne *tcord){
 
 
 /* penser a comment gerer le score */
-void destruction(coordonne *tcord, grille *gr, int taille_t){
+int destruction(coordonne *tcord, grille *gr, int taille_t){
     int i;
     if( taille_t >= 4 ){
         printf("Destruction d'un groupe de %d Poyos.\n", taille_t);
@@ -110,5 +111,32 @@ void destruction(coordonne *tcord, grille *gr, int taille_t){
              printf("(%d, %d)\n", tcord[i].x, tcord[i].y);
             gr -> mat[tcord[i].x][tcord[i].y] = 0;
         }
+    }else{
+      return 0;
     }
+    return 1;
 }
+
+void chutte_destrtuction(grille *gr){
+  int i, j, k;
+
+  /* on verifie pour chaque case du tableau */
+  for( i = gr -> n - 2 ; i >= 0  ; i-- ){ 
+    for( j = gr -> m - 1 ; j >= 0 ; j-- ){
+
+      /* si n tombe sur un poyo alors */
+      if( gr -> mat[i][j] != 0 ){
+	k = i;
+	/* on regarde si dessous la piece peux descendre */
+	while( (k + 1) < gr -> n && gr -> mat[k + 1][j] == 0 ){
+	  gr -> mat[k + 1][j] =  gr -> mat[k][j];
+	  gr -> mat[k][j] = 0;
+	  k++;
+ 
+	}
+      }
+    }
+  }
+}
+	      
+	    

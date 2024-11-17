@@ -9,6 +9,8 @@ int est_a_coter(poyo *p, grille *gr, coordonne *tcoord, coordonne *est_visiter, 
 
 int recup_coord(poyo *p, grille *gr, coordonne *tcord);
 
-void destruction(coordonne *tcord, grille *gr, int taille_t);
+int destruction(coordonne *tcord, grille *gr, int taille_t);
+
+void chutte_destrtuction(grille *gr);
 
 #endif

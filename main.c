@@ -10,11 +10,11 @@
 #include "destruction.h"
 
 int main(){
-  int n = 10, m = 8, tmp_prc, tmp_act,  taille_tcord = 0;
+  int n = 10, m = 8, tmp_prc, tmp_act,  taille_tcord = 0, taille_tcord1 = 0;
   grille gr;
   joueur j;
   c_poyo tpoyo[4];
-  coordonne tcord[100];
+  coordonne tcord[100],tcord1[100];
 
   
   srand(time(NULL));
@@ -53,6 +53,9 @@ int main(){
 
 	taille_tcord = recup_coord(&tpoyo[0].p1, &gr, tcord);
 	destruction(tcord, &gr, taille_tcord);
+	taille_tcord1 = recup_coord(&tpoyo[0].p2, &gr, tcord1);
+	destruction(tcord1, &gr, taille_tcord1);
+        chutte_destrtuction(&gr);
      
     }
     

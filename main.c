@@ -6,15 +6,16 @@
 #include "grille.h"
 #include "pieces.h"
 #include "ini_poyo.h"
+#include "jeu.h"
 #include "affichage_mlv.h"
 #include "destruction.h"
 
 int main(){
-  int n = 10, m = 8, tmp_prc, tmp_act,  taille_tcord = 0, taille_tcord1 = 0;
+  int n = 10, m = 8;
   grille gr;
   joueur j;
   c_poyo tpoyo[4];
-  coordonne tcord[100],tcord1[100];
+
 
   
   srand(time(NULL));
@@ -28,39 +29,9 @@ int main(){
   gr= initialisation_grille(n,m);
 
   ini_poyo_chaine(tpoyo, 4);
-  tmp_prc = MLV_get_time();
+
+  jeu(&gr, &j, tpoyo);
   
-  while(1){
-    tmp_act = MLV_get_time();
-    roulement_poyo(tpoyo, &gr, 4);
-    if( tmp_act - tmp_prc >= 1000){
-      avancement_piece(&tpoyo[0], &gr);
-      tmp_prc = tmp_act ;
-    }
-
-    
-    aff_grille(gr);
-    aff_etat(gr, j);
-    
-    printf("\n");
-
-    deplacement(&tpoyo[0], &gr);
-    
-    affiche_c_poyo(&tpoyo[0]);
-    actualisation_poyo(&tpoyo[0], &gr);
-
-    if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
-
-	taille_tcord = recup_coord(&tpoyo[0].p1, &gr, tcord);
-	destruction(tcord, &gr, taille_tcord);
-	taille_tcord1 = recup_coord(&tpoyo[0].p2, &gr, tcord1);
-	destruction(tcord1, &gr, taille_tcord1);
-        chutte_destrtuction(&gr);
-     
-    }
-    
-    MLV_actualise_window();
-  }
   MLV_wait_seconds(7);
   MLV_free_window();
   exit(EXIT_SUCCESS);

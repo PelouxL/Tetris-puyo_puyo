@@ -114,7 +114,7 @@ int destruction(coordonne *tcord, grille *gr, int taille_t){
     }else{
       return 0;
     }
-    return 1;
+    return taille_t;
 }
 
 void chutte_destrtuction(grille *gr){

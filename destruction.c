@@ -117,7 +117,7 @@ int destruction(coordonne *tcord, grille *gr, int taille_t){
     return taille_t;
 }
 
-void chutte_destrtuction(grille *gr){
+void chutte_destruction(grille *gr){
   int i, j, k;
 
   /* on verifie pour chaque case du tableau */
@@ -138,5 +138,30 @@ void chutte_destrtuction(grille *gr){
     }
   }
 }
+
+int post_destruction( grille *gr ){
+    int taille_tcordall, detruite, chute = 0, i, j;
+    coordonne tcordall[100];
+    poyo ptmp;
+
+    for ( i = 0; i < gr -> n ; i++ ) {
+        for ( j = 0; j < gr -> m ; j++ ) {
+            if (gr -> mat[i][j] > 0) { /* Vérifie la présence d'un poyo */
+                ptmp.x = i;
+                ptmp.y = j;
+                ptmp.couleur = gr -> mat[i][j];
+                taille_tcordall = recup_coord(&ptmp, gr, tcordall);
+                detruite = destruction(tcordall, gr, taille_tcordall);
+                if (detruite > 0) {
+                    chutte_destruction(gr);
+                    chute = 1;
+                }
+            }
+        }
+    }
+    return chute;
+}
+
+
 	      
 	    

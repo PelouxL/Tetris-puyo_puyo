@@ -11,6 +11,7 @@ int recup_coord(poyo *p, grille *gr, coordonne *tcord);
 
 int destruction(coordonne *tcord, grille *gr, int taille_t);
 
-void chutte_destrtuction(grille *gr);
+void chutte_destruction(grille *gr);
 
+int post_destruction( grille *gr );
 #endif

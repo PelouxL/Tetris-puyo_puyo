@@ -10,9 +10,8 @@
 #include "destruction.h"
 
 void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
-    int taille_tcord1 = 0, taille_tcord2 = 0, temps, duree, i = 0 , j = 0 , chute = 1, taille_tcordall, nb_dest1 = 0, nb_dest2 = 0, detruite;
-    coordonne tcord1[100],tcord2[100], tcordall[100];
-    poyo ptmp;
+    int taille_tcord1 = 0, taille_tcord2 = 0, temps, duree , nb_dest1 = 0, nb_dest2 = 0;
+    coordonne tcord1[100],tcord2[100];
 
     struct timespec debut, fin, maintenant, dernier_avancement;
   
@@ -55,36 +54,10 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
 
             /* verifie que si l'on detruit des poyos alors une chute se fait*/
             if( nb_dest1 > 0 || nb_dest2 > 0){
-                chutte_destrtuction(gr);
+                chutte_destruction(gr);
                 /* cette boucle permet de detruire tout les nouveau groupe causer par une chute */
-                while( chute == 1){
-                    chute = 0;
-                    /* on parcours tout le tableau */
-                    for( i = 0 ; i < gr -> n && chute == 0 ; i++ ){
-                        for( j = 0 ; j < gr -> m ; j++ ){
-                            /* on verifie que il y est un poyo present */
-                            if( gr -> mat[i][j] > 0){
-                                /* si poyo present alors on initialise un poyo tmp et */
-                                /* lançon le principe de coordonnees et de destruction */
-                                ptmp.x = i;
-                                ptmp.y = j;
-                                ptmp.couleur = gr -> mat[i][j];
-                                taille_tcordall = recup_coord( &ptmp, gr, tcordall);
-                                
-                                detruite = destruction( tcordall, gr, taille_tcordall );
-                                /* si une nouvelle destruction c'est effectuer alors */
-                                /* on fais une chute et remet chute a 1 pour relancer la boucle */
-                                if( detruite > 0 ){                             
-                                        chutte_destrtuction(gr);
-                                      
-                                        chute = 1;
-                                        /* il serait bie nd'ajouter d utemps d'attente entre chaque chtes */
-                                    }      
-                                }
-                            
-                        }
-                    }
-                
+                while( post_destruction(gr)){
+                    MLV_wait_milliseconds(200);
                 }
             }
  

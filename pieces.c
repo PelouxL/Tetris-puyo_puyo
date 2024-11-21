@@ -331,11 +331,16 @@ c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr){
              
             if( poyo_sauvegarde.p1.couleur == 0){
                 poyo_sauvegarde = tpoyo[0];
+                gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
+                gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
                 roulement_poyo(tpoyo, gr);
             }else{
                 ptmp = tpoyo[0];
+                gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
+                gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
                 tpoyo[0] = poyo_sauvegarde;
                 poyo_sauvegarde = ptmp;
+                
             }
             tmp_passer = tmp_act;
         }

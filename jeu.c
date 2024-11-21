@@ -42,7 +42,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     
         /* aff_grille(*gr); */
         aff_etat(*gr, *je);
-        aff_poyos(tpoyo, ptmp);
+        aff_poyos(tpoyo, &ptmp);
     
         printf("\n");
 

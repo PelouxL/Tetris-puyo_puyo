@@ -23,6 +23,20 @@ void initialisation_cpoyo(c_poyo *cp){
 
 }
 
+void initialisation_cpoyo_vide(c_poyo *cp){
+    /* 0 = vide , 1 = red, 2 = green, 3 = blue */
+    cp -> p1.couleur = 0;
+    cp -> p2.couleur = 0;
+    cp -> p1.x = 0; 
+    cp -> p1.y = 0;
+    cp -> p1.pos = 0;
+    cp -> p2.x = -1;
+    cp -> p2.y = -1;
+    cp -> p2.pos = 0;
+    cp -> apparait = 0;
+
+}
+
 void ini_poyo_chaine(c_poyo *tpoyo, int n){
     int i;
     for(i = 0 ; i < n ; i++){
@@ -39,14 +53,12 @@ void decalage_gauche(c_poyo *tpoyo, int n){ /* n correspond a la taille de t */
 }
      
 
-void roulement_poyo(c_poyo *tpoyo, grille *gr, int n){
+void roulement_poyo(c_poyo *tpoyo, grille *gr){
     if( tpoyo[0].apparait == 0 ){
         apparition_piece(&tpoyo[0], gr);
     }
-    if( tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
-        decalage_gauche(tpoyo, n);
-        initialisation_cpoyo(&tpoyo[n-1]);
-    }
+    decalage_gauche(tpoyo, 4);
+    initialisation_cpoyo(&tpoyo[3]);
 }
                              
     

@@ -41,5 +41,8 @@ void deplacement(c_poyo *p, grille *gr);
 /* permet de mouvoir une piece */
 void deplacement(c_poyo * p, grille *gr);
 
+/* sauvegarde une piece en appyant sur espace */
+c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr);
+
 
 #endif

@@ -318,3 +318,32 @@ void deplacement(c_poyo *p, grille *gr){
 
 
 /* -------------------------------- fin des definition de deplacement -------------------------------------*/
+
+c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr){
+    c_poyo ptmp;
+    static int tmp_passer = 0;
+    int tmp_act, attente;
+    tmp_act = MLV_get_time(), attente = 500;
+    
+    if( MLV_get_keyboard_state(MLV_KEYBOARD_SPACE) == MLV_PRESSED){
+
+        if( tmp_act - tmp_passer >= attente ){
+             
+            if( poyo_sauvegarde.p1.couleur == 0){
+                poyo_sauvegarde = tpoyo[0];
+                roulement_poyo(tpoyo, gr);
+            }else{
+                ptmp = tpoyo[0];
+                tpoyo[0] = poyo_sauvegarde;
+                poyo_sauvegarde = ptmp;
+            }
+            tmp_passer = tmp_act;
+        }
+    }
+    poyo_sauvegarde.apparait = 0;
+    poyo_sauvegarde.p1.x = 0;
+    poyo_sauvegarde.p1.y = 0;
+    poyo_sauvegarde.p2.x = -1;
+    poyo_sauvegarde.p2.y = -1;
+    return poyo_sauvegarde;
+}

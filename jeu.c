@@ -12,10 +12,13 @@
 void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     int taille_tcord1 = 0, taille_tcord2 = 0, temps, duree , nb_dest1 = 0, nb_dest2 = 0;
     coordonne tcord1[100],tcord2[100];
-
+    c_poyo ptmp;
+    
     struct timespec debut, fin, maintenant, dernier_avancement;
-  
+
+    initialisation_cpoyo_vide(&ptmp);
     aff_jeu();
+   
   
     clock_gettime( CLOCK_REALTIME, &dernier_avancement );
   
@@ -26,7 +29,12 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
         /* permet de gérer le temps passer entre chaque avancement */
         clock_gettime( CLOCK_REALTIME, &maintenant );
 
-        roulement_poyo(tpoyo, gr, 4);
+        if( tpoyo[0].apparait == 0 ){
+            apparition_piece(&tpoyo[0], gr);
+        }
+        if( tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
+            roulement_poyo(tpoyo, gr);
+        }
         if(( maintenant.tv_sec - dernier_avancement.tv_sec ) > 1 ||  ( (maintenant.tv_sec - dernier_avancement.tv_sec) == 1 && maintenant.tv_nsec >= dernier_avancement.tv_nsec) ){
             avancement_piece(&tpoyo[0], gr);
             dernier_avancement = maintenant;
@@ -34,10 +42,12 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     
         /* aff_grille(*gr); */
         aff_etat(*gr, *je);
+        aff_poyos(tpoyo, ptmp);
     
         printf("\n");
 
         deplacement(&tpoyo[0], gr);
+        ptmp = sauvegarde_poyos(tpoyo, ptmp, gr);
     
         affiche_c_poyo(&tpoyo[0]);
         actualisation_poyo(&tpoyo[0], gr);

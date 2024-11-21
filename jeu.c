@@ -10,8 +10,7 @@
 #include "destruction.h"
 
 void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
-    int taille_tcord1 = 0, taille_tcord2 = 0, temps, duree , nb_dest1 = 0, nb_dest2 = 0;
-    coordonne tcord1[100],tcord2[100];
+    int temps, duree ;
     c_poyo ptmp;
     
     struct timespec debut, fin, maintenant, dernier_avancement;

@@ -14,4 +14,7 @@ int destruction(coordonne *tcord, grille *gr, int taille_t);
 void chutte_destruction(grille *gr);
 
 int post_destruction( grille *gr );
+
+void chute_et_destruction(c_poyo *tpoyo, grille *gr );
+
 #endif

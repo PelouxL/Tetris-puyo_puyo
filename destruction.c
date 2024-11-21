@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "types.h"
 #include "ini_poyo.h"
+#include <MLV/MLV_all.h>
 
 
 
@@ -162,6 +163,34 @@ int post_destruction( grille *gr ){
     return chute;
 }
 
+void chute_et_destruction(c_poyo *tpoyo, grille *gr ){
+    int nb_dest1, nb_dest2, taille_tcord1 = 0, taille_tcord2 = 0;
+    coordonne tcord1[100],tcord2[100];
+    
+    /* principe des coordonnées et de la destruction */
+    if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
+        nb_dest1 = 0;
+        nb_dest2 = 0;
+        taille_tcord1 = recup_coord(&tpoyo[0].p1, gr, tcord1);           
+        nb_dest1 = destruction(tcord1, gr, taille_tcord1);
+        taille_tcord2 = recup_coord(&tpoyo[0].p2, gr, tcord2);
+        nb_dest2 = destruction(tcord2, gr, taille_tcord2);
+            
 
+        /* verifie que si l'on detruit des poyos alors une chute se fait*/
+        if( nb_dest1 > 0 || nb_dest2 > 0){
+            chutte_destruction(gr);
+            /* cette boucle permet de detruire tout les nouveau groupe causer par une chute */
+            while( post_destruction(gr)){
+                /* il faut actualiser entre les destrcution */
+                /* flemme pour l'instant */
+                MLV_wait_milliseconds(200);
+            }
+        }
+ 
+    }
+
+
+}
 	      
 	    

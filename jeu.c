@@ -29,6 +29,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
         /* permet de gérer le temps passer entre chaque avancement */
         clock_gettime( CLOCK_REALTIME, &maintenant );
 
+
         if( tpoyo[0].apparait == 0 ){
             apparition_piece(&tpoyo[0], gr);
         }
@@ -53,32 +54,13 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
         actualisation_poyo(&tpoyo[0], gr);
 
         /* principe des coordonnées et de la destruction */
-        if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
-            nb_dest1 = 0;
-            nb_dest2 = 0;
-            taille_tcord1 = recup_coord(&tpoyo[0].p1, gr, tcord1);           
-            nb_dest1 = destruction(tcord1, gr, taille_tcord1);
-            taille_tcord2 = recup_coord(&tpoyo[0].p2, gr, tcord2);
-            nb_dest2 = destruction(tcord2, gr, taille_tcord2);
-            
-
-            /* verifie que si l'on detruit des poyos alors une chute se fait*/
-            if( nb_dest1 > 0 || nb_dest2 > 0){
-                chutte_destruction(gr);
-                /* cette boucle permet de detruire tout les nouveau groupe causer par une chute */
-                while( post_destruction(gr)){
-                    MLV_wait_milliseconds(200);
-                }
-            }
- 
-        }
-    
+        chute_et_destruction(&tpoyo[0], gr);
 
         clock_gettime(CLOCK_REALTIME, &fin );
     
         /* Framerate */
         duree = ((fin.tv_sec - debut.tv_sec) * 1000) + ((fin.tv_nsec - debut.tv_nsec) / 1000000);
-        temps = 41 - duree ;
+        temps = 16 - duree ;
         if(temps > 0){
             MLV_wait_milliseconds(temps);
         }

@@ -62,6 +62,4 @@ void roulement_poyo(c_poyo *tpoyo, grille *gr){
 }
                              
     
-    
-    
 

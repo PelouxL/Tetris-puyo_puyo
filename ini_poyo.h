@@ -16,6 +16,7 @@ void apparition_piece(c_poyo * p, grille *gr);
 void decalage_gauche(c_poyo *tpoyo, int n);
 
 void roulement_poyo(c_poyo *tpoyo, grille *gr);
+
 /*------------------ fin d'initialisation ----------------*/
 
 #endif

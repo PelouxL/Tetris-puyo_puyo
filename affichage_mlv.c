@@ -48,7 +48,7 @@ void aff_poyos(c_poyo *tpoyo, c_poyo *sauvegarde){
         MLV_draw_filled_rectangle(130,130 , TSUIV, TSUIV, color[sauvegarde -> p2.couleur]);
         MLV_draw_rectangle( 130, 130, TSUIV, TSUIV, MLV_COLOR_GREY);
 
-        MLV_draw_filled_rectangle(130,170 , TSUIV, TSUIV, color[sauvegarde -> p2.couleur]);
+        MLV_draw_filled_rectangle(130,170 , TSUIV, TSUIV, color[sauvegarde -> p1.couleur]);
         MLV_draw_rectangle( 130, 170, TSUIV, TSUIV, MLV_COLOR_GREY);
     }
     

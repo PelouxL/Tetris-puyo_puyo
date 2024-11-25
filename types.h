@@ -37,6 +37,12 @@ typedef struct{
   int y;
 }coordonne;
 
+typedef struct{
+  int heures;
+  int minutes;
+  int secondes;
+}hms;
+
 #endif
     
 	      

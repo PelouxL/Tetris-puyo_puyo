@@ -6,9 +6,9 @@
 #define TCUB 50
 #define TSUIV 40
 
-void aff_etat(grille gr, joueur je){
+void aff_etat(grille gr, joueur je, hms chrono){
   int i, j;
-  char texte[100], score[10];
+  char texte[100], score[10], chronometre[20];
   MLV_Color color[6] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE, MLV_COLOR_YELLOW, MLV_COLOR_PURPLE};
 
    MLV_clear_window(MLV_COLOR_BLACK);
@@ -16,6 +16,9 @@ void aff_etat(grille gr, joueur je){
   sprintf(score,"%d", je.score);
   strcat(texte, score);
 
+  sprintf(chronometre, "%d:%d:%d", chrono.heures, chrono.minutes, chrono.secondes);
+  MLV_draw_adapted_text_box(600 ,10, chronometre ,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+  
   MLV_draw_adapted_text_box(50,390, texte,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER); /* affichage du score du joueur */
   
   for( i = 0 ; i < gr.n ; i++ ){

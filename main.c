@@ -11,7 +11,7 @@
 #include "destruction.h"
 
 int main(){
-  int n = 10, m = 8;
+  int n = 12, m = 6;
   grille gr;
   joueur j;
   c_poyo tpoyo[4];
@@ -22,10 +22,8 @@ int main(){
   MLV_create_window("Puyo","puyo", LX, LY);
    
   j.pseudo = "Moi";
-  j.score = 1500;
+  j.score = 0;
 
-  
-  aff_jeu();
   gr= initialisation_grille(n,m);
 
   ini_poyo_chaine(tpoyo, 4);

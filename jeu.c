@@ -15,14 +15,12 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     
     struct timespec debut, fin, maintenant, dernier_avancement;
 
-    initialisation_cpoyo_vide(&ptmp);
-    aff_jeu();
-   
-  
+    initialisation_cpoyo_vide(&ptmp);   
+    MLV_clear_window(MLV_COLOR_BLACK);
     clock_gettime( CLOCK_REALTIME, &dernier_avancement );
   
     while(1){
-        /* permet de de gerer le framrate */
+        /* permet de gerer le framrate */
         clock_gettime( CLOCK_REALTIME, &debut );
 
         /* permet de gérer le temps passer entre chaque avancement */
@@ -40,7 +38,6 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
             dernier_avancement = maintenant;
         }
     
-        /* aff_grille(*gr); */
         aff_etat(*gr, *je);
         aff_poyos(tpoyo, &ptmp);
     
@@ -53,7 +50,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
         actualisation_poyo(&tpoyo[0], gr);
 
         /* principe des coordonnées et de la destruction */
-        chute_et_destruction(&tpoyo[0], gr);
+        je -> score += chute_et_destruction(&tpoyo[0], gr);
 
         clock_gettime(CLOCK_REALTIME, &fin );
     
@@ -62,9 +59,6 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
         temps = 16 - duree ;
         if(temps > 0){
             MLV_wait_milliseconds(temps);
-        }
-        if(temps > 50){
-            printf("%d\n", temps);
         }
         MLV_actualise_window();
     }

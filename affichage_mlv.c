@@ -6,15 +6,12 @@
 #define TCUB 50
 #define TSUIV 40
 
-void aff_jeu(){
-  MLV_clear_window(MLV_COLOR_BLACK);
-}
-
 void aff_etat(grille gr, joueur je){
   int i, j;
   char texte[100], score[10];
-  MLV_Color color[4] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE};
-  
+  MLV_Color color[6] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE, MLV_COLOR_YELLOW, MLV_COLOR_PURPLE};
+
+   MLV_clear_window(MLV_COLOR_BLACK);
   strcpy(texte, "Joueur 1 \n Score : "); /* on met le score dans un const char */
   sprintf(score,"%d", je.score);
   strcat(texte, score);
@@ -30,7 +27,7 @@ void aff_etat(grille gr, joueur je){
 }
 
 void aff_poyos(c_poyo *tpoyo, c_poyo *sauvegarde){
-    MLV_Color color[4] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE};
+  MLV_Color color[6] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE,  MLV_COLOR_YELLOW, MLV_COLOR_PURPLE};
     int i;
 
     for(i = 0 ; i < 3 ; i++ ){

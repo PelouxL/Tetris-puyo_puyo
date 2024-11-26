@@ -41,6 +41,7 @@ typedef struct{
   int heures;
   int minutes;
   int secondes;
+  int milis;
 }hms;
 
 #endif

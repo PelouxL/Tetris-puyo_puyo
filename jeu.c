@@ -9,22 +9,20 @@
 #include "affichage_mlv.h"
 #include "destruction.h"
 #include "chrono.h"
+#include "score.h"
 
 void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
-  int temps, duree ;
+    int temps, duree, tmpscore = 0;
   c_poyo ptmp;
   hms chrono;
-  struct timespec debut, fin, maintenant, dernier_avancement, chrono_deb, chrono_fin;
+  struct timespec debut, fin, maintenant, dernier_avancement;
   chrono.secondes = 0;
   chrono.minutes = 0;
   chrono.heures = 0;
-    
-  
 
   initialisation_cpoyo_vide(&ptmp);   
   MLV_clear_window(MLV_COLOR_BLACK);
   clock_gettime( CLOCK_REALTIME, &dernier_avancement );
-  clock_gettime( CLOCK_REALTIME, &chrono_deb);
     
   while(1){
     /* permet de gerer le framrate */
@@ -33,13 +31,11 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     /* permet de gérer le temps passer entre chaque avancement */
     clock_gettime( CLOCK_REALTIME, &maintenant );
 
-    clock_gettime( CLOCK_REALTIME, &chrono_fin);
 
-    /* gestion de l'avancement du chronometre */
-    if(( chrono_fin.tv_sec - chrono_deb.tv_sec ) > 1 ||  ( (chrono_fin.tv_sec - chrono_deb.tv_sec) == 1 && chrono_fin.tv_nsec >= chrono_deb.tv_nsec) ){
-      chronometre( &chrono);
-      chrono_deb = chrono_fin;
-    }
+    /* gestion de l'avancement du temps, attention le jeu tourne a 60 fps donc ça marche mais*/
+    /* si la cadence vient a changer sa posera un problème */
+    chronometre( &chrono);
+  
 
     if( tpoyo[0].apparait == 0 ){
       apparition_piece(&tpoyo[0], gr);
@@ -65,9 +61,13 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     affiche_c_poyo(&tpoyo[0]);
     actualisation_poyo(&tpoyo[0], gr);
 
-    /* principe des coordonnées et de la destruction */
-    je -> score += chute_et_destruction(&tpoyo[0], gr);
+    /* principe des coordonnées, destruction et destrucion */
+    tmpscore = chute_et_destruction(&tpoyo[0], gr);
+    if( tmpscore > 0 ){
+        calcule_score(tmpscore, je, chrono);
+    }
 
+    
     clock_gettime(CLOCK_REALTIME, &fin );
     
     /* Framerate */

@@ -16,7 +16,7 @@ void aff_etat(grille gr, joueur je, hms chrono){
   sprintf(score,"%d", je.score);
   strcat(texte, score);
 
-  sprintf(chronometre, "%d:%d:%d", chrono.heures, chrono.minutes, chrono.secondes);
+  sprintf(chronometre, "%d:%d:%d:%d", chrono.heures, chrono.minutes, chrono.secondes, chrono.milis);
   MLV_draw_adapted_text_box(600 ,10, chronometre ,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
   
   MLV_draw_adapted_text_box(50,390, texte,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER); /* affichage du score du joueur */

@@ -11,8 +11,8 @@ void affiche_c_poyo(c_poyo *p){
 
 void initialisation_cpoyo(c_poyo *cp){
     /* 0 = vide , 1 = red, 2 = green, 3 = blue */
-    cp -> p1.couleur = (rand()%2)+1;
-    cp -> p2.couleur = (rand()%2)+1;
+    cp -> p1.couleur = (rand()%5)+1;
+    cp -> p2.couleur = (rand()%5)+1;
     cp -> p1.x = 0; 
     cp -> p1.y = 0;
     cp -> p1.pos = 0;

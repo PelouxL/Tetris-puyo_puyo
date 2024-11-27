@@ -27,10 +27,12 @@ void chronometre(hms * chrono){
 void gestion_niveau_grille(grille *gr, hms chrono){
     static int dernier_avancement = 0;
     int temps_ecoule;
-    temps_ecoule = chrono.secondes + chrono.minutes * 60 + chrono.heures * 3600;   
-    if (temps_ecoule - dernier_avancement >= 30) {
-        gr->niveau += 1;           
-        dernier_avancement = temps_ecoule;  
+    if( gr -> niveau < 50){
+        temps_ecoule = chrono.secondes + chrono.minutes * 60 + chrono.heures * 3600;   
+        if (temps_ecoule - dernier_avancement >= 30) {
+            gr->niveau += 1;           
+            dernier_avancement = temps_ecoule;  
+        }
     }
 }
 

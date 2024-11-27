@@ -297,22 +297,22 @@ void deplacement_bas( c_poyo *p, grille *gr){
 }
 
 void deplacement(c_poyo *p, grille *gr){
-  static int tmp_passer = 0;
-  int tmp_act, attente;
-  tmp_act = MLV_get_time(), attente = 150;
-  if( MLV_get_keyboard_state(MLV_KEYBOARD_DOWN) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_LEFT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED ){
+    static int tmp_passer = 0;
+    int tmp_act, attente;
+    tmp_act = MLV_get_time(), attente = 150;
+    if( MLV_get_keyboard_state(MLV_KEYBOARD_DOWN) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_LEFT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_RIGHT) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_q) == MLV_PRESSED || MLV_get_keyboard_state(MLV_KEYBOARD_d) == MLV_PRESSED ){
       
-    if( tmp_act - tmp_passer >= attente ){
+        if( tmp_act - tmp_passer >= attente ){
         
-      pivot_gauche(p, gr);
-      pivot_droit(p, gr);
-      deplacement_droit(p, gr);
-      deplacement_gauche(p, gr);
-      deplacement_bas(p, gr);
+            pivot_gauche(p, gr);
+            pivot_droit(p, gr);
+            deplacement_droit(p, gr);
+            deplacement_gauche(p, gr);
+            deplacement_bas(p, gr);
 
-      tmp_passer = tmp_act;
+            tmp_passer = tmp_act;
+        }
     }
-  }
 }
 
 
@@ -329,19 +329,48 @@ c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr){
 
         if( tmp_act - tmp_passer >= attente ){
              
-            if( poyo_sauvegarde.p1.couleur == 0){
-                poyo_sauvegarde = tpoyo[0];
-                gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
-                gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
-                roulement_poyo(tpoyo, gr);
-            }else{
-                ptmp = tpoyo[0];
-                gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
-                gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
-                tpoyo[0] = poyo_sauvegarde;
-                poyo_sauvegarde = ptmp;
+            if( poyo_sauvegarde.p1.couleur == 0 && poyo_sauvegarde.p2.couleur == 0){
                 
+                if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 0){
+                    poyo_sauvegarde = tpoyo[0];  
+                    gr->mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = 0; 
+                    roulement_poyo(tpoyo, gr);
+                }
+                else if(tpoyo[0].p1.pos == 0 && tpoyo[0].p2.pos == 1){
+                    poyo_sauvegarde = tpoyo[0]; 
+                    gr->mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;  
+                    roulement_poyo(tpoyo, gr);
+                }
+                else{
+                    poyo_sauvegarde = tpoyo[0];
+                    gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
+                    gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
+                    roulement_poyo(tpoyo, gr);
+                }
+            }else{
+                /* flemme la */
+                /*  if (poyo_sauvegarde.p2.couleur == 0 && tpoyo[0].p2.pos == 1) { */
+                /*     poyo_sauvegarde.p2 = tpoyo[0].p2;  */
+                /*     gr->mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = 0;  */
+                /*     roulement_poyo(tpoyo, gr);  */
+                /* }  */
+         
+                /* else if (poyo_sauvegarde.p1.couleur == 0 && tpoyo[0].p1.pos == 1) { */
+                /*     poyo_sauvegarde.p1 = tpoyo[0].p1;   */
+                /*     gr->mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;   */
+                /*     roulement_poyo(tpoyo, gr);   */
+                /* } */
+
+                /* else{ */
+                    
+                    ptmp = tpoyo[0];
+                    gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
+                    gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
+                    tpoyo[0] = poyo_sauvegarde;
+                    poyo_sauvegarde = ptmp;
+                /* } */
             }
+           
             tmp_passer = tmp_act;
         }
     }

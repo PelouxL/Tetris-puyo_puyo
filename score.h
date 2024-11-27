@@ -3,8 +3,10 @@
 
 int calcule_score(int destruction, joueur *je, hms chrono);
 
-int recup_score( char *nom, int *score[10] );
+int echange_joueur_score(joueur *j1, joueur *j2);
 
-int tri_insertion( int score, int *tabscore[10] );
+int recup_score( char *nom, tjoueur *je_score );
+
+int tri_insertion( char *nom, int score, int *tabscore[10] );
 
 #endif

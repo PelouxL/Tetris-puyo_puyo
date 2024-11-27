@@ -23,5 +23,9 @@ void chronometre(hms * chrono){
     }
 }
 
+/* void gestion_vitesse_grille(grille *gr, hms chrono, float vitesse){ */
+    
+    
+
     
     

@@ -32,6 +32,8 @@ typedef struct{
   int score;
 }joueur;
 
+typedef joueur tjoueur[10];
+
 typedef struct{
   int x;
   int y;

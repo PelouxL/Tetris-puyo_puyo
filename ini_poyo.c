@@ -20,6 +20,8 @@ void initialisation_cpoyo(c_poyo *cp){
     cp -> p2.y = -1;
     cp -> p2.pos = 0;
     cp -> apparait = 0;
+    cp -> p1.fantome = 0;
+    cp -> p2.fantome = 0;
 
 }
 
@@ -34,6 +36,9 @@ void initialisation_cpoyo_vide(c_poyo *cp){
     cp -> p2.y = -1;
     cp -> p2.pos = 0;
     cp -> apparait = 0;
+    cp -> p1.fantome = 0;
+    cp -> p2.fantome = 0;
+
 
 }
 

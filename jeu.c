@@ -20,7 +20,6 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     chrono.secondes = 0;
     chrono.minutes = 0;
     chrono.heures = 0;
-    printf("\a");
     initialisation_cpoyo_vide(&ptmp);   
     MLV_clear_window(MLV_COLOR_BLACK);
     clock_gettime( CLOCK_REALTIME, &dernier_avancement );

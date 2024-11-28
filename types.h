@@ -18,6 +18,7 @@ typedef struct{
   int x;
   int y;
   int pos;
+  int fantome;
 }poyo;
 
 typedef struct{

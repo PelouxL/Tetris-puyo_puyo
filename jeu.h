@@ -3,6 +3,8 @@
 
 void jeu(grille *gr, joueur *j, c_poyo tpoyo[4]);
 
+void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[4], c_poyo tpoyo2[4]);
+
 #endif
 
 

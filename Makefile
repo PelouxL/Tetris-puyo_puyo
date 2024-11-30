@@ -1,8 +1,8 @@
 CC= gcc
 OPTION= -W -Wall -pedantic -std=gnu89 -O3
 
-main: main.o grille.o pieces.o affichage_mlv.o ini_poyo.o destruction.o jeu.o chrono.o score.o
-	$(CC) $(OPTION) `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` $^ `pkg-config --libs-only-l MLV` -lrt -o $@
+main: main.o grille.o pieces.o affichage_mlv.o ini_poyo.o destruction.o jeu.o chrono.o score.o deplacement_1vs1.o
+	$(CC) $(OPTION) `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` $^ `pkg-config --libs-only-l MLV` -lrt -o $@ -lMLV
 
 main.o: main.c
 	$(CC) $(OPTION) $^ -c
@@ -30,6 +30,9 @@ chrono.o: chrono.c
 
 score.o: score.c
 	$(CC) $(OPTION) $^ -c
+
+deplacement_1vs1.o: deplacement_1vs1.c
+	$(CC) $(OPTION) $^ -c	
 
 clean:
 	rm -rf *.o *#~  main 

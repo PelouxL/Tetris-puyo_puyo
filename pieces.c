@@ -324,7 +324,7 @@ void deplacement(c_poyo *p, grille *gr){
 /* PROBLEME lors de la recuperation d'un poyo separer, il est encore EXISTANT a corriger ! */
 /* ok A OPTIMISER !!!, il suffit surement de mettre juste un poyo tmp */
 /* qu'on initialise a p1, et on change en fonction de si il est poser ou non */
-c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr){
+c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr ){
     c_poyo cptmp;
     static int tmp_passer = 0;
     int tmp_act, attente;

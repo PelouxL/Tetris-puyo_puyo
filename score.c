@@ -2,13 +2,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include "types.h"
+#include "ini_poyo.h"
+#include "pieces.h"
 
 
+
+/* permet de calculer le score max par rapport au temps */
 void calcule_score(int destruction, joueur *je, hms chrono){
     int total = 0;
     total = chrono.milis + chrono.secondes + destruction *(chrono.minutes * 1.5) + 100000 * chrono.heures;
-    je -> score += total;
+    if(je -> score + total < 999999999 ){
+      je -> score += total;
+    }
 }
+
+/*-------- fonction permettant de gerer les nouveaux score ------*/
 
 /* permet de recupperer le score dans un tableau tjoueur */
 int recup_score( char *nom, tjoueur *je_score ){
@@ -97,3 +105,44 @@ int tri_insertion( char *nom, joueur nouveau_score, tjoueur *je_score ){
     
 }
 
+/* --------------------------------------------------- */
+/* ------------------- peut-être le changer de module ? -------*/
+void creation_malus(c_poyo *poyo_piege, grille *gr, int absisse){
+  initialisation_cpoyo_vide( poyo_piege);
+  poyo_piege -> p1.couleur = 6;
+  poyo_piege -> p2.couleur = 6;
+  poyo_piege -> p2.x = gr -> n - 2;
+  poyo_piege -> p1.x = gr -> n - 1;
+  poyo_piege -> p2.y = absisse;
+  poyo_piege -> p1.y = absisse;
+  poyo_piege -> p2.fantome = 1;
+  poyo_piege -> p1.fantome = 1;
+}
+
+void decalage(int absisse, grille *gr){
+  int i, tmp;
+  for( i = 1 ; i <  gr -> n ; i++){
+    if( gr -> mat[i][absisse] != 0){
+      tmp = gr -> mat[i][absisse];
+      gr -> mat[i - 2][absisse] = tmp;
+      gr -> mat[i][absisse] = 0;
+    }
+  }
+}
+
+
+void appliquer_malus(int score, grille *gr){
+  int absisse;
+  c_poyo poyo_piege;
+  absisse = rand()%( gr -> m -1);
+  if( score >= 16 ){
+    creation_malus( &poyo_piege, gr, absisse);
+    affiche_c_poyo( &poyo_piege );
+    decalage( absisse, gr );
+    poyo_piege.apparait = 1;
+    actualisation_poyo( &poyo_piege, gr);
+  }
+}
+
+
+    

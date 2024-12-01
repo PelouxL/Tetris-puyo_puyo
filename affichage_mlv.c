@@ -11,7 +11,7 @@
 void aff_etat(grille gr, joueur je, hms chrono){
   int i, j;
   char texte[100], score[10], chronometre[20];
-  MLV_Color color[6] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE, MLV_COLOR_YELLOW, MLV_COLOR_PURPLE};
+  MLV_Color color[7] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE, MLV_COLOR_YELLOW, MLV_COLOR_PURPLE, MLV_COLOR_GREY};
 
    MLV_clear_window(MLV_COLOR_BLACK);
   strcpy(texte, "Joueur 1 \n Score : "); /* on met le score dans un const char */
@@ -63,7 +63,7 @@ void aff_poyos(c_poyo *tpoyo, c_poyo *sauvegarde){
 void aff_1vs1_etat(grille gr1, grille gr2, joueur je1, joueur je2, hms chrono){
   int i, j;
   char texte1[100], texte2[100], score1[10], score2[10], chronometre[20];
-  MLV_Color color[6] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE, MLV_COLOR_YELLOW, MLV_COLOR_PURPLE};
+  MLV_Color color[7] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE, MLV_COLOR_YELLOW, MLV_COLOR_PURPLE, MLV_COLOR_BLACK};
 
   MLV_clear_window(MLV_COLOR_BLACK);
 

@@ -11,6 +11,7 @@
 #include "chrono.h"
 #include "score.h"
 #include "deplacement_1vs1.h"
+#include "fin_partie.h"
 
 void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     int temps, duree, tmpscore = 0, vitesse, temps_ecoule;
@@ -148,7 +149,8 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
     }
 
     /* affichage de la grille et des poyos */
-    aff_1vs1_etat(*gr1, *gr2, *je1, *je2, chrono);
+    aff_grille( *gr1);
+    aff_1vs1_etat( *gr1, *gr2, *je1, *je2, chrono );
     
     /* aff_poyos(tpoyo, &ptmp); */
     aff_1vs1_poyos(tpoyo1, tpoyo2, &ptmp1, &ptmp2);
@@ -173,12 +175,14 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
 
     
     if( tmpscore1 > 0 ){
+      appliquer_malus(tmpscore1, gr2);
       calcule_score(tmpscore1, je1, chrono);   
     }
      if( tmpscore2 > 0 ){
+       appliquer_malus(tmpscore2, gr1);
       calcule_score(tmpscore2, je2, chrono);   
     }
-    
+
     clock_gettime(CLOCK_REALTIME, &fin );
     
     /* Framerate */

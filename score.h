@@ -9,4 +9,10 @@ int recup_score( char *nom, tjoueur *je_score );
 
 int tri_insertion( char *nom, int score, int *tabscore[10] );
 
+void creation_malus(c_poyo poyo_piege, grille *gr_adverse);
+
+void decalage(int absisse, grille *gr);
+
+void appliquer_malus(int score, grille *gr);
+
 #endif

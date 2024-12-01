@@ -1,10 +1,10 @@
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
+moi 0
+toi 0
+lui 0
+nous 0
+vous 0
+je 0
+moi 0
+feur 0
+pourquoi 0
+feur2 0

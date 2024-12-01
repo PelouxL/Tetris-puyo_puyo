@@ -7,7 +7,7 @@ int echange_joueur_score(joueur *j1, joueur *j2);
 
 int recup_score( char *nom, tjoueur *je_score );
 
-int tri_insertion( char *nom, int score, int *tabscore[10] );
+int tri_insertion( char *nom, joueur score, tjoueur *tabscore );
 
 void creation_malus(c_poyo poyo_piege, grille *gr_adverse);
 

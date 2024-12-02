@@ -9,6 +9,7 @@
 #include "jeu.h"
 #include "affichage_mlv.h"
 #include "destruction.h"
+#include "menu.h"
 
 int main(){
   int n = 12, m = 6;
@@ -28,8 +29,9 @@ int main(){
   ini_poyo_chaine(tpoyo1, 4);
   ini_poyo_chaine(tpoyo2, 4);
 
-  /* jeu(&gr1, &je1, tpoyo1); */
-  jeu_1vs1(&gr1, &gr2, &je1, &je2, tpoyo1, tpoyo2);  
+  fonctionnement();
+  jeu(&gr1, &je1, tpoyo1);
+  /* jeu_1vs1(&gr1, &gr2, &je1, &je2, tpoyo1, tpoyo2);   */
   
   MLV_wait_seconds(7);
   MLV_free_window();

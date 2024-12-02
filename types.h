@@ -48,6 +48,18 @@ typedef struct{
   int milis;
 }hms;
 
+/* Menu */
+#define L 50
+
+typedef struct{
+  int x;
+  int y;
+  int hauteur;
+  int largeur;
+  int valeur;
+  char txt[L];
+}bouton;
+
 #endif
     
 	      

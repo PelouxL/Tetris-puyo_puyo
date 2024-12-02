@@ -20,21 +20,21 @@ void calcule_score(int destruction, joueur *je, hms chrono){
 
 /* permet de recupperer le score dans un tableau tjoueur */
 int recup_score( char *nom, tjoueur *je_score ){
-    int i;
-    FILE  *fichier;
+  FILE *fichier;
 
-    if( (fichier = fopen( nom, "r")) == NULL ){
-        printf("Erreur lors de l'ouverture\n");
-        return -1;
-    }
-    for( i = 0 ; i < 10 ; i++ ){
-        if( (fscanf( fichier, "%s %d", je_score[i] -> pseudo, &je_score[i] -> score) ) != 2){
-            printf("erreur lors de la reccuperation\n");
-            return -1;
-        }
-    }
-    fclose(fichier);
-    return 1;
+  if( (fichier = fopen( nom, "rb")) == NULL ){
+    printf("Erreur lors de l'ouverture\n");
+    return -1;
+  }
+
+  if( fread(*je_score, sizeof(joueur), 10, fichier) != 10){
+     printf("erreur lors de la reccuperation\n");
+     fclose(fichier);
+     return -1;
+  }
+
+  fclose(fichier);
+  return 1;
 }
 
 
@@ -42,7 +42,6 @@ int recup_score( char *nom, tjoueur *je_score ){
 int echange_joueur_score(joueur *j1, joueur *j2){
     joueur tmp;
     tmp.score = 0;
-    tmp.pseudo ="temporaire";
     
     if( (strcpy(tmp.pseudo, j1 -> pseudo)) == NULL ){
         printf("Erreur lors du deplacement\n");
@@ -65,15 +64,12 @@ int echange_joueur_score(joueur *j1, joueur *j2){
 
 }
     
-
-
 /* tri la liste des score et renvoie 1 ou -1 en cas d'erreurs */
 int tri_insertion( char *nom, joueur nouveau_score, tjoueur *je_score ){
-    /* on va peut-être devoir ne pas ouvrir le file ici */
     FILE *fichier;
     int i, j;
 
-    if( (fichier = fopen( nom, "w+")) == NULL ){
+    if( (fichier = fopen( nom, "wb")) == NULL ){
         printf("erreur lros de l'overture\n");
         return -1;
     }
@@ -83,7 +79,7 @@ int tri_insertion( char *nom, joueur nouveau_score, tjoueur *je_score ){
         if( je_score[i] -> score  < nouveau_score.score ){
             for( j = i ; j < 9 ; j++ ){
                 /* on verifie qu'il n'y est pas de pb dans l'echange de position */
-                if (echange_joueur_score(je_score[i+1], je_score[i]) == -1 ){
+                if (echange_joueur_score(je_score[i + 1], je_score[i]) == -1 ){
                     printf("Erreur lors du deplacement de score\n");
                     return -1;
                 }
@@ -96,16 +92,18 @@ int tri_insertion( char *nom, joueur nouveau_score, tjoueur *je_score ){
         }
     }
     /* ecriture sur le fichier */
-    for( i = 0 ; i < 10 ; i ++ ){
-        fprintf( fichier, "%s %d\n", je_score[i] -> pseudo, je_score[i] -> score);
+    if( fwrite( *je_score, sizeof(joueur), 10, fichier) != 10 ){
+       printf("Erreur lors de l'écriture dans le fichier\n");
+        fclose(fichier);
+        return -1;
     }
+    
     
     fclose(fichier);
     return 1;
     
 }
 
-/* --------------------------------------------------- */
 /* ------------------- peut-être le changer de module ? -------*/
 void creation_malus(c_poyo *poyo_piege, grille *gr, int absisse){
   initialisation_cpoyo_vide( poyo_piege);

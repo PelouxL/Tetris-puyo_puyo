@@ -74,7 +74,13 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
             calcule_score(tmpscore, je, chrono);
         }
 
-    
+	/* on verifie que la partie n'est pas fini */
+	if( fin_solo( tpoyo[0], *je, *gr) == 1 ){
+	  printf(" et la ???? \n");
+	  return ;
+	}
+        
+	
         clock_gettime(CLOCK_REALTIME, &fin );
     
         /* Framerate */

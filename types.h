@@ -5,6 +5,7 @@
 #define LY 800
 #define N 100
 #define M 100
+#define TAILLE_PSEUDO 10
 
 typedef struct{
   int mat[N][M];
@@ -29,7 +30,7 @@ typedef struct{
 
 
 typedef struct{
-  char *pseudo;
+  char pseudo[TAILLE_PSEUDO];
   int score;
 }joueur;
 

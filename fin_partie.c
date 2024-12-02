@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <MLV/MLV_all.h>
 #include "types.h"
 #include "score.h"
 
@@ -15,21 +16,40 @@ int verif_fin( c_poyo poyo, grille gr ){
 
 int fin_solo( c_poyo poyo, joueur je, grille gr ){
   tjoueur tmp_tjoueur;
+  char *pseudo = NULL;
+  
   if( (verif_fin( poyo, gr) ) == 1 ){
+    MLV_clear_window(MLV_COLOR_BLACK);
 
-    printf(" rentrer un pseudo \n");
+    /* boite pour ecrire le pseudo */
+    MLV_wait_input_box( 100, 100, 300, 50,  MLV_COLOR_WHITE, MLV_COLOR_BLACK, MLV_COLOR_WHITE, "Entrez votre pseudo : ", &pseudo );
+    
+    /* on verifie si il y a une erreur */
+    if (pseudo == NULL) {
+      fprintf(stderr, "Erreur : Aucun pseudo saisi.\n");
+      return -1;
+    }
 
-    if( recup_score("score.txt", &tmp_tjoueur) == -1 ){
+    strncpy(je.pseudo, pseudo, sizeof(je.pseudo) - 1);
+    je.pseudo[sizeof(je.pseudo) - 1] = '\0'; 
+
+    free(pseudo );
+
+    
+    if( recup_score("score.bin", &tmp_tjoueur) == -1 ){
       fprintf( stderr, "Erreur lors de la recupperation du score\n");
       return -1;
     }
-
-    if( (tri_insertion( "score.txt", je, &tmp_tjoueur) ) == -1){
+    
+    if( (tri_insertion( "score.bin", je, &tmp_tjoueur) ) == -1){
       fprintf( stderr, "Erreur lors de l'actualisation du score\n");
       return -1;
     }
+    /* partie fini et aucun problème */
+    return 1;
   }
-  return 1;
+  /* la fonction est appeler mais partie n'est pas fini */
+  return 0; 
 }
       
 

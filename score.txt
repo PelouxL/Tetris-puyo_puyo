@@ -1,9 +1,9 @@
-moi 0
-toi 0
-lui 0
-nous 0
-vous 0
-je 0
+moi 65
+d 63
+d 61
+kkk 42
+feur 41
+m 16
 moi 0
 feur 0
 pourquoi 0

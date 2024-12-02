@@ -19,9 +19,7 @@ int main(){
   srand(time(NULL));
   MLV_create_window("Puyo","puyo", LX, LY);
 
-  /*strcpy(je1.pseudo,"Moi");  */
   je1.score = 0;
-
   je2.score = 1500;
 
   gr1 = initialisation_grille(n,m);
@@ -30,8 +28,8 @@ int main(){
   ini_poyo_chaine(tpoyo1, 4);
   ini_poyo_chaine(tpoyo2, 4);
 
-   jeu(&gr1, &je1, tpoyo1); 
-  /* jeu_1vs1(&gr1, &gr2, &je1, &je2, tpoyo1, tpoyo2); */
+  /* jeu(&gr1, &je1, tpoyo1); */
+  jeu_1vs1(&gr1, &gr2, &je1, &je2, tpoyo1, tpoyo2);  
   
   MLV_wait_seconds(7);
   MLV_free_window();

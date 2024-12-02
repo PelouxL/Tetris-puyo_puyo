@@ -14,7 +14,7 @@
 #include "fin_partie.h"
 
 void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
-    int temps, duree, tmpscore = 0, vitesse, temps_ecoule;
+  int temps, duree, tmpscore = 0, vitesse, temps_ecoule, dest;
     c_poyo ptmp;
     hms chrono;
     struct timespec debut, fin, maintenant, dernier_avancement;
@@ -27,6 +27,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     clock_gettime( CLOCK_REALTIME, &dernier_avancement );
     
     while(1){
+      dest = 0;
         /* permet de gerer le framrate */
         clock_gettime( CLOCK_REALTIME, &debut );
 
@@ -71,12 +72,12 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
         /* principe des coordonnées, destruction et destrucion */
         tmpscore = chute_et_destruction(&tpoyo[0], gr);
         if( tmpscore > 0 ){
+	  dest = 1;
             calcule_score(tmpscore, je, chrono);
         }
 
 	/* on verifie que la partie n'est pas fini */
-	if( fin_solo( tpoyo[0], *je, *gr) == 1 ){
-	  printf(" et la ???? \n");
+	if( fin_solo( tpoyo[0], *je, *gr, dest) == 1){
 	  return ;
 	}
         
@@ -96,7 +97,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
 
 
 void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[4], c_poyo tpoyo2[4]){
-  int temps, duree, tmpscore1 = 0, tmpscore2 = 0, vitesse, temps_ecoule;
+  int temps, duree, tmpscore1 = 0, tmpscore2 = 0, vitesse, temps_ecoule, dest1, dest2;
   c_poyo ptmp1, ptmp2;
   hms chrono;
   struct timespec debut, fin, maintenant, dernier_avancement;
@@ -111,6 +112,8 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
   clock_gettime( CLOCK_REALTIME, &dernier_avancement );
     
   while(1){
+    dest1 = 0;
+    dest2 = 0;
     /* permet de gerer le framrate */
     clock_gettime( CLOCK_REALTIME, &debut );
 
@@ -181,14 +184,21 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
 
     
     if( tmpscore1 > 0 ){
+      dest1 = 1;
       appliquer_malus(tmpscore1, gr2);
       calcule_score(tmpscore1, je1, chrono);   
     }
      if( tmpscore2 > 0 ){
+       dest2 = 1;
        appliquer_malus(tmpscore2, gr1);
       calcule_score(tmpscore2, je2, chrono);   
     }
 
+     printf("%d et %d\n", dest1, dest2);
+     if( fin_1vs1( tpoyo1[0], tpoyo2[0], *je1, *je2, *gr1, *gr2, dest1, dest2) == 1){
+       return ;
+     }
+     
     clock_gettime(CLOCK_REALTIME, &fin );
     
     /* Framerate */

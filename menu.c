@@ -126,6 +126,7 @@ int save_partie(char *nom, joueur *jr, grille *gr){
     FILE *f;
     int i, j;
     if((f = fopen(nom, "w")) == NULL){
+        fprintf(stderr, "Erreur lors de l'ouverture du fichier de sauvegarde \n");
         return -1;
     }
 
@@ -225,15 +226,14 @@ void fonctionnement(){
     bouton t_bouton_menu[4], t_bouton_save[5];
     bouton retour;
     int pressed; /* bouton pressé */
-    int n = 10, m = 8, ok = 1;
+    int n = 10, m = 6, ok = 1;
     int retour_menu_p = 1;
-    int pause = 1;
     grille gr;
     joueur j;
     c_poyo tpoyo[4];
 
 
-    menu(t_bouton_menu);
+    /* menu(t_bouton_menu); */
 
     while(ok == 1){
         menu(t_bouton_menu);
@@ -252,7 +252,6 @@ void fonctionnement(){
             menu_save(t_bouton_save);
             while(retour_menu_p == 1){
                 pressed = clic_bouton(t_bouton_save, 5);
-                MLV_actualise_window();
                                   
                 if(pressed == 0){
                     printf("Save 1 \n");
@@ -260,6 +259,7 @@ void fonctionnement(){
                         ini_poyo_chaine(tpoyo, 4);
                         jeu(&gr, &j, tpoyo);
                     }
+                    /* cas d'erreur */
                 }
                 else if(pressed == 1){
                     printf("Save 2 \n");

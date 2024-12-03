@@ -64,6 +64,7 @@ int disposition(c_poyo p){
 void avancement_piece(c_poyo * p, grille *gr){
   int d = -1;
   if( p -> p2.fantome == 1 ){
+      p -> p2.x = -1;
       p -> p2.pos = 1;
   }
   if( p -> p1.pos == 0 && p -> p2.pos == 0){ /* si poyo est seul alors pas connaitre disposition */

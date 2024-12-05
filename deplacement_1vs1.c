@@ -232,15 +232,15 @@ void deplacement_j1(c_poyo *p, grille *gr){
     }
 }
 
-c_poyo sauvegarde_poyos_j1(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr ){
+c_poyo sauvegarde_poyos_j1(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save1){
     c_poyo cptmp;
     static int tmp_passer = 0;
     int tmp_act, attente;
     tmp_act = MLV_get_time(), attente = 500;
     /* permet de savoir quel poyo va être vide */
     
-    if( MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED){
-
+    if( MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED && *est_save1 == 0){
+        *est_save1 = 1;
         if( tmp_act - tmp_passer >= attente ){
 
             /* si rien dans la sauvegarde alors on recup juste la pieces */
@@ -557,17 +557,17 @@ void deplacement_j2(c_poyo *p, grille *gr){
     }
 }
 
-c_poyo sauvegarde_poyos_j2(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr ){
+c_poyo sauvegarde_poyos_j2(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save2 ){
     c_poyo cptmp;
     static int tmp_passer = 0;
     int tmp_act, attente;
     tmp_act = MLV_get_time(), attente = 500;
     /* permet de savoir quel poyo va être vide */
     
-    if( MLV_get_keyboard_state(MLV_KEYBOARD_UP) == MLV_PRESSED){
+    if( MLV_get_keyboard_state(MLV_KEYBOARD_UP) == MLV_PRESSED && *est_save2 == 0){
 
         if( tmp_act - tmp_passer >= attente ){
-
+            *est_save2 = 1;
             /* si rien dans la sauvegarde alors on recup juste la pieces */
             /* et on applique le roulement de poyo */
             if( poyo_sauvegarde.p1.couleur == 0 && poyo_sauvegarde.p2.couleur == 0){

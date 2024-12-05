@@ -16,7 +16,7 @@ void deplacement_bas_j1( c_poyo *p, grille *gr);
 
 void deplacement_j1(c_poyo *p, grille *gr);
 
-c_poyo sauvegarde_poyos_j1(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr );
+c_poyo sauvegarde_poyos_j1(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save1);
 
 /* -------------------- j2 --------------------------*/
 
@@ -32,6 +32,6 @@ void deplacement_bas_j2( c_poyo *p, grille *gr);
 
 void deplacement_j2(c_poyo *p, grille *gr);
 
-c_poyo sauvegarde_poyos_j2(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr );
+c_poyo sauvegarde_poyos_j2(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save2 );
 
 #endif

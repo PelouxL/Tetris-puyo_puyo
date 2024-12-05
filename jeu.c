@@ -131,7 +131,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
 
 
 void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[4], c_poyo tpoyo2[4]){
-    int temps, duree, tmpscore1 = 0, tmpscore2 = 0, vitesse, temps_ecoule, dest1, dest2;
+    int temps, duree, tmpscore1 = 0, tmpscore2 = 0, vitesse, temps_ecoule, dest1, dest2, est_save1 = 0, est_save2 = 0;
     c_poyo ptmp1, ptmp2;
     hms chrono;
     struct timespec debut, fin, maintenant, dernier_avancement;
@@ -175,10 +175,12 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
      
         if( tpoyo1[0].p1.pos == 1 && tpoyo1[0].p2.pos == 1 ){
             roulement_poyo(tpoyo1, gr1);
+            est_save1 = 0;
         }
 
         if( tpoyo2[0].p1.pos == 1 && tpoyo2[0].p2.pos == 1 ){
             roulement_poyo(tpoyo2, gr2);
+            est_save2 = 0;
         }
 
         /* -------------------------------------------------------*/
@@ -203,8 +205,8 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
         deplacement_j1(&tpoyo1[0], gr1);
         deplacement_j2(&tpoyo2[0], gr2);
     
-        ptmp1 = sauvegarde_poyos_j1(tpoyo1, ptmp1, gr1);
-        ptmp2 = sauvegarde_poyos_j2(tpoyo2, ptmp2, gr2);
+        ptmp1 = sauvegarde_poyos_j1(tpoyo1, ptmp1, gr1, &est_save1);
+        ptmp2 = sauvegarde_poyos_j2(tpoyo2, ptmp2, gr2, &est_save2);
 
         /* c koi ca deja */
         affiche_c_poyo(&tpoyo1[0]);

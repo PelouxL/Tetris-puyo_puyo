@@ -42,7 +42,7 @@ void deplacement(c_poyo *p, grille *gr);
 void deplacement(c_poyo * p, grille *gr);
 
 /* sauvegarde une piece en appyant sur espace */
-c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr);
+c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save);
 
 
 #endif

@@ -41,4 +41,4 @@ menu.o: menu.c
 	$(CC) $(OPTION) $^ -c
 
 clean:
-	rm -rf *.o *#~  main 
+	rm -rf *.o *~  main 

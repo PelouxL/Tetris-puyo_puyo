@@ -325,15 +325,15 @@ void deplacement(c_poyo *p, grille *gr){
 /* PROBLEME lors de la recuperation d'un poyo separer, il est encore EXISTANT a corriger ! */
 /* ok A OPTIMISER !!!, il suffit surement de mettre juste un poyo tmp */
 /* qu'on initialise a p1, et on change en fonction de si il est poser ou non */
-c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr ){
+c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save ){
     c_poyo cptmp;
     static int tmp_passer = 0;
     int tmp_act, attente;
     tmp_act = MLV_get_time(), attente = 500;
     /* permet de savoir quel poyo va être vide */
     
-    if( MLV_get_keyboard_state(MLV_KEYBOARD_SPACE) == MLV_PRESSED){
-
+    if( MLV_get_keyboard_state(MLV_KEYBOARD_SPACE) == MLV_PRESSED && *est_save == 0){
+        *est_save = 1;
         if( tmp_act - tmp_passer >= attente ){
 
             /* si rien dans la sauvegarde alors on recup juste la pieces */

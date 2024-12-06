@@ -3,6 +3,7 @@
 #include <MLV/MLV_all.h>
 #include "types.h"
 #include <string.h>
+#include "ini_poyo.h"
 #define TCUB 50
 #define TSUIV 40
 #define TVS 40
@@ -17,7 +18,7 @@ void aff_etat(grille gr, joueur je, hms chrono){
   strcpy(texte, "Joueur 1 \n Score : "); /* on met le score dans un const char */
   sprintf(score,"%d", je.score);
   strcat(texte, score);
-
+  
   sprintf(chronometre, "%d:%d:%d:%d", chrono.heures, chrono.minutes, chrono.secondes, chrono.milis);
   MLV_draw_adapted_text_box(600 ,10, chronometre ,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
   
@@ -31,18 +32,20 @@ void aff_etat(grille gr, joueur je, hms chrono){
   }
 }
 
-void aff_poyos(c_poyo *tpoyo, c_poyo *sauvegarde){
+void aff_poyos(tc_poyo *tpoyo, c_poyo *sauvegarde){
   MLV_Color color[6] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE,  MLV_COLOR_YELLOW, MLV_COLOR_PURPLE};
     int i;
 
     for(i = 0 ; i < 3 ; i++ ){
-        MLV_draw_filled_rectangle(700, 200+(i*90), TSUIV, TSUIV, color[tpoyo[i + 1].p2.couleur]);
+      printf(" c'est vous ouuuu ? %d\n",i);
+       affiche_c_poyo(tpoyo[i+1]);
+        MLV_draw_filled_rectangle(700, 200+(i*90), TSUIV, TSUIV, color[tpoyo[i + 1] -> p2.couleur]);
         MLV_draw_rectangle( 700, 200+(i*90), TSUIV, TSUIV, MLV_COLOR_GREY);
         
-        MLV_draw_filled_rectangle(700, 240+(i*90), TSUIV, TSUIV, color[tpoyo[i + 1].p1.couleur]);
+        MLV_draw_filled_rectangle(700, 240+(i*90), TSUIV, TSUIV, color[tpoyo[i + 1] -> p1.couleur]);
         MLV_draw_rectangle( 700, 240+(i*90), TSUIV, TSUIV, MLV_COLOR_GREY);
     }
-
+    
     MLV_draw_text_box( 100, 100, 100, 20, "Sauvegarde", 10, MLV_COLOR_GREY, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER, MLV_HORIZONTAL_CENTER, MLV_VERTICAL_CENTER);
     MLV_draw_rectangle(100,  120, 100, 100, MLV_COLOR_GREY);
 
@@ -99,16 +102,16 @@ void aff_1vs1_etat(grille gr1, grille gr2, joueur je1, joueur je2, hms chrono){
 }
 
 
-void aff_1vs1_poyos(c_poyo *tpoyo1, c_poyo *tpoyo2,  c_poyo *sauvegarde1, c_poyo *sauvegarde2){
+void aff_1vs1_poyos(tc_poyo *tpoyo1, tc_poyo *tpoyo2,  c_poyo *sauvegarde1, c_poyo *sauvegarde2){
   MLV_Color color[6] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE,  MLV_COLOR_YELLOW, MLV_COLOR_PURPLE};
     int i;
 
     /* ------------------------------------ j1 ---------------------------------------------------- */
     for(i = 0 ; i < 3 ; i++ ){
-        MLV_draw_filled_rectangle(350, 200+(i*70), TVSUIV, TVSUIV, color[tpoyo1[i + 1].p2.couleur]);
+        MLV_draw_filled_rectangle(350, 200+(i*70), TVSUIV, TVSUIV, color[tpoyo1[i + 1] -> p2.couleur]);
         MLV_draw_rectangle( 350, 200+(i*70), TVSUIV, TVSUIV, MLV_COLOR_GREY);
         
-        MLV_draw_filled_rectangle(350, 230+(i*70), TVSUIV, TVSUIV, color[tpoyo1[i + 1].p1.couleur]);
+        MLV_draw_filled_rectangle(350, 230+(i*70), TVSUIV, TVSUIV, color[tpoyo1[i + 1] -> p1.couleur]);
         MLV_draw_rectangle( 350, 230+(i*70), TVSUIV, TVSUIV, MLV_COLOR_GREY);
     }
 
@@ -128,10 +131,10 @@ void aff_1vs1_poyos(c_poyo *tpoyo1, c_poyo *tpoyo2,  c_poyo *sauvegarde1, c_poyo
     /* ----------------------------------- j2 --------------------------------------------------- */
 
     for(i = 0 ; i < 3 ; i++ ){
-      MLV_draw_filled_rectangle(750, 200+(i*70), TVSUIV, TVSUIV, color[tpoyo2[i + 1].p2.couleur]);
+      MLV_draw_filled_rectangle(750, 200+(i*70), TVSUIV, TVSUIV, color[tpoyo2[i + 1] -> p2.couleur]);
       MLV_draw_rectangle( 750, 200+(i*70), TVSUIV, TVSUIV, MLV_COLOR_GREY);
         
-      MLV_draw_filled_rectangle(750, 230+(i*70), TVSUIV, TVSUIV, color[tpoyo2[i + 1].p1.couleur]);
+      MLV_draw_filled_rectangle(750, 230+(i*70), TVSUIV, TVSUIV, color[tpoyo2[i + 1] -> p1.couleur]);
       MLV_draw_rectangle( 750, 230+(i*70), TVSUIV, TVSUIV, MLV_COLOR_GREY);
     }
 

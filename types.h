@@ -28,6 +28,7 @@ typedef struct{
   int apparait;
 }c_poyo;
 
+typedef c_poyo tc_poyo[4];
 
 typedef struct{
   char pseudo[TAILLE_PSEUDO];

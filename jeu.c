@@ -61,16 +61,16 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
                         pressed = clic_bouton(t_bouton_save, 5);
 
                         if(pressed == 0){ /* save 1 */
-                            gestion_save_pause(t_bouton_save, je, gr);
+                            gestion_save_pause(t_bouton_save, je, gr, tpoyo);
                         }
                         else if(pressed == 1){ /* save 2 */
-                            gestion_save_pause(t_bouton_save, je, gr);
+                            gestion_save_pause(t_bouton_save, je, gr, tpoyo);
                         }
                         else if(pressed == 2){ /* save 3 */
-                            gestion_save_pause(t_bouton_save, je, gr);
+                            gestion_save_pause(t_bouton_save, je, gr, tpoyo);
                         }
                         else if(pressed == 3){ /* save 4 */
-                            gestion_save_pause(t_bouton_save, je, gr);
+                            gestion_save_pause(t_bouton_save, je, gr, tpoyo);
                         }
                         else if(pressed == 4){
                             printf("Retour menu principal \n");

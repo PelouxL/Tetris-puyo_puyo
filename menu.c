@@ -95,7 +95,7 @@ void menu_save(bouton t_bouton_save[5]){
 }
 
 
-int charger_save(char *nom, joueur *jr, grille *gr){
+int charger_save(char *nom, joueur *jr, grille *gr, c_poyo tpoyo[4]){
     FILE * f;
     int i;
     if(( f = fopen(nom, "rb")) == NULL ){
@@ -122,18 +122,25 @@ int charger_save(char *nom, joueur *jr, grille *gr){
     }
 
     for( i = 0; i < gr -> n; i++ ){
-        if( fread(gr -> mat[i], sizeof(int), gr -> m, f) != gr -> m ){
+        if( fread(gr -> mat[i], sizeof(int), (size_t)gr -> m, f) != (size_t)gr -> m ){
            fprintf(stderr, "Erreur : lecture matrice \n");
            fclose(f);
            return -1;
         }
+    }
+
+    
+    if (fread(tpoyo, sizeof(c_poyo), 1, f) != 1){
+        fprintf(stderr, "Erreur lors de la lecture du couple de poyo en cours \n");
+        fclose(f);
+        return -1;
     }
     
     fclose(f);
     return 1;
 }
 
-int save_partie(char *nom, joueur *jr, grille *gr){
+int save_partie(char *nom, joueur *jr, grille *gr, c_poyo tpoyo[4]){
     FILE *f;
     int i;
 
@@ -160,19 +167,20 @@ int save_partie(char *nom, joueur *jr, grille *gr){
         return -1;
     }
 
-    for( i = 0; i < gr -> n; i++ ){
-        if(gr -> mat[i] ==  NULL){
-            fprintf(stderr, "Erreur : ligne %d de la matrice non allouée \n", i);
-            fclose(f);
-            return -1;
-        }
-        
-        if(fwrite(gr -> mat[i], sizeof(int), gr -> m, f) != gr -> m){
+    for( i = 0; i < gr -> n; i++ ){   
+        if(fwrite(gr -> mat[i], sizeof(int), (size_t)gr -> m, f) != (size_t)gr -> m){
             fprintf(stderr, "Erreur : écriture matrice à la ligne %d \n", i);
             fclose(f);
             return -1;
         }
     }
+
+    if (fwrite(tpoyo, sizeof(c_poyo), 1, f) != 1){
+        fprintf(stderr, "Erreur lors de l'écriture du couple de poyo en cours \n");
+        fclose(f);
+        return -1;
+    }
+    
     fclose(f);
     return 1;
 }
@@ -201,8 +209,9 @@ int ecrasement_save(){
     }
 }
 
-void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr){
+void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr, c_poyo tpoyo[4]){
     char *nom_save[4] = {"save1.bin", "save2.bin", "save3.bin", "save4.bin"};
+    /* poyo p1, p2; */
     int pressed, ecrase;
     FILE *f;
 
@@ -211,14 +220,18 @@ void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr){
     f = fopen(nom_save[pressed], "rb");
 
     if(f == NULL){
-        if(save_partie(nom_save[pressed], j, gr) == 1){
+        if(save_partie(nom_save[pressed], j, gr, tpoyo) == 1){
             printf("Partie bien sauvegardé \n");
         }
     }
     else{
         ecrase = ecrasement_save();
         if(ecrase == 1){
-            if(save_partie(nom_save[pressed], j, gr) == 1){
+            gr -> mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;
+            gr -> mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = 0;
+            if(save_partie(nom_save[pressed], j, gr, tpoyo) == 1){
+                gr -> mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = tpoyo[0].p1.couleur;
+                gr -> mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = tpoyo[0].p2.couleur;
                 printf("Partie bien sauvegardé après confirmation d'écrasement \n");
             }
         }
@@ -332,7 +345,7 @@ void fonctionnement(){
                                   
                 if(pressed == 0){
                     printf("Save 1 \n");
-                    if(charger_save("save1.bin", &j, &gr) == 1){
+                    if(charger_save("save1.bin", &j, &gr, tpoyo) == 1){
                         ini_poyo_chaine(tpoyo, 4);
                         jeu(&gr, &j, tpoyo);
                     }
@@ -340,21 +353,21 @@ void fonctionnement(){
                 }
                 else if(pressed == 1){
                     printf("Save 2 \n");
-                    if(charger_save("save2.bin", &j, &gr) == 1){
+                    if(charger_save("save2.bin", &j, &gr, tpoyo) == 1){
                         ini_poyo_chaine(tpoyo, 4);
                         jeu(&gr, &j, tpoyo);
                     }
                 }
                 else if(pressed == 2){
                     printf("Save 3 \n");
-                    if(charger_save("save3.bin", &j, &gr ) == 1){
+                    if(charger_save("save3.bin", &j, &gr, tpoyo) == 1){
                         ini_poyo_chaine(tpoyo, 4);
                         jeu(&gr, &j, tpoyo);
                     }
                 }
                 else if(pressed == 3){
                     printf("Save 4 \n");
-                    if(charger_save("save4.bin", &j, &gr) == 1){
+                    if(charger_save("save4.bin", &j, &gr, tpoyo) == 1){
                         ini_poyo_chaine(tpoyo, 4);
                         jeu(&gr, &j, tpoyo);
                     }

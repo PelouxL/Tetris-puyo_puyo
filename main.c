@@ -31,7 +31,7 @@ int main(){
 
   fonctionnement();
   /* jeu(&gr1, &je1, tpoyo1); */
-  /* jeu_1vs1(&gr1, &gr2, &je1, &je2, tpoyo1, tpoyo2);   */
+  /* jeu_1vs1(&gr1, &gr2, &je1, &je2, tpoyo1, tpoyo2); */
   
   MLV_wait_seconds(7);
   MLV_free_window();

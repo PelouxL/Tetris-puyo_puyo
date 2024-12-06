@@ -15,6 +15,10 @@ int charger_save(char *nom, joueur *j, grille *gr);
 
 int save_partie(char *nom, joueur *jr, grille *gr);
 
+int ecrasement_save();
+
+void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr);
+
 void menu_score(bouton *retour);
 
 void menu_pause(bouton t_bouton_pause[3]);

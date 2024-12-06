@@ -18,7 +18,17 @@ int verif(bouton bouton, int coord_x, int coord_y){
     return 0;
 }
 
+int clic_bouton(bouton t_bouton[], int longueur){
+    int i, s_x, s_y;
 
+    MLV_wait_mouse(&s_x, &s_y);
+    for(i = 0; i < longueur; i++){
+        if(verif(t_bouton[i], s_x, s_y)){
+            return i;
+        }
+    }
+    return -1;
+}
 
 void cree_bouton(bouton *bouton, char* message, int x, int y, MLV_Font *police){
     int largeur, hauteur;
@@ -33,8 +43,6 @@ void cree_bouton(bouton *bouton, char* message, int x, int y, MLV_Font *police){
 void afficher_text(bouton bouton , MLV_Font *police){
     MLV_draw_adapted_text_box_with_font(bouton.x, bouton.y, bouton.txt, police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
 }
-
-
 
 void menu(bouton t_bouton_menu[4]){
     char *nom_bouton[4] = {"START", "SAVE", "SCORE", "EXIT"}; 
@@ -60,8 +68,6 @@ void menu(bouton t_bouton_menu[4]){
     MLV_free_font(police);
     MLV_actualise_window();
 }
-
-
 
 void menu_save(bouton t_bouton_save[5]){
     char *nom_bouton_save[5] = {"SAVE 1", "SAVE 2", "SAVE 3", "SAVE 4", "BACK"};
@@ -91,59 +97,140 @@ void menu_save(bouton t_bouton_save[5]){
 
 int charger_save(char *nom, joueur *jr, grille *gr){
     FILE * f;
-    int i, j;
-    if((f = fopen(nom, "r")) == NULL){
+    int i;
+    if(( f = fopen(nom, "rb")) == NULL ){
         printf("Erreur ouverture f \n");
         return -1;
     }
 
-    if (fscanf(f, "%s %d", jr -> pseudo, &jr -> score) != 2){
-        printf("Erreur : lecture pseudo ou score \n");
-        fclose(f);
-        return -1;
-    }
-    
-    if(fscanf(f, "%d %d %d ", &gr -> n, &gr -> m, &gr -> niveau) != 3){
-        printf("Erreur lecture dimension grille \n");
+    if( fread(jr, sizeof(joueur), 1, f) != 1 ){
+        fprintf(stderr, "Erreur : lecture pseudo ou score \n");
         fclose(f);
         return -1;
     }
 
-    for( i = 0; i < gr -> n; i++){
-        for( j = 0; j < gr -> m; j++){
-            if(fscanf(f, "%d,", &gr -> mat[i][j]) != 1){
-                printf("Erreur lecture case \n");
-                fclose(f);
-                return -1;
-            }
+    if ( fread(&gr -> n, sizeof(int), 1, f) != 1 ){
+        fprintf(stderr, "Erreur : lecture n matrice \n");
+        fclose(f);
+        return -1;
+    }
+
+    if ( fread(&gr -> m, sizeof(int), 1, f) != 1 ){
+        fprintf(stderr, "Erreur : lecture m matrice \n");
+        fclose(f);
+        return -1;
+    }
+
+    for( i = 0; i < gr -> n; i++ ){
+        if( fread(gr -> mat[i], sizeof(int), gr -> m, f) != gr -> m ){
+           fprintf(stderr, "Erreur : lecture matrice \n");
+           fclose(f);
+           return -1;
         }
     }
+    
     fclose(f);
     return 1;
 }
 
 int save_partie(char *nom, joueur *jr, grille *gr){
     FILE *f;
-    int i, j;
-    if((f = fopen(nom, "w")) == NULL){
-        fprintf(stderr, "Erreur lors de l'ouverture du fichier de sauvegarde \n");
+    int i;
+
+    if((f = fopen(nom, "wb+")) == NULL){
+        printf("Erreur ouverture f \n");
+        return -1;
+    }
+   
+    if( fwrite(jr, sizeof(joueur), 1, f) != 1){
+        fprintf(stderr, "Erreur : écrituer pseudo ou score \n");
+        fclose(f);
         return -1;
     }
 
-    fprintf(f, "%s\n", jr -> pseudo);
-    fprintf(f, "%d\n", jr -> score);
+    if (fwrite(&gr -> n, sizeof(int), 1, f) != 1){
+        fprintf(stderr, "Erreur : écriture n matrice \n");
+        fclose(f);
+        return -1;
+    }
 
-    fprintf(f, "%d %d %d\n", gr -> n, gr -> m, gr -> niveau);
+    if (fwrite(&gr -> m, sizeof(int), 1, f) != 1){
+        fprintf(stderr, "Erreur : écriture m matrice \n");
+        fclose(f);
+        return -1;
+    }
 
-    for( i = 0; i < gr -> n; i++){
-        for( j = 0; j < gr -> m; j++){
-            fprintf(f, "%d ", gr -> mat[i][j]);
+    for( i = 0; i < gr -> n; i++ ){
+        if(gr -> mat[i] ==  NULL){
+            fprintf(stderr, "Erreur : ligne %d de la matrice non allouée \n", i);
+            fclose(f);
+            return -1;
         }
-        fprintf(f, "\n");
+        
+        if(fwrite(gr -> mat[i], sizeof(int), gr -> m, f) != gr -> m){
+            fprintf(stderr, "Erreur : écriture matrice à la ligne %d \n", i);
+            fclose(f);
+            return -1;
+        }
     }
     fclose(f);
     return 1;
-}  
+}
+
+/* on vérifie juste si le joueur veut écraser la save */
+int ecrasement_save(){
+    MLV_Keyboard_button touche;
+
+    MLV_clear_window(MLV_COLOR_BEIGE);
+    MLV_draw_text(LX / 2, LY / 3, "Ecraser la sauvegarde ? (o/n)", MLV_COLOR_BLACK);
+    MLV_actualise_window();
+
+    while(1){
+        MLV_wait_keyboard(&touche, NULL, NULL);
+        
+        if(touche == MLV_KEYBOARD_o){
+            return 1;
+        }
+        else if(touche  == MLV_KEYBOARD_n){
+            return 0;
+        }
+        else{
+            MLV_draw_text(LX / 2, LY / 3 + 20, "Entrez soit 'o' pour OUI ou 'n' pour NON \n", MLV_COLOR_BLACK);
+            MLV_actualise_window();
+        }
+    }
+}
+
+void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr){
+    char *nom_save[4] = {"save1.bin", "save2.bin", "save3.bin", "save4.bin"};
+    int pressed, ecrase;
+    FILE *f;
+
+    pressed = clic_bouton(t_bouton_save, 4);
+
+    f = fopen(nom_save[pressed], "rb");
+
+    if(f == NULL){
+        if(save_partie(nom_save[pressed], j, gr) == 1){
+            printf("Partie bien sauvegardé \n");
+        }
+    }
+    else{
+        ecrase = ecrasement_save();
+        if(ecrase == 1){
+            if(save_partie(nom_save[pressed], j, gr) == 1){
+                printf("Partie bien sauvegardé après confirmation d'écrasement \n");
+            }
+        }
+        else{
+            printf("Annulation de l'écrasement \n");
+        }
+    }
+    fclose(f);
+}
+        
+                
+                
 
 void menu_score(bouton *retour){
     char *nom_bouton_score[10] = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"};
@@ -210,17 +297,7 @@ void menu_pause(bouton t_bouton_pause[3]){
     MLV_actualise_window();
 }
 
-int clic_bouton(bouton t_bouton[], int longueur){
-    int i, s_x, s_y;
 
-    MLV_wait_mouse(&s_x, &s_y);
-    for(i = 0; i < longueur; i++){
-        if(verif(t_bouton[i], s_x, s_y)){
-            return i;
-        }
-    }
-    return -1;
-}
 
 void fonctionnement(){
     bouton t_bouton_menu[4], t_bouton_save[5];
@@ -255,7 +332,7 @@ void fonctionnement(){
                                   
                 if(pressed == 0){
                     printf("Save 1 \n");
-                    if(charger_save("save1.txt", &j, &gr) == 1){
+                    if(charger_save("save1.bin", &j, &gr) == 1){
                         ini_poyo_chaine(tpoyo, 4);
                         jeu(&gr, &j, tpoyo);
                     }
@@ -263,27 +340,27 @@ void fonctionnement(){
                 }
                 else if(pressed == 1){
                     printf("Save 2 \n");
-                    if(charger_save("save2.txt", &j, &gr) == 1){
+                    if(charger_save("save2.bin", &j, &gr) == 1){
                         ini_poyo_chaine(tpoyo, 4);
                         jeu(&gr, &j, tpoyo);
                     }
                 }
                 else if(pressed == 2){
                     printf("Save 3 \n");
-                    if(charger_save("save3.txt", &j, &gr ) == 1){
+                    if(charger_save("save3.bin", &j, &gr ) == 1){
                         ini_poyo_chaine(tpoyo, 4);
                         jeu(&gr, &j, tpoyo);
                     }
                 }
                 else if(pressed == 3){
                     printf("Save 4 \n");
-                    if(charger_save("save4.txt", &j, &gr) == 1){
+                    if(charger_save("save4.bin", &j, &gr) == 1){
                         ini_poyo_chaine(tpoyo, 4);
                         jeu(&gr, &j, tpoyo);
                     }
                 }
                 else if(pressed == 4){
-                    printf("Menu p \n");
+                    printf("Menu principal \n");
                     retour_menu_p = 0;
                 }
             }

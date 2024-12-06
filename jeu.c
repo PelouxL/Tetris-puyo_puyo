@@ -18,7 +18,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
     int temps, duree, tmpscore = 0, vitesse, temps_ecoule, dest, est_save = 0;
     int pause = 0, pressed;
     MLV_Keyboard_button touche;
-    bouton t_bouton_pause[3];
+    bouton t_bouton_pause[3], t_bouton_save[5];
     c_poyo ptmp;
     hms chrono;
     struct timespec debut, fin, maintenant, dernier_avancement;
@@ -56,7 +56,27 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4]){
                         break;
 
                     case 1:
-                        printf("Save \n"); /* enregistrement de la partie dans une save, faudra que je regarde */
+                         /* enregistrement de la partie dans une save, faudra que je regarde */
+                        menu_save(t_bouton_save);
+                        pressed = clic_bouton(t_bouton_save, 5);
+
+                        if(pressed == 0){ /* save 1 */
+                            gestion_save_pause(t_bouton_save, je, gr);
+                        }
+                        else if(pressed == 1){ /* save 2 */
+                            gestion_save_pause(t_bouton_save, je, gr);
+                        }
+                        else if(pressed == 2){ /* save 3 */
+                            gestion_save_pause(t_bouton_save, je, gr);
+                        }
+                        else if(pressed == 3){ /* save 4 */
+                            gestion_save_pause(t_bouton_save, je, gr);
+                        }
+                        else if(pressed == 4){
+                            printf("Retour menu principal \n");
+                            pause = 0; /* pour l'instant ça relance la partie mais c'est temporaire */
+                        }
+                        
                         break;
                     case 2:
                         printf("Menu \n"); /* on quitte la partie et on attérit dans le menu principal */

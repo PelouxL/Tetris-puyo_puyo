@@ -14,28 +14,23 @@
 #include "fin_partie.h"
 #include "menu.h"
 
-void jeu(grille *gr, joueur *je, tc_poyo *tpoyo){
+void jeu(grille *gr, joueur *je, tc_poyo *tpoyo, c_poyo *ptmp){
   int temps, duree, tmpscore = 0, vitesse, temps_ecoule, dest, est_save = 0;
-  int pause = 0, pressed, i;
+  int pause = 0, pressed;
   MLV_Keyboard_button touche;
   bouton t_bouton_pause[3], t_bouton_save[5];
-  c_poyo ptmp;
   hms chrono;
   struct timespec debut, fin, maintenant, dernier_avancement;
     
   chrono.secondes = 0;
   chrono.minutes = 0;
-  chrono.heures = 0;
-  initialisation_cpoyo_vide(&ptmp);   
+  chrono.heures = 0;  
   MLV_clear_window(MLV_COLOR_BLACK);
   clock_gettime( CLOCK_REALTIME, &dernier_avancement );
 
    
     
   while(1){
-     for(i = 0 ; i < 4 ; i++ ){
-    affiche_c_poyo(tpoyo[i]);
-     }
     dest = 0;
     /* permet de gerer le framrate */
     clock_gettime( CLOCK_REALTIME, &debut );
@@ -63,16 +58,16 @@ void jeu(grille *gr, joueur *je, tc_poyo *tpoyo){
 	    pressed = clic_bouton(t_bouton_save, 5);
 
 	    if(pressed == 0){ /* save 1 */
-	      gestion_save_pause(t_bouton_save, je, gr, tpoyo);
+	      gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
 	    }
 	    else if(pressed == 1){ /* save 2 */
-	      gestion_save_pause(t_bouton_save, je, gr, tpoyo);
+	      gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
 	    }
 	    else if(pressed == 2){ /* save 3 */
-	      gestion_save_pause(t_bouton_save, je, gr, tpoyo);
+	      gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
 	    }
 	    else if(pressed == 3){ /* save 4 */
-	      gestion_save_pause(t_bouton_save, je, gr, tpoyo);
+	      gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
 	    }
 	    else if(pressed == 4){
 	      printf("Retour menu principal \n");
@@ -114,12 +109,12 @@ void jeu(grille *gr, joueur *je, tc_poyo *tpoyo){
       }
       /* affichage de la grille et des poyos */
       aff_etat(*gr, *je, chrono);
-      aff_poyos(tpoyo, &ptmp);
+      aff_poyos(tpoyo, ptmp);
 
       printf("\n");
     
       deplacement(tpoyo[0], gr);
-      ptmp = sauvegarde_poyos(*tpoyo, ptmp, gr, &est_save);
+      *ptmp = sauvegarde_poyos(*tpoyo, *ptmp, gr, &est_save);
     
       affiche_c_poyo(tpoyo[0]);
       actualisation_poyo(tpoyo[0], gr);

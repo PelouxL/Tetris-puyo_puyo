@@ -1,7 +1,7 @@
 #ifndef _JEU_H_
 #define _HEU_H_
 
-void jeu(grille *gr, joueur *j, tc_poyo *tpoyo);
+void jeu(grille *gr, joueur *j, tc_poyo *tpoyo, c_poyo *ptmp);
 
 void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, tc_poyo *tpoyo1, tc_poyo *tpoyo2);
 

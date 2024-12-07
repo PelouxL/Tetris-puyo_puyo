@@ -37,7 +37,6 @@ void aff_poyos(tc_poyo *tpoyo, c_poyo *sauvegarde){
     int i;
 
     for(i = 0 ; i < 3 ; i++ ){
-      printf(" c'est vous ouuuu ? %d\n",i);
        affiche_c_poyo(tpoyo[i+1]);
         MLV_draw_filled_rectangle(700, 200+(i*90), TSUIV, TSUIV, color[tpoyo[i + 1] -> p2.couleur]);
         MLV_draw_rectangle( 700, 200+(i*90), TSUIV, TSUIV, MLV_COLOR_GREY);

@@ -9,12 +9,12 @@
 #define TVS 40
 #define TVSUIV 30
 
-void aff_etat(grille gr, joueur je, hms chrono){
+void aff_etat(grille gr, joueur je, hms chrono, c_poyo poyo){
   int i, j;
   char texte[100], score[10], chronometre[20];
   MLV_Color color[7] = {MLV_COLOR_WHITE, MLV_COLOR_RED, MLV_COLOR_GREEN, MLV_COLOR_BLUE, MLV_COLOR_YELLOW, MLV_COLOR_PURPLE, MLV_COLOR_GREY};
 
-   MLV_clear_window(MLV_COLOR_BLACK);
+  MLV_clear_window(MLV_COLOR_BLACK);
   strcpy(texte, "Joueur 1 \n Score : "); /* on met le score dans un const char */
   sprintf(score,"%d", je.score);
   strcat(texte, score);
@@ -26,8 +26,13 @@ void aff_etat(grille gr, joueur je, hms chrono){
   
   for( i = 0 ; i < gr.n ; i++ ){
     for( j = 0; j < gr.m ; j++){
-      MLV_draw_filled_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, color[gr.mat[i][j]]);
-      MLV_draw_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_GREY);
+      if( i == 0 && (poyo.p1.x > 0 ) && (poyo.p2.x > 0 ) && (poyo.p1.y == j ||poyo.p2.y == j) ){
+	MLV_draw_filled_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_DARKRED);
+	MLV_draw_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_GREY);
+      }else{
+	MLV_draw_filled_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, color[gr.mat[i][j]]);
+	MLV_draw_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_GREY);
+      }
     }
   }
 }

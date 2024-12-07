@@ -1,7 +1,7 @@
 #ifndef AFFICHAGE_MLV_H
 #define AFFICHAGE_MLV_H
 
-void aff_etat(grille gr, joueur j, hms chrono);
+void aff_etat(grille gr, joueur j, hms chrono, c_poyo poyo);
 
 
 void aff_poyos(tc_poyo *tpoyo, c_poyo *sauvegarde);

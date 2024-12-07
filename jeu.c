@@ -108,7 +108,7 @@ void jeu(grille *gr, joueur *je, tc_poyo *tpoyo, c_poyo *ptmp){
 	dernier_avancement = maintenant;
       }
       /* affichage de la grille et des poyos */
-      aff_etat(*gr, *je, chrono);
+      aff_etat(*gr, *je, chrono, *tpoyo[0]);
       aff_poyos(tpoyo, ptmp);
 
       printf("\n");

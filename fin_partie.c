@@ -6,14 +6,23 @@
 #include "destruction.h"
 
 int verif_fin( tc_poyo poyo, grille gr ){
+  int j;
   /* on verifie si un poyo a ete poser a l'endroit de l'initialisation */
-  if( (poyo -> p1.pos == 1 && ( poyo -> p1.x == 0 && poyo -> p1.y == gr.m/2 ) ) ||
-      ( (poyo -> p2.pos == 1 && ( poyo -> p2.x == 0 && poyo -> p2.y == gr.m/2 )))){
-    return 1;
+  for( j = 0 ; j < gr.m ; j++ ){
+    if(gr.mat[0][j] != 0 && (poyo -> p1.pos == 1 && poyo -> p2.pos == 1)){
+      return 1;
+    }
   }
+
+  /*
+    if( (poyo -> p1.pos == 1 && ( poyo -> p1.x == 0 && poyo -> p1.y == gr.m/2 ) ) ||
+    ( (poyo -> p2.pos == 1 && ( poyo -> p2.x == 0 && poyo -> p2.y == gr.m/2 )))){
+    return 1;
+    }
+  */
   return 0;
 }
-/* permet de finir une partie et de mettre a jour le tableau score */
+  /* permet de finir une partie et de mettre a jour le tableau score */
 
 int fin_solo( tc_poyo poyo, joueur je, grille gr, int dest ){
   tjoueur tmp_tjoueur;

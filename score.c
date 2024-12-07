@@ -11,7 +11,7 @@
 void calcule_score(int destruction, joueur *je, hms chrono){
     int total = 0;
     total = chrono.milis + chrono.secondes + destruction *(chrono.minutes * 1.5) + 100000 * chrono.heures;
-    if(je -> score + total < 999999999 ){
+    if(je -> score + total < 99999999 ){
       je -> score += total;
     }
 }
@@ -117,26 +117,30 @@ void creation_malus(c_poyo *poyo_piege, grille *gr, int absisse){
   poyo_piege -> p1.fantome = 1;
 }
 
-void decalage(int absisse, grille *gr){
+
+/* faire une fonction qui verifie si un poyo est toucher par un decalage est si c'est le cas le deplacer
+   sur la gaguche ou la droute en fonction des dispo */
+void decalage(int absisse, grille *gr, c_poyo poyo){
   int i, tmp;
-  for( i = 1 ; i <  gr -> n ; i++){
-    if( gr -> mat[i][absisse] != 0){
+  for( i = 0 ; i <  gr -> n ; i++){
+    if( (gr -> mat[i][absisse] != 0) &&  !((poyo.p1.x == i && poyo.p1.y == absisse) || (poyo.p2.x == i && poyo.p2.y == absisse)) ){
       tmp = gr -> mat[i][absisse];
       gr -> mat[i - 2][absisse] = tmp;
       gr -> mat[i][absisse] = 0;
-    }
+    }/* else if( (gr -> mat[i][absisse] != 0) &&  !((poyo.p1.x == i +2 && poyo.p1.y == absisse) || (poyo.p2.x == i && poyo.p2.y == absisse)) ){ */
+      
   }
 }
 
 
-void appliquer_malus(int score, grille *gr){
+void appliquer_malus(int score, grille *gr, c_poyo poyo){
   int absisse;
   c_poyo poyo_piege;
-  absisse = rand()%( gr -> m -1);
-  if( score >= 16 ){
+  absisse =  rand()%( gr -> m); 
+  if( score >= 4 ){
     creation_malus( &poyo_piege, gr, absisse);
     affiche_c_poyo( &poyo_piege );
-    decalage( absisse, gr );
+    decalage( absisse, gr, poyo );
     poyo_piege.apparait = 1;
     actualisation_poyo( &poyo_piege, gr);
   }

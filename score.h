@@ -11,8 +11,8 @@ int tri_insertion( char *nom, joueur score, tjoueur *tabscore );
 
 void creation_malus(c_poyo poyo_piege, grille *gr_adverse);
 
-void decalage(int absisse, grille *gr);
+void decalage(int absisse, grille *gr, c_poyo poyo);
 
-void appliquer_malus(int score, grille *gr);
+void appliquer_malus(int score, grille *gr, c_poyo poyo);
 
 #endif

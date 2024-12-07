@@ -237,12 +237,12 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
     
         if( tmpscore1 > 0 ){
             dest1 = 1;
-            appliquer_malus(tmpscore1, gr2);
+            appliquer_malus(tmpscore1, gr2, tpoyo2[0]);
             calcule_score(tmpscore1, je1, chrono);   
         }
         if( tmpscore2 > 0 ){
             dest2 = 1;
-            appliquer_malus(tmpscore2, gr1);
+            appliquer_malus(tmpscore2, gr1, tpoyo1[0]);
             calcule_score(tmpscore2, je2, chrono);   
         }
 

@@ -63,7 +63,7 @@ void roulement_poyo(tc_poyo *tpoyo, grille *gr){
         apparition_piece(tpoyo[0], gr);
     }
     decalage_gauche(tpoyo, 4);
-    initialisation_cpoyo(*tpoyo);
+    initialisation_cpoyo(tpoyo[3]);
 }
                              
     

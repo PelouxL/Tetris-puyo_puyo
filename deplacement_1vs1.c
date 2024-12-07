@@ -232,7 +232,7 @@ void deplacement_j1(c_poyo *p, grille *gr){
     }
 }
 
-c_poyo sauvegarde_poyos_j1(tc_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save1){
+c_poyo sauvegarde_poyos_j1(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save1){
     c_poyo cptmp;
     static int tmp_passer = 0;
     int tmp_act, attente;
@@ -240,79 +240,79 @@ c_poyo sauvegarde_poyos_j1(tc_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, i
     /* permet de savoir quel poyo va être vide */
     
     if( MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED && *est_save1 == 0){
-              *est_save1 = 1;
+        *est_save1 = 1;
         if( tmp_act - tmp_passer >= attente ){
 
             /* si rien dans la sauvegarde alors on recup juste la pieces */
             /* et on applique le roulement de poyo */
             if( poyo_sauvegarde.p1.couleur == 0 && poyo_sauvegarde.p2.couleur == 0){
                 /* geres les cas ou les pieces ne sont pas complète */
-                if(tpoyo[0] -> p1.pos == 1 && tpoyo[0] -> p2.pos == 0){
-                    poyo_sauvegarde.p1 = tpoyo[0] -> p2;
-                    poyo_sauvegarde.p2.couleur = 0;
-                    poyo_sauvegarde .p2.fantome = 1;
-                    gr->mat[tpoyo[0] -> p2.x][tpoyo[0] -> p2.y] = 0; 
-                    roulement_poyo(tpoyo, gr);
-                }
-                else if(tpoyo[0] -> p1.pos == 0 && tpoyo[0] -> p2.pos == 1){
-                    poyo_sauvegarde.p1 = tpoyo[0] -> p1;
+                if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 0){
+                    poyo_sauvegarde.p1 = tpoyo[0].p2;
                     poyo_sauvegarde.p2.couleur = 0;
                     poyo_sauvegarde.p2.fantome = 1;
-                    gr->mat[tpoyo[0] -> p1.x][tpoyo[0] -> p1.y] = 0;  
+                    gr->mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = 0; 
+                    roulement_poyo(tpoyo, gr);
+                }
+                else if(tpoyo[0].p1.pos == 0 && tpoyo[0].p2.pos == 1){
+                    poyo_sauvegarde.p1 = tpoyo[0].p1;
+                    poyo_sauvegarde.p2.couleur = 0;
+                    poyo_sauvegarde.p2.fantome = 1;
+                    gr->mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;  
                     roulement_poyo(tpoyo, gr);
                 }
                 else{
-                    poyo_sauvegarde = *tpoyo[0];
-                    gr -> mat[ tpoyo[0] -> p1.x ][tpoyo[0] -> p1.y ] = 0;
-                    gr -> mat[ tpoyo[0] -> p2.x ][tpoyo[0] -> p2.y ] = 0;
+                    poyo_sauvegarde = tpoyo[0];
+                    gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
+                    gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
                     roulement_poyo(tpoyo, gr);
                 }
             }else{
                 /* deux pieces imcomplette s'echange */
-                if ( (poyo_sauvegarde.p2.couleur == 0 || poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0] -> p2.pos == 1) {
-                    cptmp.p1 = tpoyo[0] -> p1;
+                if ( (poyo_sauvegarde.p2.couleur == 0 || poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0].p2.pos == 1) {
+                    cptmp.p1 = tpoyo[0].p1;
                     cptmp.p2.couleur = 0;
                     cptmp.p2.fantome = 1;
-                    gr->mat[tpoyo[0] -> p1.x][tpoyo[0] -> p1.y] = 0;
-                    *tpoyo[0] = poyo_sauvegarde;
+                    gr->mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;
+                    tpoyo[0] = poyo_sauvegarde;
                     poyo_sauvegarde = cptmp;
                    
                 
                 }
                 /* deux pieces imcomplette s'echange */
-                else if( (poyo_sauvegarde.p1.couleur == 0 ||  poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0] -> p1.pos == 1) {
-                    cptmp.p1 = tpoyo[0] -> p2;
+                else if( (poyo_sauvegarde.p1.couleur == 0 ||  poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0].p1.pos == 1) {
+                    cptmp.p1 = tpoyo[0].p2;
                     cptmp.p2.couleur = 0;
                     cptmp.p2.fantome = 1;
-                    gr->mat[tpoyo[0] -> p2.x][tpoyo[0] -> p2.y] = 0;
-                    *tpoyo[0] = poyo_sauvegarde;
+                    gr->mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = 0;
+                    tpoyo[0] = poyo_sauvegarde;
                     poyo_sauvegarde = cptmp;
                   
                 }
                 /*  pieces complète save s'echange avec incomplete */
-                else if( tpoyo[0] -> p1.pos == 1 || tpoyo[0] -> p2.pos == 1){
-                    if( tpoyo[0] -> p1.pos == 0){
-                        cptmp.p1 = tpoyo[0] -> p1;
+                else if( tpoyo[0].p1.pos == 1 || tpoyo[0].p2.pos == 1){
+                    if( tpoyo[0].p1.pos == 0){
+                        cptmp.p1 = tpoyo[0].p1;
                         cptmp.p2.couleur = 0;
                         cptmp.p2.fantome = 1;
-                        gr->mat[tpoyo[0] -> p1.x][tpoyo[0] -> p1.y] = 0;
-                        *tpoyo[0] = poyo_sauvegarde;
+                        gr->mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;
+                        tpoyo[0] = poyo_sauvegarde;
                         poyo_sauvegarde = cptmp;
                     }
-                    else if( tpoyo[0] -> p2.pos == 0){
-                        cptmp.p1 = tpoyo[0]-> p2;
+                    else if( tpoyo[0].p2.pos == 0){
+                        cptmp.p1 = tpoyo[0].p2;
                         cptmp.p2.couleur = 0;
                         cptmp.p2.fantome = 1;
-                        gr->mat[tpoyo[0] -> p2.x][tpoyo[0] -> p2.y] = 0;
-                        *tpoyo[0] = poyo_sauvegarde;
+                        gr->mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = 0;
+                        tpoyo[0] = poyo_sauvegarde;
                         poyo_sauvegarde = cptmp;
                     }             
                 }
                 else{
-                    cptmp = *tpoyo[0];
-                    gr -> mat[ tpoyo[0] -> p1.x ][tpoyo[0] -> p1.y ] = 0;
-                    gr -> mat[ tpoyo[0] -> p2.x ][tpoyo[0] -> p2.y ] = 0;
-                    *tpoyo[0] = poyo_sauvegarde;
+                    cptmp = tpoyo[0];
+                    gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
+                    gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
+                    tpoyo[0] = poyo_sauvegarde;
                     poyo_sauvegarde = cptmp;
                 }
             }
@@ -327,7 +327,7 @@ c_poyo sauvegarde_poyos_j1(tc_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, i
     poyo_sauvegarde.p2.y = -1;
     return poyo_sauvegarde;
 }
-        
+
 
 /* --------------------------------------------------- deplacement pour le deuxième joueur */
 
@@ -557,99 +557,99 @@ void deplacement_j2(c_poyo *p, grille *gr){
     }
 }
 
-c_poyo sauvegarde_poyos_j2(tc_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save2 ){
-  c_poyo cptmp;
-  static int tmp_passer = 0;
-  int tmp_act, attente;
-  tmp_act = MLV_get_time(), attente = 500;
-  /* permet de savoir quel poyo va être vide */
+c_poyo sauvegarde_poyos_j2(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save2 ){
+    c_poyo cptmp;
+    static int tmp_passer = 0;
+    int tmp_act, attente;
+    tmp_act = MLV_get_time(), attente = 500;
+    /* permet de savoir quel poyo va être vide */
     
-  if( MLV_get_keyboard_state(MLV_KEYBOARD_UP) == MLV_PRESSED && *est_save2 == 0){
+    if( MLV_get_keyboard_state(MLV_KEYBOARD_UP) == MLV_PRESSED && *est_save2 == 0){
 
-    *est_save2 = 1;
-    if( tmp_act - tmp_passer >= attente ){
-
-      /* si rien dans la sauvegarde alors on recup juste la pieces */
-      /* et on applique le roulement de poyo */
-      if( poyo_sauvegarde.p1.couleur == 0 && poyo_sauvegarde.p2.couleur == 0){
-	/* geres les cas ou les pieces ne sont pas complète */
-	if(tpoyo[0] -> p1.pos == 1 && tpoyo[0] -> p2.pos == 0){
-	  poyo_sauvegarde.p1 = tpoyo[0] -> p2;
-	  poyo_sauvegarde.p2.couleur = 0;
-	  poyo_sauvegarde .p2.fantome = 1;
-	  gr->mat[tpoyo[0] -> p2.x][tpoyo[0] -> p2.y] = 0; 
-	  roulement_poyo(tpoyo, gr);
-	}
-	else if(tpoyo[0] -> p1.pos == 0 && tpoyo[0] -> p2.pos == 1){
-	  poyo_sauvegarde.p1 = tpoyo[0] -> p1;
-	  poyo_sauvegarde.p2.couleur = 0;
-	  poyo_sauvegarde.p2.fantome = 1;
-	  gr->mat[tpoyo[0] -> p1.x][tpoyo[0] -> p1.y] = 0;  
-	  roulement_poyo(tpoyo, gr);
-	}
-	else{
-	  poyo_sauvegarde = *tpoyo[0];
-	  gr -> mat[ tpoyo[0] -> p1.x ][tpoyo[0] -> p1.y ] = 0;
-	  gr -> mat[ tpoyo[0] -> p2.x ][tpoyo[0] -> p2.y ] = 0;
-	  roulement_poyo(tpoyo, gr);
-	}
-      }else{
-	/* deux pieces imcomplette s'echange */
-	if ( (poyo_sauvegarde.p2.couleur == 0 || poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0] -> p2.pos == 1) {
-	  cptmp.p1 = tpoyo[0] -> p1;
-	  cptmp.p2.couleur = 0;
-	  cptmp.p2.fantome = 1;
-	  gr->mat[tpoyo[0] -> p1.x][tpoyo[0] -> p1.y] = 0;
-	  *tpoyo[0] = poyo_sauvegarde;
-	  poyo_sauvegarde = cptmp;
+        if( tmp_act - tmp_passer >= attente ){
+            *est_save2 = 1;
+            /* si rien dans la sauvegarde alors on recup juste la pieces */
+            /* et on applique le roulement de poyo */
+            if( poyo_sauvegarde.p1.couleur == 0 && poyo_sauvegarde.p2.couleur == 0){
+                /* geres les cas ou les pieces ne sont pas complète */
+                if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 0){
+                    poyo_sauvegarde.p1 = tpoyo[0].p2;
+                    poyo_sauvegarde.p2.couleur = 0;
+                    poyo_sauvegarde.p2.fantome = 1;
+                    gr->mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = 0; 
+                    roulement_poyo(tpoyo, gr);
+                }
+                else if(tpoyo[0].p1.pos == 0 && tpoyo[0].p2.pos == 1){
+                    poyo_sauvegarde.p1 = tpoyo[0].p1;
+                    poyo_sauvegarde.p2.couleur = 0;
+                    poyo_sauvegarde.p2.fantome = 1;
+                    gr->mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;  
+                    roulement_poyo(tpoyo, gr);
+                }
+                else{
+                    poyo_sauvegarde = tpoyo[0];
+                    gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
+                    gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
+                    roulement_poyo(tpoyo, gr);
+                }
+            }else{
+                /* deux pieces imcomplette s'echange */
+                if ( (poyo_sauvegarde.p2.couleur == 0 || poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0].p2.pos == 1) {
+                    cptmp.p1 = tpoyo[0].p1;
+                    cptmp.p2.couleur = 0;
+                    cptmp.p2.fantome = 1;
+                    gr->mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;
+                    tpoyo[0] = poyo_sauvegarde;
+                    poyo_sauvegarde = cptmp;
                    
                 
-	}
-	/* deux pieces imcomplette s'echange */
-	else if( (poyo_sauvegarde.p1.couleur == 0 ||  poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0] -> p1.pos == 1) {
-	  cptmp.p1 = tpoyo[0] -> p2;
-	  cptmp.p2.couleur = 0;
-	  cptmp.p2.fantome = 1;
-	  gr->mat[tpoyo[0] -> p2.x][tpoyo[0] -> p2.y] = 0;
-	  *tpoyo[0] = poyo_sauvegarde;
-	  poyo_sauvegarde = cptmp;
+                }
+                /* deux pieces imcomplette s'echange */
+                else if( (poyo_sauvegarde.p1.couleur == 0 ||  poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0].p1.pos == 1) {
+                    cptmp.p1 = tpoyo[0].p2;
+                    cptmp.p2.couleur = 0;
+                    cptmp.p2.fantome = 1;
+                    gr->mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = 0;
+                    tpoyo[0] = poyo_sauvegarde;
+                    poyo_sauvegarde = cptmp;
                   
-	}
-	/*  pieces complète save s'echange avec incomplete */
-	else if( tpoyo[0] -> p1.pos == 1 || tpoyo[0] -> p2.pos == 1){
-	  if( tpoyo[0] -> p1.pos == 0){
-	    cptmp.p1 = tpoyo[0] -> p1;
-	    cptmp.p2.couleur = 0;
-	    cptmp.p2.fantome = 1;
-	    gr->mat[tpoyo[0] -> p1.x][tpoyo[0] -> p1.y] = 0;
-	    *tpoyo[0] = poyo_sauvegarde;
-	    poyo_sauvegarde = cptmp;
-	  }
-	  else if( tpoyo[0] -> p2.pos == 0){
-	    cptmp.p1 = tpoyo[0]-> p2;
-	    cptmp.p2.couleur = 0;
-	    cptmp.p2.fantome = 1;
-	    gr->mat[tpoyo[0] -> p2.x][tpoyo[0] -> p2.y] = 0;
-	    *tpoyo[0] = poyo_sauvegarde;
-	    poyo_sauvegarde = cptmp;
-	  }             
-	}
-	else{
-	  cptmp = *tpoyo[0];
-	  gr -> mat[ tpoyo[0] -> p1.x ][tpoyo[0] -> p1.y ] = 0;
-	  gr -> mat[ tpoyo[0] -> p2.x ][tpoyo[0] -> p2.y ] = 0;
-	  *tpoyo[0] = poyo_sauvegarde;
-	  poyo_sauvegarde = cptmp;
-	}
-      }
+                }
+                /*  pieces complète save s'echange avec incomplete */
+                else if( tpoyo[0].p1.pos == 1 || tpoyo[0].p2.pos == 1){
+                    if( tpoyo[0].p1.pos == 0){
+                        cptmp.p1 = tpoyo[0].p1;
+                        cptmp.p2.couleur = 0;
+                        cptmp.p2.fantome = 1;
+                        gr->mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;
+                        tpoyo[0] = poyo_sauvegarde;
+                        poyo_sauvegarde = cptmp;
+                    }
+                    else if( tpoyo[0].p2.pos == 0){
+                        cptmp.p1 = tpoyo[0].p2;
+                        cptmp.p2.couleur = 0;
+                        cptmp.p2.fantome = 1;
+                        gr->mat[tpoyo[0].p2.x][tpoyo[0].p2.y] = 0;
+                        tpoyo[0] = poyo_sauvegarde;
+                        poyo_sauvegarde = cptmp;
+                    }             
+                }
+                else{
+                    cptmp = tpoyo[0];
+                    gr -> mat[ tpoyo[0].p1.x ][tpoyo[0].p1.y ] = 0;
+                    gr -> mat[ tpoyo[0].p2.x ][tpoyo[0].p2.y ] = 0;
+                    tpoyo[0] = poyo_sauvegarde;
+                    poyo_sauvegarde = cptmp;
+                }
+            }
            
-      tmp_passer = tmp_act;
+            tmp_passer = tmp_act;
+        }
     }
-  }
-  poyo_sauvegarde.apparait = 0;
-  poyo_sauvegarde.p1.x = 0;
-  poyo_sauvegarde.p1.y = 0;
-  poyo_sauvegarde.p2.x = -1;
-  poyo_sauvegarde.p2.y = -1;
-  return poyo_sauvegarde;
+    poyo_sauvegarde.apparait = 0;
+    poyo_sauvegarde.p1.x = 0;
+    poyo_sauvegarde.p1.y = 0;
+    poyo_sauvegarde.p2.x = -1;
+    poyo_sauvegarde.p2.y = -1;
+    return poyo_sauvegarde;
 }
+

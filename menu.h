@@ -11,13 +11,13 @@ void menu(bouton t_bouton_menu[4]);
 
 void menu_save(bouton t_bouton_save[5]);
 
-int charger_save(char *nom, joueur *j, grille *gr, tc_poyo *tpoyo, c_poyo *ptmp);
+int charger_save(char *nom, joueur *j, grille *gr, c_poyo tpoyo[4], c_poyo * ptmp);
 
-int save_partie(char *nom, joueur *jr, grille gr, tc_poyo *tpoyo, c_poyo *ptmp);
+int save_partie(char *nom, joueur *jr, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp);
 
 int ecrasement_save();
 
-void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr, tc_poyo *tpoyo, c_poyo *ptmp);
+void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp);
 
 void menu_score(bouton *retour);
 

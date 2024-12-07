@@ -5,7 +5,7 @@
 /*------------------ initialisation des poyos -------------*/
 void affiche_c_poyo(c_poyo * cp);
 
-void ini_poyo_chaine(tc_poyo *tpoyo);
+void ini_poyo_chaine(c_poyo *tpoyo, int n);
 
 void initialisation_cpoyo(c_poyo * cp);
 
@@ -13,9 +13,9 @@ void initialisation_cpoyo_vide(c_poyo *cp);
 
 void apparition_piece(c_poyo * p, grille *gr);
 
-void decalage_gauche(tc_poyo *tpoyo, int n);
+void decalage_gauche(c_poyo *tpoyo, int n);
 
-void roulement_poyo(tc_poyo *tpoyo, grille *gr);
+void roulement_poyo(c_poyo *tpoyo, grille *gr);
 
 /*------------------ fin d'initialisation ----------------*/
 

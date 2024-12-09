@@ -123,12 +123,17 @@ void creation_malus(c_poyo *poyo_piege, grille *gr, int absisse){
 void decalage(int absisse, grille *gr, c_poyo poyo){
   int i, tmp;
   for( i = 0 ; i <  gr -> n ; i++){
+    /* on empêche de faire decaler le poyo actuel */
     if( (gr -> mat[i][absisse] != 0) &&  !((poyo.p1.x == i && poyo.p1.y == absisse) || (poyo.p2.x == i && poyo.p2.y == absisse)) ){
       tmp = gr -> mat[i][absisse];
       gr -> mat[i - 2][absisse] = tmp;
       gr -> mat[i][absisse] = 0;
-    }/* else if( (gr -> mat[i][absisse] != 0) &&  !((poyo.p1.x == i +2 && poyo.p1.y == absisse) || (poyo.p2.x == i && poyo.p2.y == absisse)) ){ */
-      
+
+      if ((poyo.p1.x == i - 2 && poyo.p1.y == absisse) || (poyo.p2.x == i - 2 && poyo.p2.y == absisse)){
+	poyo.p1.x += 2;
+	poyo.p2.x += 2;
+      }
+    }
   }
 }
 
@@ -136,7 +141,8 @@ void decalage(int absisse, grille *gr, c_poyo poyo){
 void appliquer_malus(int score, grille *gr, c_poyo poyo){
   int absisse;
   c_poyo poyo_piege;
-  absisse =  rand()%( gr -> m); 
+  absisse = 2;
+  /* rand()%( gr -> m);  */
   if( score >= 4 ){
     creation_malus( &poyo_piege, gr, absisse);
     affiche_c_poyo( &poyo_piege );

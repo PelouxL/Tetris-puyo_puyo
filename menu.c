@@ -18,6 +18,7 @@ int verif(bouton bouton, int coord_x, int coord_y){
     return 0;
 }
 
+
 int clic_bouton(bouton t_bouton[], int longueur){
     int i, s_x, s_y;
 
@@ -54,7 +55,9 @@ void menu(bouton t_bouton_menu[4]){
     police = MLV_load_font("squaretype_b.ttf", 90);
 
     /* Titre */
+
     MLV_get_size_of_adapted_text_box_with_font("PUYO PUYO", police, 10, &text_width, &text_height); /* on récup la taille du texte écrit avec la largueur (width) et la hauteur (height) je traduis on sait jamais :) */
+  
     MLV_draw_adapted_text_box_with_font((LX - text_width) / 2, text_height / 3 /* pour le mettre en haut */, "PUYO PUYO", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
 
     police = MLV_load_font("squaretype_b.ttf", 60); /* je change la taille du texte pour faire une diff avec le titre */
@@ -352,9 +355,7 @@ void fonctionnement(){
     c_poyo tpoyo[4], ptmp;
 
     initialisation_cpoyo_vide(&ptmp);
-   
-    /* menu(t_bouton_menu); */
-
+    menu(t_bouton_menu); 
     while(ok == 1){
         menu(t_bouton_menu);
         pressed = clic_bouton(t_bouton_menu, 4);

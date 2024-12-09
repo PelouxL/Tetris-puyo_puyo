@@ -18,6 +18,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
     int temps, duree, tmpscore = 0, vitesse, temps_ecoule, dest, est_save = 0;
     int pause = 0, pressed;
     MLV_Keyboard_button touche;
+    MLV_Image *images[NUM_IMAGES];
     bouton t_bouton_pause[3], t_bouton_save[5];
     hms chrono;
     struct timespec debut, fin, maintenant, dernier_avancement;
@@ -27,6 +28,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
     chrono.heures = 0;   
     MLV_clear_window(MLV_COLOR_BLACK);
     clock_gettime( CLOCK_REALTIME, &dernier_avancement );
+    charger_img(images);
     
     while(1){
 
@@ -107,8 +109,8 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
             }
 
             /* affichage de la grille et des poyos */
-            aff_etat(*gr, *je, chrono, tpoyo[0]);
-            aff_poyos(tpoyo, ptmp);
+            aff_etat(*gr, *je, chrono, tpoyo[0], images);
+            aff_poyos(tpoyo, ptmp, images);
     
             printf("\n");
 
@@ -143,6 +145,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
         }
     
     }
+    liberer_images(images);
 }
 
 
@@ -150,6 +153,7 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
     int temps, duree, tmpscore1 = 0, tmpscore2 = 0, vitesse, temps_ecoule, dest1, dest2, est_save1 = 0, est_save2 = 0;
     c_poyo ptmp1, ptmp2;
     hms chrono;
+    MLV_Image *images[NUM_IMAGES_1VS1];
     struct timespec debut, fin, maintenant, dernier_avancement;
     
     chrono.secondes = 0;
@@ -160,6 +164,7 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
     initialisation_cpoyo_vide(&ptmp2);
     MLV_clear_window(MLV_COLOR_BLACK);
     clock_gettime( CLOCK_REALTIME, &dernier_avancement );
+    charger_img_1vs1(images);
     
     while(1){
         dest1 = 0;
@@ -211,10 +216,10 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
 
         /* affichage de la grille et des poyos */
         aff_grille( *gr1);
-        aff_1vs1_etat( *gr1, *gr2, *je1, *je2, chrono, tpoyo1[0], tpoyo2[0] );
+        aff_1vs1_etat( *gr1, *gr2, *je1, *je2, chrono, tpoyo1[0], tpoyo2[0], images );
     
         /* aff_poyos(tpoyo, &ptmp); */
-        aff_1vs1_poyos(tpoyo1, tpoyo2, &ptmp1, &ptmp2);
+        aff_1vs1_poyos(tpoyo1, tpoyo2, &ptmp1, &ptmp2, images);
     
         printf("\n");
 
@@ -261,6 +266,6 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
         }
         MLV_actualise_window();
     }
-
+    liberer_images_1vs1(images);
 
 }

@@ -6,6 +6,8 @@
 #define N 100
 #define M 100
 #define TAILLE_PSEUDO 10
+#define NUM_IMAGES 5
+#define NUM_IMAGES_1VS1 6
 
 typedef struct{
   int mat[N][M];

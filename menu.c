@@ -97,6 +97,24 @@ void menu_save(bouton t_bouton_save[5]){
     MLV_actualise_window();
 }
 
+void affiche_box( char *message, int secondes, int taille_police ){
+  int text_w, text_h, text_x, text_y;
+  MLV_Font *police;
+  
+  police = MLV_load_font("squaretype_b.ttf", taille_police);
+  MLV_get_size_of_adapted_text_box_with_font(message, police, 10, &text_w, &text_h);
+  
+  text_x = (LX - text_w)/2;
+  text_y = (LY - text_h)/2;
+
+  MLV_draw_adapted_text_box_with_font( text_x, text_y, message, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_COLOR_BISQUE, MLV_TEXT_CENTER);
+  
+
+  MLV_actualise_window();
+  MLV_wait_seconds(secondes);
+
+}
+  
 
 int charger_save(char *nom, joueur *jr, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp){
   FILE * f;
@@ -242,7 +260,6 @@ int ecrasement_save(){
 
 void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp){
     char *nom_save[4] = {"save1.bin", "save2.bin", "save3.bin", "save4.bin"};
-    /* poyo p1, p2; */
     int pressed, ecrase;
     FILE *f;
 
@@ -479,6 +496,7 @@ void menu_choix_mode( bouton t_bouton_choix_mode[2] ){
 int choix_mode_jeu(){
     bouton t_bouton_choix_mode[2];
     int pressed;
+  
 
     menu_choix_mode(t_bouton_choix_mode);
 
@@ -490,6 +508,7 @@ int choix_mode_jeu(){
 void fonctionnement(){
   bouton t_bouton_menu[4], t_bouton_save[5];
   char *nom_save[4] = { "save1.bin", "save2.bin", "save3.bin" ,"save4.bin"};
+  char text[200];
   bouton retour;
   int pressed, mode_jeu; /* bouton pressé */
   int n = 10, m = 6, ok = 1;
@@ -534,12 +553,14 @@ void fonctionnement(){
 
 	if( pressed < 4 ){
 	  printf("Save %s\n", nom_save[pressed]);
-	  if(charger_save( nom_save[pressed], &j1, &gr1, tpoyo1, &ptmp) == -1){
-	    fprintf(stderr, "Erreur lors de l'ouverture de la save %s\n",nom_save[pressed]);
-	    return ;
+	  if(charger_save( nom_save[pressed], &j1, &gr1, tpoyo1, &ptmp) == 1){
+	    jeu(&gr1, &j1, tpoyo1, &ptmp);
+
+	  }else{
+	    sprintf(text, "Il n'y a pas de donnée(s) de sauvegardes ici : Save %d", pressed+1);
+	    affiche_box(text, pressed, 20);
+	    retour_menu_p = 0;
 	  }
-	  jeu(&gr1, &j1, tpoyo1, &ptmp);
-	  retour_menu_p = 0;
 	}
 	else if(pressed == 4){
 	  printf("Menu principal \n");

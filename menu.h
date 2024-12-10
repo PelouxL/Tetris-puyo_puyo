@@ -11,6 +11,8 @@ void menu(bouton t_bouton_menu[4]);
 
 void menu_save(bouton t_bouton_save[5]);
 
+void affiche_box( char *message, int secondes, int espacement, int taille_police );
+
 int charger_save(char *nom, joueur *j, grille *gr, c_poyo tpoyo[4], c_poyo * ptmp);
 
 int save_partie(char *nom, joueur *jr, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp);

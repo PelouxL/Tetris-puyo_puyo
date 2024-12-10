@@ -7,6 +7,7 @@ Puyo_Puyo: $(OBJET)main.o $(OBJET)grille.o $(OBJET)pieces.o $(OBJET)affichage_ml
 	$(CC) $(OPTION) `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` $^ `pkg-config --libs-only-l MLV` -lrt -o $@ -lMLV
 
 $(OBJET)main.o: $(SOURCE)main.c
+	mkdir -p $(OBJET)
 	$(CC) $(OPTION) $^ -c -o $@
 
 $(OBJET)grille.o: $(SOURCE)grille.c
@@ -49,4 +50,4 @@ animation.o: animation.c
 	$(CC) $(OPTION) $^ -c
 
 clean:
-	rm -rf $(OBJET)*.o *~  Puyo_Puyo anim
+	rm -rf $(OBJET) *~  Puyo_Puyo anim

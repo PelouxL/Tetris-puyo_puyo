@@ -47,4 +47,4 @@ animation.o: animation.c
 	$(CC) $(OPTION) $^ -c
 
 clean:
-	rm -rf *.o *~  main 
+	rm -rf *.o *~  main anim

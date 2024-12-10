@@ -61,7 +61,7 @@ int fin_1vs1( c_poyo poyo1, c_poyo poyo2, joueur je1, joueur je2, grille gr1, gr
 
   /* on verifie si quelqu'un a perdu */
   if( (verif_fin( poyo1, gr1 ) == 1 && dest1 == 0) || (verif_fin( poyo2, gr2 ) == 1 && dest2 == 0) ){
-    MLV_clear_window(MLV_COLOR_BLACK);
+    MLV_clear_window(MLV_COLOR_BEIGE);
 
     /* on verifie si c'est j1 ou j2 qui a perdu */
     if( verif_fin( poyo1, gr1 ) == 1){

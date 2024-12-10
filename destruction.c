@@ -141,9 +141,9 @@ int post_destruction( grille *gr ){
   coordonne tcordall[100];
   poyo ptmp;
 
-  for ( i = 0; i < gr -> n ; i++ ) {
-    for ( j = 0; j < gr -> m ; j++ ) {
-      if (gr -> mat[i][j] > 0) { /* Vérifie la présence d'un poyo */
+  for( i = 0; i < gr -> n ; i++ ) {
+    for( j = 0; j < gr -> m ; j++ ) {
+      if( gr -> mat[i][j] > 0 &&   gr -> mat[i][j] < 6) { /* Vérifie la présence d'un poyo */
 	ptmp.x = i;
 	ptmp.y = j;
 	ptmp.couleur = gr -> mat[i][j];

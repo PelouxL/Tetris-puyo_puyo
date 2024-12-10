@@ -15,141 +15,91 @@
 #include "menu.h"
 
 void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
-    int temps, duree, tmpscore = 0, vitesse, temps_ecoule, dest, est_save = 0;
-    int pause = 0, pressed;
-    MLV_Keyboard_button touche;
-    MLV_Image *images[NUM_IMAGES];
-    bouton t_bouton_pause[3], t_bouton_save[5];
-    hms chrono;
-    struct timespec debut, fin, maintenant, dernier_avancement;
-    je -> score = 2000;
-    chrono.milis = 0;
-    chrono.secondes = 0;
-    chrono.minutes = 0;
-    chrono.heures = 0;
+  int temps, duree, tmpscore = 0, vitesse, temps_ecoule, dest, est_save = 0;
+  MLV_Image *images[NUM_IMAGES];
+  hms chrono;
+  struct timespec debut, fin, maintenant, dernier_avancement;
 
-  
+  ini_chrono( &chrono);
+  MLV_clear_window(MLV_COLOR_BEIGE);
+  clock_gettime( CLOCK_REALTIME, &dernier_avancement );
+  charger_img(images);
     
-    MLV_clear_window(MLV_COLOR_BLACK);
-    clock_gettime( CLOCK_REALTIME, &dernier_avancement );
-    charger_img(images);
-    
-    while(1){
+  while(1){
 
-        dest = 0;
-        /* permet de gerer le framrate */
-        clock_gettime( CLOCK_REALTIME, &debut );
+    dest = 0;
+    /* permet de gerer le framrate */
+    clock_gettime( CLOCK_REALTIME, &debut );
 
-        /* permet de gérer le temps passer entre chaque avancement */
-        clock_gettime( CLOCK_REALTIME, &maintenant );
+    /* permet de gérer le temps passer entre chaque avancement */
+    clock_gettime( CLOCK_REALTIME, &maintenant );
 
-        if(MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == MLV_KEY){
-            if(touche == MLV_KEYBOARD_ESCAPE){
-                pause = 1;
 
-                while(pause == 1){
-                    MLV_clear_window(MLV_COLOR_BEIGE);
-                    menu_pause(t_bouton_pause);
-                    pressed = clic_bouton(t_bouton_pause, 3);
-                    switch(pressed){
-                    case 0:
-                        printf("Le jeu se relance \n");
-                        pause = 0;
-                        break;
+    if( pause_jeu(je, gr, tpoyo, ptmp) == 0){
+      return ;
+    }
+      
+    /* gestion de l'avancement du temps, attention le jeu tourne a 60 fps donc ça marche mais*/
+    /* si la cadence vient a changer sa posera un problème */
+    chronometre( &chrono);
 
-                    case 1:
-                         /* enregistrement de la partie dans une save, faudra que je regarde */
-                        menu_save(t_bouton_save);
-                        pressed = clic_bouton(t_bouton_save, 5);
-
-                        if(pressed == 0){ /* save 1 */
-			  gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
-                        }
-                        else if(pressed == 1){ /* save 2 */
-                            gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
-                        }
-                        else if(pressed == 2){ /* save 3 */
-                            gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
-                        }
-                        else if(pressed == 3){ /* save 4 */
-                            gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
-                        }
-                        else if(pressed == 4){
-                            printf("Retour menu principal \n");
-                            pause = 0; /* pour l'instant ça relance la partie mais c'est temporaire */
-                        }
-                        
-                        break;
-                    case 2:
-                        printf("Menu \n"); /* on quitte la partie et on attérit dans le menu principal */
-                        break;
-                    }
-                }
-            }
-        }
-        if(pause == 0){
-            
-            /* gestion de l'avancement du temps, attention le jeu tourne a 60 fps donc ça marche mais*/
-            /* si la cadence vient a changer sa posera un problème */
-            chronometre( &chrono);
-
-            /* gestion de la valeur de la vitesse */
-            gestion_niveau_grille(gr, chrono);
-            vitesse = gestion_vitesse_grille(gr);
+    /* gestion de la valeur de la vitesse */
+    gestion_niveau_grille(gr, chrono);
+    vitesse = gestion_vitesse_grille(gr);
         
-            if( tpoyo[0].apparait == 0 ){
-                apparition_piece(&tpoyo[0], gr);
-            }
-            if( tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
-                est_save = 0;
-                roulement_poyo(tpoyo, gr);
-            }
-            temps_ecoule = (maintenant.tv_sec - dernier_avancement.tv_sec) * 1000 + (maintenant.tv_nsec - dernier_avancement.tv_nsec) / 1000000;
+    if( tpoyo[0].apparait == 0 ){
+      apparition_piece(&tpoyo[0], gr);
+    }
+    if( tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
+      est_save = 0;
+      roulement_poyo(tpoyo, gr);
+    }
+    temps_ecoule = (maintenant.tv_sec - dernier_avancement.tv_sec) * 1000 + (maintenant.tv_nsec - dernier_avancement.tv_nsec) / 1000000;
         
-            /* gestion de la vitesse de chutte des pieces */
-            if (temps_ecoule >= vitesse) {
-                avancement_piece(&tpoyo[0], gr);
-                dernier_avancement = maintenant;
-            }
+    /* gestion de la vitesse de chutte des pieces */
+    if (temps_ecoule >= vitesse) {
+      avancement_piece(&tpoyo[0], gr);
+      dernier_avancement = maintenant;
+    }
 
-            /* affichage de la grille et des poyos */
-            aff_etat(*gr, *je, chrono, tpoyo[0], images);
-            aff_poyos(tpoyo, ptmp, images);
+    /* affichage de la grille et des poyos */
+    aff_etat(*gr, *je, chrono, tpoyo[0], images);
+    aff_poyos(tpoyo, ptmp, images);
     
-            printf("\n");
+    printf("\n");
 
-            deplacement(&tpoyo[0], gr);
-            *ptmp = sauvegarde_poyos(tpoyo, *ptmp, gr, &est_save);
+    deplacement(&tpoyo[0], gr);
+    *ptmp = sauvegarde_poyos(tpoyo, *ptmp, gr, &est_save);
     
-            affiche_c_poyo(&tpoyo[0]);
-            actualisation_poyo(&tpoyo[0], gr);
+    affiche_c_poyo(&tpoyo[0]);
+    actualisation_poyo(&tpoyo[0], gr);
 
-            /* principe des coordonnées, destruction et destrucion */
-            tmpscore = chute_et_destruction(&tpoyo[0], gr);
-            if( tmpscore > 0 ){
-                dest = 1;
-                calcule_score(tmpscore, je, chrono);
-            }
+    /* principe des coordonnées, destruction et destrucion */
+    tmpscore = chute_et_destruction(&tpoyo[0], gr);
+    if( tmpscore > 0 ){
+      dest = 1;
+      calcule_score(tmpscore, je, chrono);
+    }
 
-            /* on verifie que la partie n'est pas fini */
-            if( fin_solo( tpoyo[0], *je, *gr, dest) == 1){
-                return ;
-            }
+    /* on verifie que la partie n'est pas fini */
+    if( fin_solo( tpoyo[0], *je, *gr, dest) == 1){
+      return ;
+    }
         
 	
-            clock_gettime(CLOCK_REALTIME, &fin );
+    clock_gettime(CLOCK_REALTIME, &fin );
     
-            /* Framerate */
-            duree = ((fin.tv_sec - debut.tv_sec) * 1000) + ((fin.tv_nsec - debut.tv_nsec) / 1000000);
-            temps = 16 - duree ;
-            if(temps > 0){
-                MLV_wait_milliseconds(temps);
-            }
-            MLV_actualise_window();
-        }
-    
+    /* Framerate */
+    duree = ((fin.tv_sec - debut.tv_sec) * 1000) + ((fin.tv_nsec - debut.tv_nsec) / 1000000);
+    temps = 16 - duree ;
+    if(temps > 0){
+      MLV_wait_milliseconds(temps);
     }
-    liberer_images(images);
+    MLV_actualise_window();
+  }
+    
+
+  liberer_images(images);
 }
 
 
@@ -172,10 +122,15 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
     charger_img_1vs1(images);
     
     while(1){
-        dest1 = 0;
-        dest2 = 0;
-        /* permet de gerer le framrate */
-        clock_gettime( CLOCK_REALTIME, &debut );
+      /* permet de gerer le framrate */
+      clock_gettime( CLOCK_REALTIME, &debut );
+      
+      dest1 = 0;
+      dest2 = 0;
+
+      if( pause_jeu_1vs1() == 0){
+	return ;
+      }
 
         /* permet de gérer le temps passer entre chaque avancement */
         clock_gettime( CLOCK_REALTIME, &maintenant );

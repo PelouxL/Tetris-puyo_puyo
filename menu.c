@@ -321,8 +321,10 @@ void menu_score(bouton *retour){
     MLV_actualise_window();
 }
 
+
+/* -----------------------pause du Joueur 1 ------------------------- */
 void menu_pause(bouton t_bouton_pause[3]){
-    char *nom_bouton_pause[3] = {"RESTART", "SAVE", "QUIT"};
+    char *nom_bouton_pause[3] = {"RESUME", "SAVE", "QUIT"};
     MLV_Font *police;
     int text_width, text_height, i;
 
@@ -334,7 +336,7 @@ void menu_pause(bouton t_bouton_pause[3]){
     MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3, "PAUSE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
         
     police = MLV_load_font("squaretype_b.ttf", 50);
-        
+     
     /* bouton pause */
     for( i = 0 ; i < 3 ; i++){
         cree_bouton(&t_bouton_pause[i], nom_bouton_pause[i], LX / 2, 150 + i * 100, police);
@@ -345,89 +347,222 @@ void menu_pause(bouton t_bouton_pause[3]){
     MLV_actualise_window();
 }
 
+int pause_jeu( joueur *je, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp){
+  MLV_Keyboard_button touche;
+  bouton t_bouton_pause[3], t_bouton_save[5];
+  int pressed;
+
+  if(MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == MLV_KEY){
+    if(touche == MLV_KEYBOARD_ESCAPE){
+      while(1){
+	menu_pause(t_bouton_pause);
+	pressed = clic_bouton(t_bouton_pause, 3);
+	switch(pressed){
+	case 0:
+	  printf("Le jeu se relance \n");
+	  /* pause = 0; */
+	  return 1;
+	  break;
+
+	case 1:
+	  /* enregistrement de la partie dans une save, faudra que je regarde */
+	  menu_save(t_bouton_save);
+	  pressed = clic_bouton(t_bouton_save, 5);
+
+	  if(pressed == 0){ /* save 1 */
+	    gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
+	  }
+	  else if(pressed == 1){ /* save 2 */
+	    gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
+	  }
+	  else if(pressed == 2){ /* save 3 */
+	    gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
+	  }
+	  else if(pressed == 3){ /* save 4 */
+	    gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
+	  }
+	  else if(pressed == 4){
+	    printf("Retour menu principal \n");
+	 
+	    /*pause = 0;  pour l'instant ça relance la partie mais c'est temporaire */
+	  }
+                        
+	  break;
+	case 2:
+	  printf("Menu \n"); /* on quitte la partie et on attérit dans le menu principal */
+	     return 0;
+	  break;
+	}
+      }
+    }
+  }
+  return 1;
+}
+
+/* -----------------------------Pause de 1 VS 1-------------------------------------------------- */
+
+void menu_pause_1vs1(bouton t_bouton_pause[2]){
+    char *nom_bouton_pause[2] = {"RESUME", "QUIT"};
+    MLV_Font *police;
+    int text_width, text_height, i;
+
+    MLV_clear_window(MLV_COLOR_BEIGE);
+    police = MLV_load_font("squaretype_b.ttf", 90);
+
+    /* Titre */
+    MLV_get_size_of_adapted_text_box_with_font("PAUSE", police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3, "PAUSE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+        
+    police = MLV_load_font("squaretype_b.ttf", 50);
+     
+    /* bouton pause */
+    for( i = 0 ; i < 2 ; i++){
+        cree_bouton(&t_bouton_pause[i], nom_bouton_pause[i], LX / 2, 150 + i * 100, police);
+        afficher_text(t_bouton_pause[i], police);
+    }
+
+    MLV_free_font(police);
+    MLV_actualise_window();
+}
+
+int pause_jeu_1vs1(){
+  MLV_Keyboard_button touche;
+  bouton t_bouton_pause[2];
+  int pressed;
+
+  if(MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == MLV_KEY){
+    if(touche == MLV_KEYBOARD_ESCAPE){
+      while(1){
+	menu_pause_1vs1(t_bouton_pause);
+	pressed = clic_bouton(t_bouton_pause, 2);
+	switch(pressed){
+	case 0:
+	  printf("Le jeu se relance \n");
+	  return 1;
+	  break;
+
+	case 1:
+	  printf("Menu \n"); /* on quitte la partie et on attérit dans le menu principal */
+	  return 0;
+	  break;
+	}
+      }
+    }
+  }
+  return 1;
+}
+
+/* --------------------------------------------------------------------- */
+
+void menu_choix_mode( bouton t_bouton_choix_mode[2] ){
+    char *nom_bouton_choix_mode[2] = {"SOLO", "VERSUS"};
+    int text_width, text_height, i;
+    MLV_Font *police;
+
+    MLV_clear_window(MLV_COLOR_BEIGE);
+    police = MLV_load_font("squaretype_b.ttf", 90);
+
+    MLV_get_size_of_adapted_text_box_with_font("CHOISIR UN MODE", police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font((LX - text_width) / 2, text_height / 3, "CHOISIR UN MODE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+
+    police = MLV_load_font("squaretype_b.ttf", 60);
+
+    for (i = 0; i < 2; i++) {
+        cree_bouton(&t_bouton_choix_mode[i], nom_bouton_choix_mode[i], LX / 2, 200 + i * 150, police);
+        afficher_text(t_bouton_choix_mode[i], police);
+    }
+
+    MLV_free_font(police);
+    MLV_actualise_window();
+}
+
+int choix_mode_jeu(){
+    bouton t_bouton_choix_mode[2];
+    int pressed;
+
+    menu_choix_mode(t_bouton_choix_mode);
+
+    pressed = clic_bouton(t_bouton_choix_mode, 2);
+    return pressed;
+}
 
 
 void fonctionnement(){
-    bouton t_bouton_menu[4], t_bouton_save[5];
-    bouton retour;
-    int pressed; /* bouton pressé */
-    int n = 10, m = 6, ok = 1;
-    int retour_menu_p = 1;
-    grille gr;
-    joueur j;
-    c_poyo tpoyo[4], ptmp;
+  bouton t_bouton_menu[4], t_bouton_save[5];
+  char *nom_save[4] = { "save1.bin", "save2.bin", "save3.bin" ,"save4.bin"};
+  bouton retour;
+  int pressed, mode_jeu; /* bouton pressé */
+  int n = 10, m = 6, ok = 1;
+  int retour_menu_p = 1;
+  grille gr1, gr2;
+  joueur j1, j2;
+  c_poyo tpoyo1[4], ptmp, tpoyo2[4];
 
-   
-    initialisation_cpoyo_vide(&ptmp);
+  menu(t_bouton_menu);
+  
+  while(ok == 1){
     menu(t_bouton_menu);
-    while(ok == 1){
-        menu(t_bouton_menu);
-        pressed = clic_bouton(t_bouton_menu, 4);
+    pressed = clic_bouton(t_bouton_menu, 4);
 
-        switch(pressed){
-        case 0:
-            printf("Début jeu \n");
-            gr = initialisation_grille(n, m);
-            ini_poyo_chaine(tpoyo, 4);
-	    printf("lalalallalalala\n");
-            jeu(&gr, &j, tpoyo, &ptmp);
-            break;
+    switch(pressed){
+    case 0:
+      printf("Choix du mode de jeu \n");
+      mode_jeu = choix_mode_jeu();
+      if( mode_jeu == 0){
+	printf("Mode SOLO\n");
+	initialisation_cpoyo_vide(&ptmp);
+	gr1 = initialisation_grille(n, m);
+	ini_poyo_chaine(tpoyo1, 4);
+	jeu(&gr1, &j1, tpoyo1, &ptmp);
+      }else if( mode_jeu == 1){
+	printf("Mode VERSUS\n");
+	j1.score = 0;
+	j2.score = 0;
+	gr1 = initialisation_grille(n, m);
+	ini_poyo_chaine(tpoyo1, 4);
+	gr2 = initialisation_grille(n, m);
+	ini_poyo_chaine(tpoyo2, 4);
+	jeu_1vs1(&gr1, &gr2, &j1, &j2, tpoyo1, tpoyo2);
+      }
+      break;
             
-        case 1:
-            printf("Menu save \n");
-            menu_save(t_bouton_save);
-            while(retour_menu_p == 1){
-                pressed = clic_bouton(t_bouton_save, 5);
-                                  
-                if(pressed == 0){
-                    printf("Save 1 \n");
-                    if(charger_save("save1.bin", &j, &gr, tpoyo, &ptmp) == 1){
-                        ini_poyo_chaine(tpoyo, 4);
-                        jeu(&gr, &j, tpoyo, &ptmp);
-                    }
-                    /* cas d'erreur */
-                }
-                else if(pressed == 1){
-                    printf("Save 2 \n");
-                    if(charger_save("save2.bin", &j, &gr, tpoyo, &ptmp) == 1){
-                        jeu(&gr, &j, tpoyo, &ptmp);
-                    }
-                }
-                else if(pressed == 2){
-                    printf("Save 3 \n");
-                    if(charger_save("save3.bin", &j, &gr, tpoyo, &ptmp) == 1){
-                        jeu(&gr, &j, tpoyo, &ptmp);
-                    }
-                }
-                else if(pressed == 3){
-                    printf("Save 4 \n");
-                    if(charger_save("save4.bin", &j, &gr, tpoyo, &ptmp) == 1){
-                        jeu(&gr, &j, tpoyo, &ptmp);
-                    }
-                }
-                else if(pressed == 4){
-                    printf("Menu principal \n");
-                    retour_menu_p = 0;
-                }
-            }
-            break;
+    case 1:
+      printf("Menu save \n");
+      menu_save(t_bouton_save);
+      while( retour_menu_p == 1 ){
+	pressed = clic_bouton(t_bouton_save, 5);
+
+	if( pressed < 4 ){
+	  printf("Save %s\n", nom_save[pressed]);
+	  if(charger_save( nom_save[pressed], &j1, &gr1, tpoyo1, &ptmp) == -1){
+	    fprintf(stderr, "Erreur lors de l'ouverture de la save %s\n",nom_save[pressed]);
+	    return ;
+	  }
+	  jeu(&gr1, &j1, tpoyo1, &ptmp);
+	  retour_menu_p = 0;
+	}
+	else if(pressed == 4){
+	  printf("Menu principal \n");
+	  retour_menu_p = 0;
+	}
+      }
+      break;
             
-        case 2:
-            printf("Menu score \n");
-            menu_score(&retour);
-            while(retour_menu_p == 1){
-                pressed = clic_bouton(&retour, 1);
-                if(pressed == 0){
-                    retour_menu_p = 0;
-                }
-            }
-            break;
-        case 3:
-            printf("Au revoir \n");
-            MLV_free_window();
-            return ;
-        }
-        retour_menu_p = 1;
+    case 2:
+      printf("Menu score \n");
+      menu_score(&retour);
+      while(retour_menu_p == 1){
+	pressed = clic_bouton(&retour, 1);
+	if(pressed == 0){
+	  retour_menu_p = 0;
+	}
+      }
+      break;
+    case 3:
+      printf("Au revoir \n");
+      return ;
     }
-    MLV_free_window();  
+    retour_menu_p = 1;
+  }
 }
+

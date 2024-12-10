@@ -24,6 +24,14 @@ void chronometre(hms * chrono){
     }
 }
 
+
+void ini_chrono( hms *chrono){
+    chrono -> milis = 0;
+    chrono -> secondes = 0;
+    chrono -> minutes = 0;
+    chrono -> heures = 0;
+}
+
 void gestion_niveau_grille(grille *gr, hms chrono){
     static int dernier_avancement = 0;
     int temps_ecoule;

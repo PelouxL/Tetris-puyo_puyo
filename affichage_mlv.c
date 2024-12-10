@@ -44,7 +44,7 @@ void aff_etat(grille gr, joueur je, hms chrono, c_poyo poyo, MLV_Image *images[N
   int i, j;
   char texte[100], score[10], chronometre[20];
 
-  MLV_clear_window(MLV_COLOR_BLACK);
+   MLV_clear_window(MLV_COLOR_BEIGE);
   
   strcpy(texte, "Joueur 1 \n Score : "); /* on met le score dans un const char */
   sprintf(score,"%d", je.score);
@@ -52,21 +52,21 @@ void aff_etat(grille gr, joueur je, hms chrono, c_poyo poyo, MLV_Image *images[N
 
   
   sprintf(chronometre, "%d:%d:%d:%d", chrono.heures, chrono.minutes, chrono.secondes, chrono.milis);
-  MLV_draw_adapted_text_box(600 ,10, chronometre ,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+  MLV_draw_adapted_text_box(600 ,10, chronometre ,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
   
-  MLV_draw_adapted_text_box(50,390, texte,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER); /* affichage du score du joueur */
+  MLV_draw_adapted_text_box(50,390, texte,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER); /* affichage du score du joueur */
 
   for( i = 0 ; i < gr.n ; i++ ){
     for( j = 0; j < gr.m ; j++){
       if( i == 0 && (poyo.p1.x > 0 ) && (poyo.p2.x > 0 ) && (poyo.p1.y == j ||poyo.p2.y == j) ){
 	MLV_draw_filled_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_DARKRED);
-	MLV_draw_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_GREY);
+	MLV_draw_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_BLACK);
       }else{
 	MLV_draw_filled_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_WHITE);
 	if( gr.mat[i][j] > 0 ){
 	  MLV_draw_image( images[ gr.mat[i][j] - 1],  200+(j*TCUB), 100+(i*TCUB));
 	}
-	MLV_draw_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_GREY);
+	MLV_draw_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_BLACK);
       }
     }
   }
@@ -78,27 +78,18 @@ void aff_poyos(c_poyo *tpoyo, c_poyo *sauvegarde, MLV_Image *images[NUM_IMAGES])
 
     for(i = 0 ; i < 3 ; i++ ){
       MLV_draw_image( images[ (tpoyo[i + 1].p2.couleur) - 1 ] ,  700, 200+(i*110));
-      /* MLV_draw_filled_rectangle(700, 200+(i*90), TSUIV, TSUIV, images[ (tpoyo[i + 1].p2.couleur) - 1 ] ); */
-        MLV_draw_rectangle( 700, 200+(i*110), TCUB, TCUB, MLV_COLOR_GREY);
+      MLV_draw_image( images[ (tpoyo[i + 1].p1.couleur) - 1 ] ,  700, 250+(i*110));
 
-	 MLV_draw_image( images[ (tpoyo[i + 1].p1.couleur) - 1 ] ,  700, 250+(i*110));
-	 /* MLV_draw_filled_rectangle(700, 240+(i*90), TSUIV, TSUIV, images ([tpoyo[i + 1].p1.couleur) - 1]); */
-	 MLV_draw_rectangle( 700, 250+(i*110), TCUB, TCUB, MLV_COLOR_GREY);
     }
 
-    MLV_draw_text_box( 100, 100, 100, 20, "Sauvegarde", 10, MLV_COLOR_GREY, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER, MLV_HORIZONTAL_CENTER, MLV_VERTICAL_CENTER);
-    MLV_draw_rectangle(100,  120, 100, 120, MLV_COLOR_GREY);
+    MLV_draw_text_box( 100, 100, 100, 20, "Sauvegarde", 10, MLV_COLOR_GREY, MLV_COLOR_BISQUE, MLV_COLOR_BLACK, MLV_TEXT_CENTER, MLV_HORIZONTAL_CENTER, MLV_VERTICAL_CENTER);
+    MLV_draw_rectangle(100,  120, 100, 120, MLV_COLOR_BLACK);
 
     if( sauvegarde -> p1.couleur > 0 ){
       if( sauvegarde -> p2.couleur != 0 ){
 	MLV_draw_image( images[ (sauvegarde -> p2.couleur) - 1 ] , 125, 130);
-	/* MLV_draw_filled_rectangle(130,130 , TSUIV, TSUIV, color[sauvegarde -> p2.couleur]); */
-        MLV_draw_rectangle( 125, 130, TCUB, TCUB, MLV_COLOR_GREY);
       }
-
       MLV_draw_image( images[ (sauvegarde -> p1.couleur) - 1 ] , 125, 180);
-      /*  MLV_draw_filled_rectangle(130,170 , TSUIV, TSUIV, color[sauvegarde -> p1.couleur]); */
-      MLV_draw_rectangle( 125, 180, TCUB, TCUB, MLV_COLOR_GREY);
     }
     
 }
@@ -141,7 +132,7 @@ void aff_1vs1_etat(grille gr1, grille gr2, joueur je1, joueur je2, hms chrono, c
   int i, j;
   char texte1[100], texte2[100], score1[10], score2[10], chronometre[20];
   
-  MLV_clear_window(MLV_COLOR_BLACK);
+  MLV_clear_window(MLV_COLOR_BEIGE);
 
   /* gestion du nom et du score du j1 */
   strcpy(texte1, "Joueur 1 \n Score : "); /* on met le score dans un const char */
@@ -154,10 +145,10 @@ void aff_1vs1_etat(grille gr1, grille gr2, joueur je1, joueur je2, hms chrono, c
   strcat(texte2, score2);
 
   sprintf(chronometre, "%d:%d:%d:%d", chrono.heures, chrono.minutes, chrono.secondes, chrono.milis);
-  MLV_draw_adapted_text_box(400 ,10, chronometre ,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+  MLV_draw_adapted_text_box(400 ,10, chronometre ,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
   
-  MLV_draw_adapted_text_box(180,600, texte1,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER); /* affichage du score du joueur 1 */
-  MLV_draw_adapted_text_box(580,600, texte2,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER); /* affichage du score du joueur 2 */
+  MLV_draw_adapted_text_box(180,600, texte1,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER); /* affichage du score du joueur 1 */
+  MLV_draw_adapted_text_box(580,600, texte2,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER); /* affichage du score du joueur 2 */
   
   for( i = 0 ; i < gr1.n ; i++ ){
     for( j = 0; j < gr1.m ; j++){
@@ -169,7 +160,7 @@ void aff_1vs1_etat(grille gr1, grille gr2, joueur je1, joueur je2, hms chrono, c
       if( gr1.mat[i][j] > 0){
 	MLV_draw_image( images[ gr1.mat[i][j] - 1],  100+(j*TVS), 100+(i*TVS));
       }
-      MLV_draw_rectangle( 100+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_GREY);
+      MLV_draw_rectangle( 100+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_BLACK);
     }
   }
 
@@ -178,13 +169,13 @@ for( i = 0 ; i < gr2.n ; i++ ){
   for( j = 0; j < gr2.m ; j++){
     if( i == 0 && (poyo2.p1.x > 0 ) && (poyo2.p2.x > 0 ) && (poyo2.p1.y == j || poyo2.p2.y == j) ){
       MLV_draw_filled_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_DARKRED );
-      MLV_draw_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_GREY);
+      MLV_draw_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_BLACK);
     }else{
       MLV_draw_filled_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_WHITE);
       if( gr2.mat[i][j] > 0){
 	MLV_draw_image( images[ gr2.mat[i][j] - 1],  500+(j*TVS), 100+(i*TVS));
       }
-      MLV_draw_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_GREY);
+      MLV_draw_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_BLACK);
     }
   }
  }
@@ -197,45 +188,35 @@ void aff_1vs1_poyos(c_poyo *tpoyo1, c_poyo *tpoyo2,  c_poyo *sauvegarde1, c_poyo
   /* ------------------------------------ j1 ---------------------------------------------------- */
   for(i = 0 ; i < 3 ; i++ ){
     MLV_draw_image( images[ (tpoyo1[ i + 1 ].p2.couleur) - 1],  350, 200+(i*110));
-    MLV_draw_rectangle( 350, 200+(i*110), TVS, TVS, MLV_COLOR_GREY);
-
     MLV_draw_image( images[ (tpoyo1[ i + 1 ].p1.couleur) - 1],  350, 240+(i*110)); 
-    MLV_draw_rectangle( 350, 240+(i*110), TVS, TVS, MLV_COLOR_GREY);
   }
 
-  MLV_draw_text_box( 0, 100, 100, 20, "Sauvegarde", 10, MLV_COLOR_GREY, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER, MLV_HORIZONTAL_CENTER, MLV_VERTICAL_CENTER);
-  MLV_draw_rectangle(0,  120, 100, 120, MLV_COLOR_GREY);
+  MLV_draw_text_box( 0, 100, 100, 20, "Sauvegarde", 10, MLV_COLOR_GREY, MLV_COLOR_BLACK, MLV_COLOR_BISQUE, MLV_TEXT_CENTER, MLV_HORIZONTAL_CENTER, MLV_VERTICAL_CENTER);
+  MLV_draw_rectangle(0,  120, 100, 120, MLV_COLOR_BLACK); 
 
   if( sauvegarde1 -> p1.couleur > 0 ){
     if( sauvegarde1 -> p2.couleur != 0 ){
 
       MLV_draw_image( images[ (sauvegarde1 -> p1.couleur) - 1],  30, 140); 
-      MLV_draw_rectangle( 30, 140, TVS, TVS, MLV_COLOR_GREY);
     }
     MLV_draw_image( images[ (sauvegarde1 -> p2.couleur) - 1],  30, 180); 
-    MLV_draw_rectangle( 30, 180, TVS, TVS, MLV_COLOR_GREY);
   }
 
   /* ----------------------------------- j2 --------------------------------------------------- */
 
   for(i = 0 ; i < 3 ; i++ ){
     MLV_draw_image( images[ (tpoyo2[ i + 1 ].p2.couleur) - 1],  750, 200+(i*110));
-    MLV_draw_rectangle( 750, 200+(i*110), TVS, TVS, MLV_COLOR_GREY);
-
     MLV_draw_image( images[ (tpoyo2[ i + 1 ].p1.couleur) - 1],  750, 240+(i*110)); 
-    MLV_draw_rectangle( 750, 240+(i*110), TVS, TVS, MLV_COLOR_GREY);
   }
 
-  MLV_draw_text_box( 400, 100, 100, 20, "Sauvegarde", 10, MLV_COLOR_GREY, MLV_COLOR_RED, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER, MLV_HORIZONTAL_CENTER, MLV_VERTICAL_CENTER);
-  MLV_draw_rectangle(400,  120, 100, 120, MLV_COLOR_GREY);
+  MLV_draw_text_box( 400, 100, 100, 20, "Sauvegarde", 10, MLV_COLOR_GREY, MLV_COLOR_BLACK, MLV_COLOR_BISQUE, MLV_TEXT_CENTER, MLV_HORIZONTAL_CENTER, MLV_VERTICAL_CENTER);
+  MLV_draw_rectangle(400,  120, 100, 120, MLV_COLOR_BLACK);
 
   if( sauvegarde2 -> p1.couleur > 0 ){
     if( sauvegarde2 -> p2.couleur != 0 ){
       MLV_draw_image( images[ (sauvegarde2 -> p1.couleur) - 1],  430, 140); 
-      MLV_draw_rectangle( 430, 140, TVS, TVS, MLV_COLOR_GREY);
     }
     MLV_draw_image( images[ (sauvegarde2 -> p2.couleur) - 1],  430, 180); 
-    MLV_draw_rectangle( 430, 180, TVS, TVS, MLV_COLOR_GREY);
   }
    
 }

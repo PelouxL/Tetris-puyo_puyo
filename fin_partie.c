@@ -23,7 +23,7 @@ int fin_solo( c_poyo poyo, joueur je, grille gr, int dest ){
   char *pseudo = NULL;
   
   if( verif_fin( poyo, gr) == 1 && dest == 0){
-    MLV_clear_window(MLV_COLOR_BLACK);
+    MLV_clear_window(MLV_COLOR_BEIGE);
 
     /* boite pour ecrire le pseudo */
     MLV_wait_input_box( 100, 100, 300, 50,  MLV_COLOR_WHITE, MLV_COLOR_BLACK, MLV_COLOR_WHITE, "Entrez votre pseudo : ", &pseudo );
@@ -39,12 +39,12 @@ int fin_solo( c_poyo poyo, joueur je, grille gr, int dest ){
 
     free(pseudo );
 
-    if( recup_score("score.bin", &tmp_tjoueur) == -1 ){
+    if( recup_score("score.bin", tmp_tjoueur) == -1 ){
       fprintf( stderr, "Erreur lors de la recupperation du score\n");
       return -1;
     }
     
-    if( (tri_insertion( "score.bin", je, &tmp_tjoueur) ) == -1){
+    if( (tri_insertion( "score.bin", je, tmp_tjoueur) ) == -1){
       fprintf( stderr, "Erreur lors de l'actualisation du score\n");
       return -1;
     }

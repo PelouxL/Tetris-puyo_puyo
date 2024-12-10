@@ -5,9 +5,10 @@
 #define LY 800
 #define N 100
 #define M 100
-#define TAILLE_PSEUDO 10
+#define TAILLE_PSEUDO 5
 #define NUM_IMAGES 5
 #define NUM_IMAGES_1VS1 6
+#define T_J 10
 
 typedef struct{
   int mat[N][M];
@@ -36,7 +37,7 @@ typedef struct{
   int score;
 }joueur;
 
-typedef joueur tjoueur[10];
+typedef joueur tjoueur[T_J];
 
 typedef struct{
   int x;

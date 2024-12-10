@@ -9,6 +9,7 @@
 #include "jeu.h"
 #include "affichage_mlv.h"
 #include "destruction.h"
+#include "score.h"
 
 
 int verif(bouton bouton, int coord_x, int coord_y){
@@ -50,10 +51,9 @@ void menu(bouton t_bouton_menu[4]){
     int text_width, text_height, i;
     MLV_Font *police;
 
+    
     MLV_clear_window(MLV_COLOR_BEIGE);
-
     police = MLV_load_font("squaretype_b.ttf", 90);
-
     /* Titre */
 
     MLV_get_size_of_adapted_text_box_with_font("PUYO PUYO", police, 10, &text_width, &text_height); /* on récup la taille du texte écrit avec la largueur (width) et la hauteur (height) je traduis on sait jamais :) */
@@ -279,10 +279,9 @@ void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr, c_poyo t
 
 void menu_score(bouton *retour){
     char *nom_bouton_score[10] = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"};
-    int scores[10] = {1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009};
-    char affichage[100];
-    char *pseudos[10] = {"Feur1", "Feur2", "Feur3", "Feur4", "Feur5", "Feur6", "Feur7", "Feur8", "Feur9", "Feur10"};
+    char affichage[200];
     char *nom_bouton_retour[1] = {"RETOUR"};
+    tjoueur je_score;
     int text_width, text_height, i, k;
     MLV_Font *police;
 
@@ -298,9 +297,13 @@ void menu_score(bouton *retour){
     police = MLV_load_font("squaretype_b.ttf", 30);
 
     k = 0;
-    
+
+    if( recup_score( "score.bin", je_score) == -1 ){
+      fprintf(stderr, "Erreur lors de la reccuperation de score\n");
+      return ;
+    }
     for( i = 0 ; i < 10 ; i++ ){
-        sprintf(affichage, "%s   // Score =  %d //  Pseudo = %s", nom_bouton_score[i], scores[i], pseudos[i]);
+        sprintf(affichage, "%s   // Score =  %d //  Pseudo = %s", nom_bouton_score[i], je_score[i].score, je_score[i].pseudo);
         MLV_get_size_of_adapted_text_box_with_font(affichage, police, 10, &text_width, &text_height);
         MLV_draw_adapted_text_box_with_font( LX / 5, text_height / 3 + 80 + k, affichage, police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
         k += 55;
@@ -354,8 +357,9 @@ void fonctionnement(){
     joueur j;
     c_poyo tpoyo[4], ptmp;
 
+   
     initialisation_cpoyo_vide(&ptmp);
-    menu(t_bouton_menu); 
+    menu(t_bouton_menu);
     while(ok == 1){
         menu(t_bouton_menu);
         pressed = clic_bouton(t_bouton_menu, 4);
@@ -365,6 +369,7 @@ void fonctionnement(){
             printf("Début jeu \n");
             gr = initialisation_grille(n, m);
             ini_poyo_chaine(tpoyo, 4);
+	    printf("lalalallalalala\n");
             jeu(&gr, &j, tpoyo, &ptmp);
             break;
             
@@ -420,7 +425,7 @@ void fonctionnement(){
         case 3:
             printf("Au revoir \n");
             MLV_free_window();
-            exit(EXIT_SUCCESS);
+            return ;
         }
         retour_menu_p = 1;
     }

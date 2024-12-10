@@ -5,9 +5,9 @@ int calcule_score(int destruction, joueur *je, hms chrono);
 
 int echange_joueur_score(joueur *j1, joueur *j2);
 
-int recup_score( char *nom, tjoueur *je_score );
+int recup_score( char *nom, tjoueur je_score );
 
-int tri_insertion( char *nom, joueur score, tjoueur *tabscore );
+int tri_insertion( char *nom, joueur score, tjoueur tabscore );
 
 void creation_malus(c_poyo poyo_piege, grille *gr_adverse);
 

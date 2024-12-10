@@ -19,18 +19,21 @@ void calcule_score(int destruction, joueur *je, hms chrono){
 /*-------- fonction permettant de gerer les nouveaux score ------*/
 
 /* permet de recupperer le score dans un tableau tjoueur */
-int recup_score( char *nom, tjoueur *je_score ){
+int recup_score( char *nom, tjoueur je_score ){
   FILE *fichier;
-
+  int i;
+  
   if( (fichier = fopen( nom, "rb")) == NULL ){
     printf("Erreur lors de l'ouverture\n");
     return -1;
   }
-
-  if( fread(*je_score, sizeof(joueur), 10, fichier) != 10){
-     printf("erreur lors de la reccuperation\n");
-     fclose(fichier);
-     return -1;
+  for( i = 0 ; i < T_J ; i++ ){ 
+    if( fread(&je_score[i], sizeof(joueur), 1, fichier) != 1){
+      printf("erreur lors de la reccuperation\n");
+      fclose(fichier);
+      return -1;
+    }
+    printf(" recup %d %s\n", je_score[i].score, je_score[i].pseudo);
   }
 
   fclose(fichier);
@@ -65,7 +68,7 @@ int echange_joueur_score(joueur *j1, joueur *j2){
 }
     
 /* tri la liste des score et renvoie 1 ou -1 en cas d'erreurs */
-int tri_insertion( char *nom, joueur nouveau_score, tjoueur *je_score ){
+int tri_insertion( char *nom, joueur nouveau_score, tjoueur je_score ){
     FILE *fichier;
     int i, j;
 
@@ -76,26 +79,28 @@ int tri_insertion( char *nom, joueur nouveau_score, tjoueur *je_score ){
     
     /* tri du score */
     for ( i = 0 ; i < 10 ; i++ ){
-        if( je_score[i] -> score  < nouveau_score.score ){
+        if( je_score[i].score  < nouveau_score.score ){
             for( j = i ; j < 9 ; j++ ){
                 /* on verifie qu'il n'y est pas de pb dans l'echange de position */
-                if (echange_joueur_score(je_score[i + 1], je_score[i]) == -1 ){
+                if (echange_joueur_score(&je_score[i + 1], &je_score[i]) == -1 ){
                     printf("Erreur lors du deplacement de score\n");
                     return -1;
                 }
             }
             /* on place notre score au bonne endroit */
-            if( echange_joueur_score(je_score[i], &nouveau_score) == -1 ){
+            if( echange_joueur_score(&je_score[i], &nouveau_score) == -1 ){
                 printf("Erreur lors du deplacement de score\n");
                 return -1;
             }
         }
     }
     /* ecriture sur le fichier */
-    if( fwrite( *je_score, sizeof(joueur), 10, fichier) != 10 ){
-       printf("Erreur lors de l'écriture dans le fichier\n");
+    for( i = 0 ; i < T_J ; i++ ){
+      if( fwrite( &je_score[i], sizeof(joueur), 1, fichier) != 1 ){
+	printf("Erreur lors de l'écriture dans le fichier\n");
         fclose(fichier);
         return -1;
+      }
     }
     
     

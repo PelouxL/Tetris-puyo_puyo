@@ -1,44 +1,46 @@
 CC= gcc
 OPTION= -W -Wall -pedantic -std=gnu89 -O3
+OBJET= ./Objet/
+SOURCE= ./Source/
 
-main: main.o grille.o pieces.o affichage_mlv.o ini_poyo.o destruction.o jeu.o chrono.o score.o deplacement_1vs1.o fin_partie.o menu.o
+Puyo_Puyo: $(OBJET)main.o $(OBJET)grille.o $(OBJET)pieces.o $(OBJET)affichage_mlv.o $(OBJET)ini_poyo.o $(OBJET)destruction.o $(OBJET)jeu.o $(OBJET)chrono.o $(OBJET)score.o $(OBJET)deplacement_1vs1.o $(OBJET)fin_partie.o $(OBJET)menu.o
 	$(CC) $(OPTION) `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` $^ `pkg-config --libs-only-l MLV` -lrt -o $@ -lMLV
 
-main.o: main.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)main.o: $(SOURCE)main.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-grille.o: grille.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)grille.o: $(SOURCE)grille.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-pieces.o: pieces.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)pieces.o: $(SOURCE)pieces.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-affichage_mlv.o: affichage_mlv.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)affichage_mlv.o: $(SOURCE)affichage_mlv.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-ini_poyo.o: ini_poyo.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)ini_poyo.o: $(SOURCE)ini_poyo.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-destruction.o: destruction.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)destruction.o: $(SOURCE)destruction.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-jeu.o: jeu.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)jeu.o: $(SOURCE)jeu.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-chrono.o: chrono.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)chrono.o: $(SOURCE)chrono.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-score.o: score.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)score.o: $(SOURCE)score.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-deplacement_1vs1.o: deplacement_1vs1.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)deplacement_1vs1.o: $(SOURCE)deplacement_1vs1.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-fin_partie.o: fin_partie.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)fin_partie.o: $(SOURCE)fin_partie.c
+	$(CC) $(OPTION) $^ -c -o $@
 
-menu.o: menu.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)menu.o: $(SOURCE)menu.c
+	$(CC) $(OPTION) $^ -c -o $@
 
 anim: animation.o
 	$(CC) $(OPTION) `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` $^ `pkg-config --libs-only-l MLV` -lrt -o $@ -lMLV
@@ -47,4 +49,4 @@ animation.o: animation.c
 	$(CC) $(OPTION) $^ -c
 
 clean:
-	rm -rf *.o *~  main anim
+	rm -rf $(OBJET)*.o *~  Puyo_Puyo anim

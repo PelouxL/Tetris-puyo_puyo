@@ -40,5 +40,11 @@ fin_partie.o: fin_partie.c
 menu.o: menu.c
 	$(CC) $(OPTION) $^ -c
 
+anim: animation.o
+	$(CC) $(OPTION) `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` $^ `pkg-config --libs-only-l MLV` -lrt -o $@ -lMLV
+
+animation.o: animation.c
+	$(CC) $(OPTION) $^ -c
+
 clean:
 	rm -rf *.o *~  main 

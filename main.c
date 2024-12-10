@@ -29,7 +29,7 @@ int main(){
    ini_poyo_chaine(tpoyo1, 4);
    ini_poyo_chaine(tpoyo2, 4);  
 
-   /* fonctionnement();  */
+   /* fonctionnement();  */ 
    jeu_1vs1(&gr1, &gr2, &je1, &je2, tpoyo1, tpoyo2); 
   
   MLV_wait_seconds(7);

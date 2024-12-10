@@ -22,10 +22,12 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
     bouton t_bouton_pause[3], t_bouton_save[5];
     hms chrono;
     struct timespec debut, fin, maintenant, dernier_avancement;
-    
+
+     chrono.milis = 0;
     chrono.secondes = 0;
     chrono.minutes = 0;
-    chrono.heures = 0;   
+    chrono.heures = 0;
+    
     MLV_clear_window(MLV_COLOR_BLACK);
     clock_gettime( CLOCK_REALTIME, &dernier_avancement );
     charger_img(images);
@@ -155,7 +157,8 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
     hms chrono;
     MLV_Image *images[NUM_IMAGES_1VS1];
     struct timespec debut, fin, maintenant, dernier_avancement;
-    
+
+    chrono.milis = 0;
     chrono.secondes = 0;
     chrono.minutes = 0;
     chrono.heures = 0;

@@ -472,8 +472,8 @@ int pause_jeu_1vs1(){
 
 /* --------------------------------------------------------------------- */
 
-void menu_choix_mode( bouton t_bouton_choix_mode[2] ){
-    char *nom_bouton_choix_mode[2] = {"SOLO", "VERSUS"};
+void menu_choix_mode( bouton t_bouton_choix_mode[3] ){
+    char *nom_bouton_choix_mode[3] = {"SOLO", "VERSUS", "QUIT"};
     int text_width, text_height, i;
     MLV_Font *police;
 
@@ -485,7 +485,7 @@ void menu_choix_mode( bouton t_bouton_choix_mode[2] ){
 
     police = MLV_load_font("squaretype_b.ttf", 60);
 
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 3; i++) {
         cree_bouton(&t_bouton_choix_mode[i], nom_bouton_choix_mode[i], LX / 2, 200 + i * 150, police);
         afficher_text(t_bouton_choix_mode[i], police);
     }
@@ -495,13 +495,13 @@ void menu_choix_mode( bouton t_bouton_choix_mode[2] ){
 }
 
 int choix_mode_jeu(){
-    bouton t_bouton_choix_mode[2];
+    bouton t_bouton_choix_mode[3];
     int pressed;
   
 
     menu_choix_mode(t_bouton_choix_mode);
 
-    pressed = clic_bouton(t_bouton_choix_mode, 2);
+    pressed = clic_bouton(t_bouton_choix_mode, 3);
     return pressed;
 }
 
@@ -543,6 +543,9 @@ void fonctionnement(){
 	gr2 = initialisation_grille(n, m);
 	ini_poyo_chaine(tpoyo2, 4);
 	jeu_1vs1(&gr1, &gr2, &j1, &j2, tpoyo1, tpoyo2);
+      }
+      else if(mode_jeu == 2){
+          retour_menu_p = 0;
       }
       break;
             

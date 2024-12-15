@@ -3,7 +3,7 @@ OPTION= -W -Wall -pedantic -std=gnu89 -O3
 OBJET= ./Objet/
 SOURCE= ./Source/
 
-Puyo_Puyo: $(OBJET)main.o $(OBJET)grille.o $(OBJET)pieces.o $(OBJET)affichage_mlv.o $(OBJET)ini_poyo.o $(OBJET)destruction.o $(OBJET)jeu.o $(OBJET)chrono.o $(OBJET)score.o $(OBJET)deplacement_1vs1.o $(OBJET)fin_partie.o $(OBJET)menu.o
+Puyo_Puyo: $(OBJET)main.o $(OBJET)animation.o $(OBJET)grille.o $(OBJET)pieces.o $(OBJET)affichage_mlv.o $(OBJET)ini_poyo.o $(OBJET)destruction.o $(OBJET)jeu.o $(OBJET)chrono.o $(OBJET)score.o $(OBJET)deplacement_1vs1.o $(OBJET)fin_partie.o $(OBJET)menu.o
 	$(CC) $(OPTION) `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` $^ `pkg-config --libs-only-l MLV` -lrt -o $@ -lMLV
 
 $(OBJET)main.o: $(SOURCE)main.c
@@ -43,11 +43,8 @@ $(OBJET)fin_partie.o: $(SOURCE)fin_partie.c
 $(OBJET)menu.o: $(SOURCE)menu.c
 	$(CC) $(OPTION) $^ -c -o $@
 
-anim: animation.o
-	$(CC) $(OPTION) `pkg-config --cflags MLV` `pkg-config --libs-only-other --libs-only-L MLV` $^ `pkg-config --libs-only-l MLV` -lrt -o $@ -lMLV
-
-animation.o: animation.c
-	$(CC) $(OPTION) $^ -c
+$(OBJET)animation.o: $(SOURCE)animation.c
+	$(CC) $(OPTION) $^ -c  -o $@
 
 clean:
 	rm -rf $(OBJET) *~  Puyo_Puyo anim

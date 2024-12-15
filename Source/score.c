@@ -123,35 +123,35 @@ void creation_malus(c_poyo *poyo_piege, grille *gr, int absisse){
 }
 
 
-/* faire une fonction qui verifie si un poyo est toucher par un decalage est si c'est le cas le deplacer
-   sur la gaguche ou la droute en fonction des dispo */
-void decalage(int absisse, grille *gr, c_poyo poyo){
+/* on fait decaler tout les poyos de la ligne du malus vers le haut*/
+void decalage(int abscisse, grille *gr, c_poyo *poyo){
   int i, tmp;
   for( i = 0 ; i <  gr -> n ; i++){
     /* on empêche de faire decaler le poyo actuel */
-    if( (gr -> mat[i][absisse] != 0) &&  !((poyo.p1.x == i && poyo.p1.y == absisse) || (poyo.p2.x == i && poyo.p2.y == absisse)) ){
-      tmp = gr -> mat[i][absisse];
-      gr -> mat[i - 2][absisse] = tmp;
-      gr -> mat[i][absisse] = 0;
+    if( (gr -> mat[i][abscisse] != 0) ){
+      if( poyo -> p1.x == i && poyo -> p1.y == abscisse){
+	gr -> mat[i][abscisse] = 0;
+	poyo -> p1.x -= 2;
+	poyo -> p2.x -= 2;
+      }else{	
+	tmp = gr -> mat[i][abscisse];
+	gr -> mat[i - 2][abscisse] = tmp;
+	gr -> mat[i][abscisse] = 0;
 
-      if ((poyo.p1.x == i - 2 && poyo.p1.y == absisse) || (poyo.p2.x == i - 2 && poyo.p2.y == absisse)){
-	poyo.p1.x += 2;
-	poyo.p2.x += 2;
       }
     }
   }
 }
 
 
-void appliquer_malus(int score, grille *gr, c_poyo poyo){
-  int absisse;
+void appliquer_malus(int score, grille *gr, c_poyo *poyo){
+  int abscisse;
   c_poyo poyo_piege;
-  absisse = 2;
-  /* rand()%( gr -> m);  */
-  if( score >= 4 ){
-    creation_malus( &poyo_piege, gr, absisse);
+  abscisse = rand()%( gr -> m);  
+  if( score >= 8 ){
+    creation_malus( &poyo_piege, gr, abscisse);
     affiche_c_poyo( &poyo_piege );
-    decalage( absisse, gr, poyo );
+    decalage( abscisse, gr, poyo );
     poyo_piege.apparait = 1;
     actualisation_poyo( &poyo_piege, gr);
   }

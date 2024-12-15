@@ -13,17 +13,19 @@
 #include "deplacement_1vs1.h"
 #include "fin_partie.h"
 #include "menu.h"
+#include "animation.h"
 
 void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
   int temps, duree, tmpscore = 0, vitesse, temps_ecoule, dest, est_save = 0;
-  MLV_Image *images[NUM_IMAGES];
+  MLV_Image *images[NUM_IMAGES], *croix[NUM_CROIX];
   hms chrono;
   struct timespec debut, fin, maintenant, dernier_avancement;
   
   ini_chrono( &chrono);
   MLV_clear_window(MLV_COLOR_BEIGE);
   clock_gettime( CLOCK_REALTIME, &dernier_avancement );
-  charger_img(images);
+  charger_croix( croix );
+  charger_img( images );
     
   while(1){
 
@@ -63,7 +65,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
     }
 
     /* affichage de la grille et des poyos */
-    aff_etat(*gr, *je, chrono, tpoyo[0], images);
+    aff_etat(*gr, *je, chrono, tpoyo[0], images, croix);
     aff_poyos(tpoyo, ptmp, images);
     
     printf("\n");
@@ -107,7 +109,7 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
     int temps, duree, tmpscore1 = 0, tmpscore2 = 0, vitesse, temps_ecoule, dest1, dest2, est_save1 = 0, est_save2 = 0;
     c_poyo ptmp1, ptmp2;
     hms chrono;
-    MLV_Image *images[NUM_IMAGES_1VS1];
+    MLV_Image *images[NUM_IMAGES_1VS1], *croix[NUM_CROIX];
     struct timespec debut, fin, maintenant, dernier_avancement;
 
     chrono.milis = 0;
@@ -119,7 +121,8 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
     initialisation_cpoyo_vide(&ptmp2);
     MLV_clear_window(MLV_COLOR_BLACK);
     clock_gettime( CLOCK_REALTIME, &dernier_avancement );
-    charger_img_1vs1(images);
+    charger_croix( croix );
+    charger_img_1vs1( images );
     
     while(1){
       /* permet de gerer le framrate */
@@ -176,7 +179,7 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
 
         /* affichage de la grille et des poyos */
         aff_grille( *gr1);
-        aff_1vs1_etat( *gr1, *gr2, *je1, *je2, chrono, tpoyo1[0], tpoyo2[0], images );
+        aff_1vs1_etat( *gr1, *gr2, *je1, *je2, chrono, tpoyo1[0], tpoyo2[0], images, croix );
     
         /* aff_poyos(tpoyo, &ptmp); */
         aff_1vs1_poyos(tpoyo1, tpoyo2, &ptmp1, &ptmp2, images);
@@ -202,12 +205,12 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
     
         if( tmpscore1 > 0 ){
             dest1 = 1;
-            appliquer_malus(tmpscore1, gr2, tpoyo2[0]);
+            appliquer_malus(tmpscore1, gr2, &tpoyo2[0]);
             calcule_score(tmpscore1, je1, chrono);   
         }
         if( tmpscore2 > 0 ){
             dest2 = 1;
-            appliquer_malus(tmpscore2, gr1, tpoyo1[0]);
+            appliquer_malus(tmpscore2, gr1, &tpoyo1[0]);
             calcule_score(tmpscore2, je2, chrono);   
         }
 

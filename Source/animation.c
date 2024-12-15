@@ -3,6 +3,8 @@
 #include <MLV/MLV_all.h>
 #include "types.h"
 
+/*
+
 int main(){
   MLV_Image* croix;
   MLV_Animation* animation;
@@ -29,7 +31,6 @@ int main(){
   images[0] = MLV_copy_partial_image( croix, 0, 0, w, h );
   images[1] = MLV_copy_partial_image( croix, w, 0, w, h );
   images[2] = MLV_copy_partial_image( croix, 0, h, w, h );
-  images[3] = MLV_copy_partial_image( croix, w, 0, w, h );
 
   animation = MLV_create_animation( nb_frames, nb_layer, nb_channels );
 
@@ -63,4 +64,37 @@ int main(){
   }
   MLV_free_window();
   exit(1);
+}
+
+*/
+
+int charger_croix( MLV_Image *croix[NUM_CROIX] ){
+  int i;
+  char *noms_croix[NUM_CROIX] = {
+    "./animation/croix_anime1.png",
+    "./animation/croix_anime2.png",
+    "./animation/croix_anime3.png"
+  };
+  for( i = 0 ; i < NUM_CROIX ; i++){
+    croix[i] = MLV_load_image(noms_croix[i]);
+    if( croix[i] == NULL ) {
+      fprintf(stderr, "Erreur lors du chargement de l'image : %s\n", noms_croix[i]);
+      return -1;
+    }
+    MLV_resize_image_with_proportions(croix[i], 40, 40);
+  }
+  return 1;
+}
+
+void animation_croix( hms chrono, MLV_Image *croix[NUM_CROIX], int x, int y ){
+  static int nb_img = 0;
+  
+  if ( chrono.milis % 15 == 0 ){
+    nb_img += 1;
+    if( nb_img >= 3 ){
+      nb_img = 0;
+    }
+   
+  }
+   MLV_draw_image(croix[nb_img], x, y );
 }

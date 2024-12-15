@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <MLV/MLV_all.h>
 #include "types.h"
+#include "animation.h"
 #include <string.h>
 #define TCUB 50
 #define TSUIV 40
@@ -40,7 +41,7 @@ void liberer_images(MLV_Image* images[NUM_IMAGES]){
   }
 }
 
-void aff_etat(grille gr, joueur je, hms chrono, c_poyo poyo, MLV_Image *images[NUM_IMAGES]){
+void aff_etat(grille gr, joueur je, hms chrono, c_poyo poyo, MLV_Image *images[NUM_IMAGES],  MLV_Image *croix[NUM_CROIX]){
   int i, j;
   char texte[100], score[10], chronometre[20];
 
@@ -59,8 +60,11 @@ void aff_etat(grille gr, joueur je, hms chrono, c_poyo poyo, MLV_Image *images[N
   for( i = 0 ; i < gr.n ; i++ ){
     for( j = 0; j < gr.m ; j++){
       if( i == 0 && (poyo.p1.x > 0 ) && (poyo.p2.x > 0 ) && (poyo.p1.y == j ||poyo.p2.y == j) ){
-	MLV_draw_filled_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_DARKRED);
+	
+	MLV_draw_filled_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_WHITE);
+	animation_croix( chrono, croix, 200+(j*TCUB) , 100+(i*TCUB) );
 	MLV_draw_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_BLACK);
+	
       }else{
 	MLV_draw_filled_rectangle( 200+(j*TCUB), 100+(i*TCUB), TCUB, TCUB, MLV_COLOR_WHITE);
 	if( gr.mat[i][j] > 0 ){
@@ -128,7 +132,7 @@ void liberer_images_1vs1(MLV_Image* images[NUM_IMAGES_1VS1]){
 }
 
 
-void aff_1vs1_etat(grille gr1, grille gr2, joueur je1, joueur je2, hms chrono, c_poyo poyo1, c_poyo poyo2, MLV_Image *images[NUM_IMAGES_1VS1]){
+void aff_1vs1_etat(grille gr1, grille gr2, joueur je1, joueur je2, hms chrono, c_poyo poyo1, c_poyo poyo2, MLV_Image *images[NUM_IMAGES_1VS1],  MLV_Image *croix[NUM_CROIX]){
   int i, j;
   char texte1[100], texte2[100], score1[10], score2[10], chronometre[20];
   
@@ -153,7 +157,10 @@ void aff_1vs1_etat(grille gr1, grille gr2, joueur je1, joueur je2, hms chrono, c
   for( i = 0 ; i < gr1.n ; i++ ){
     for( j = 0; j < gr1.m ; j++){
       if( i == 0 && (poyo1.p1.x > 0 ) && (poyo1.p2.x > 0 ) && (poyo1.p1.y == j || poyo1.p2.y == j) ){
-	MLV_draw_filled_rectangle( 100+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_DARKRED);
+
+	MLV_draw_filled_rectangle( 100+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_WHITE);
+	animation_croix( chrono, croix, 100+(j*TVS) , 100+(i*TVS) );
+
 	MLV_draw_rectangle( 100+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_GREY);
       }else	
 	MLV_draw_filled_rectangle( 100+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_WHITE);
@@ -168,8 +175,11 @@ void aff_1vs1_etat(grille gr1, grille gr2, joueur je1, joueur je2, hms chrono, c
 for( i = 0 ; i < gr2.n ; i++ ){
   for( j = 0; j < gr2.m ; j++){
     if( i == 0 && (poyo2.p1.x > 0 ) && (poyo2.p2.x > 0 ) && (poyo2.p1.y == j || poyo2.p2.y == j) ){
-      MLV_draw_filled_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_DARKRED );
-      MLV_draw_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_BLACK);
+
+      	MLV_draw_filled_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_WHITE);
+	animation_croix( chrono, croix, 500+(j*TVS) , 100+(i*TVS) );
+
+	MLV_draw_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_BLACK);
     }else{
       MLV_draw_filled_rectangle( 500+(j*TVS), 100+(i*TVS), TVS, TVS, MLV_COLOR_WHITE);
       if( gr2.mat[i][j] > 0){

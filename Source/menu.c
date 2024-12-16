@@ -24,12 +24,12 @@ int clic_bouton(bouton t_bouton[], int longueur){
     int i, s_x, s_y;
 
     MLV_wait_mouse(&s_x, &s_y);
-    for(i = 0; i < longueur; i++){
-        if(verif(t_bouton[i], s_x, s_y)){
+    for( i = 0; i < longueur; i++ ){
+        if( verif(t_bouton[i], s_x, s_y) == 1 ){
             return i;
         }
     }
-    return -1;
+    return i;
 }
 
 void cree_bouton(bouton *bouton, char* message, int x, int y, MLV_Font *police){
@@ -43,28 +43,28 @@ void cree_bouton(bouton *bouton, char* message, int x, int y, MLV_Font *police){
 }
 
 void afficher_text(bouton bouton , MLV_Font *police){
-    MLV_draw_adapted_text_box_with_font(bouton.x, bouton.y, bouton.txt, police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+    MLV_draw_adapted_text_box_with_font( bouton.x, bouton.y, bouton.txt, police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER );
 }
 
-void menu(bouton t_bouton_menu[4]){
-    char *nom_bouton[4] = {"START", "SAVE", "SCORE", "EXIT"}; 
+void menu(bouton t_bouton_menu[5]){
+    char *nom_bouton[5] = {"START", "SAVE", "RULES", "SCORE", "EXIT"}; 
     int text_width, text_height, i;
     MLV_Font *police;
 
     
     MLV_clear_window(MLV_COLOR_BEIGE);
-    police = MLV_load_font("squaretype_b.ttf", 90);
+    police = MLV_load_font("./game_over.ttf", 180);
     /* Titre */
 
     MLV_get_size_of_adapted_text_box_with_font("PUYO PUYO", police, 10, &text_width, &text_height); /* on récup la taille du texte écrit avec la largueur (width) et la hauteur (height) je traduis on sait jamais :) */
   
-    MLV_draw_adapted_text_box_with_font((LX - text_width) / 2, text_height / 3 /* pour le mettre en haut */, "PUYO PUYO", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+    MLV_draw_adapted_text_box_with_font((LX - text_width) / 2, text_height / 3 - 25 /* pour le mettre en haut */, "PUYO PUYO", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
 
-    police = MLV_load_font("squaretype_b.ttf", 60); /* je change la taille du texte pour faire une diff avec le titre */
+    police = MLV_load_font("./game_over.ttf", 100); /* je change la taille du texte pour faire une diff avec le titre */
 
     /* bouton menu départ */
-    for( i = 0 ; i < 4 ; i++ ){
-        cree_bouton(&t_bouton_menu[i], nom_bouton[i], LX / 2, 200 + i * 100, police); /* le 200 c'est pour faire commencer en dessous du titre et le 100 c'est le décalage entre les boutons */
+    for( i = 0 ; i < 5 ; i++ ){
+        cree_bouton(&t_bouton_menu[i], nom_bouton[i], LX / 2, 150 + i * 100, police); /* le 200 c'est pour faire commencer en dessous du titre et le 100 c'est le décalage entre les boutons */
         afficher_text(t_bouton_menu[i], police);
     }
 
@@ -79,13 +79,13 @@ void menu_save(bouton t_bouton_save[5]){
         
     MLV_clear_window(MLV_COLOR_BEIGE);
 
-    police = MLV_load_font("squaretype_b.ttf", 90);
+    police = MLV_load_font("./game_over.ttf", 180);
 
     /* Titre */
     MLV_get_size_of_adapted_text_box_with_font("SAVE", police, 10, &text_width, &text_height);
-    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 4, "SAVE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3 - 25, "SAVE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
 
-    police = MLV_load_font("squaretype_b.ttf", 50);
+    police = MLV_load_font("./game_over.ttf", 100);
     
     /* bouton save */
     for( i = 0 ; i < 5 ; i++){
@@ -101,11 +101,11 @@ void affiche_box( char *message, int secondes, int taille_police ){
   int text_w, text_h, text_x, text_y;
   MLV_Font *police;
   
-  police = MLV_load_font("squaretype_b.ttf", taille_police);
+  police = MLV_load_font("./game_over.ttf", taille_police);
   MLV_get_size_of_adapted_text_box_with_font(message, police, 10, &text_w, &text_h);
   
   text_x = (LX - text_w)/2;
-  text_y = (LY - text_h)/2;
+  text_y = (LY - text_h)/3;
 
   MLV_draw_adapted_text_box_with_font( text_x, text_y, message, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_COLOR_BISQUE, MLV_TEXT_CENTER);
   
@@ -240,29 +240,22 @@ int ecrasement_save(){
     MLV_clear_window(MLV_COLOR_BEIGE);
     MLV_draw_text(LX / 2, LY / 3, "Ecraser la sauvegarde ? (o/n)", MLV_COLOR_BLACK);
     MLV_actualise_window();
-
-    while(1){
-        MLV_wait_keyboard(&touche, NULL, NULL);
+    MLV_wait_keyboard(&touche, NULL, NULL);
         
-        if(touche == MLV_KEYBOARD_o){
-            return 1;
-        }
-        else if(touche  == MLV_KEYBOARD_n){
-            return 0;
-        }
-        else{
-            MLV_draw_text(LX / 2, LY / 3 + 20, "Entrez soit 'o' pour OUI ou 'n' pour NON \n", MLV_COLOR_BLACK);
-            MLV_actualise_window();
-        }
+    if(touche == MLV_KEYBOARD_o){
+        return 1;
     }
+    else if(touche  == MLV_KEYBOARD_n){
+        return 0;
+    }
+    return -1;
 }
 
-void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp){
+void gestion_save_pause(joueur *j, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp, int pressed){
     char *nom_save[4] = {"./Saves/save1.bin", "./Saves/save2.bin", "./Saves/save3.bin", "./Saves/save4.bin"};
-    int pressed, ecrase;
+    int ecrase;
     FILE *f;
-
-    pressed = clic_bouton(t_bouton_save, 4);
+    
     f = fopen(nom_save[pressed], "rb");
 
     if(f == NULL){
@@ -272,7 +265,7 @@ void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr, c_poyo t
     }
  
     else{
-         fclose(f);
+        fclose(f);
         ecrase = ecrasement_save();
         if(ecrase == 1){
             gr -> mat[tpoyo[0].p1.x][tpoyo[0].p1.y] = 0;
@@ -283,19 +276,171 @@ void gestion_save_pause(bouton t_bouton_save[5], joueur *j, grille *gr, c_poyo t
                 printf("Partie bien sauvegardé après confirmation d'écrasement \n");
             }
         }
-        else{
+        else if(ecrase == 0){
             printf("Annulation de l'écrasement \n");
+        }
+        else{
+            printf("Mauvaise touche \n");            
         }
     }
 }
-        
-                
-                
 
+
+void menu_rules_1_joueur(bouton *retour){
+    MLV_Font *police;
+    char touche_jeu[300], but_jeu[300];
+    char *nom_bouton_retour[1] = {"BACK"};
+    int text_width, text_height, image_width, image_height, i, j;
+    MLV_Image *image;
+
+    MLV_clear_window(MLV_COLOR_GREY);
+
+    police = MLV_load_font("./game_over.ttf", 150);
+
+    MLV_get_size_of_adapted_text_box_with_font("RULES 1 PLAYER", police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3 - 20, "RULES 1 PLAYER", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+
+    police = MLV_load_font("./game_over.ttf", 40);
+
+    sprintf(touche_jeu, "TOUCHE DE JEU \n \n DEPLACEMENT FLECHES DIRECTIONNELLES : {-  -}\n ACCELERER CHUTE FLECHE DU BAS : V \n SAUVEGARDE PIECE ESPACE \n PIVOTER GAUCHE : Q    PIVOTER DROITE : D \n POUR METTRE EN PAUSE : ECHAP \n POYO BLEU\n POYO JAUNE\n POYO ROUGE\n POYO VERT\n POYO VIOLET");
+    MLV_get_size_of_adapted_text_box_with_font(touche_jeu, police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font( 50, text_height / 3, touche_jeu, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+
+    sprintf(but_jeu, "BUT \n \n OBTENIR LE PLUS HAUT SCORE \n POUR GAGNER DES POINTS \n FAIRE AU MINIMUM \n UN BLOC DE 4 POYOS IDENTIQUES \n \n COMBO \n DESTRUCTION DE PLUSIEURS BLOCS DE COULEUR \n EN MEME TEMPS \n BLOC DE + DE 4 POYOS \n");
+    MLV_get_size_of_adapted_text_box_with_font(but_jeu, police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font( LX - text_width - 50, text_height / 3, but_jeu, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+    
+    police = MLV_load_font("./game_over.ttf", 80);
+
+    cree_bouton(retour, nom_bouton_retour[0], 60, 1, police);
+    afficher_text(*retour, police);
+    i = 408;
+    j = 560;
+
+    image = MLV_load_image("assets/poyo_bleu.png");
+
+    MLV_get_image_size(image, &image_width, &image_height);
+    
+    MLV_resize_image_with_proportions(image, 25, 25);
+    MLV_draw_image(image, LX - image_width - 560, LY - image_height - i);
+    MLV_free_image(image);
+    i -= 33;
+
+    image = MLV_load_image("assets/poyo_jaune.png");
+
+    MLV_get_image_size(image, &image_width, &image_height);
+    MLV_resize_image_with_proportions(image, 25, 25);
+    MLV_draw_image(image, LX - image_width - j, LY - image_height - i);
+    MLV_free_image(image);
+    i -= 33;
+
+    image = MLV_load_image("assets/poyo_rouge.png");
+
+    MLV_get_image_size(image, &image_width, &image_height);
+    MLV_resize_image_with_proportions(image, 25, 25);
+    MLV_draw_image(image, LX - image_width - j, LY - image_height - i);
+    i -= 33;
+    
+    image = MLV_load_image("assets/poyo_vert.png");
+
+    MLV_get_image_size(image, &image_width, &image_height);
+    MLV_resize_image_with_proportions(image, 25, 25);
+    MLV_draw_image(image, LX - image_width - j, LY - image_height - i);
+    MLV_free_image(image);
+    i -= 33;
+
+    image = MLV_load_image("assets/poyo_violet.png");
+
+    MLV_get_image_size(image, &image_width, &image_height);
+    MLV_resize_image_with_proportions(image, 25, 25);
+    MLV_draw_image(image, LX - image_width - j, LY - image_height - i);
+    MLV_free_image(image);
+
+    MLV_free_font(police);
+    MLV_actualise_window();
+}
+
+void menu_rules_2_joueur(bouton *retour){
+    MLV_Font *police;
+    char touche_jeu[500], but_jeu[300], specificite[300];
+    char *nom_bouton_retour[1] = {"BACK"};
+    int text_width, text_height, image_width, image_height, i;
+    MLV_Image *image;
+
+    MLV_clear_window(MLV_COLOR_GREY);
+
+    police = MLV_load_font("./game_over.ttf", 150);
+
+    MLV_get_size_of_adapted_text_box_with_font("RULES 2 PLAYERS", police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3 - 20, "RULES 2 PLAYERS", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+
+    police = MLV_load_font("./game_over.ttf", 30);
+
+    sprintf(touche_jeu, "JOUEUR 1 \n DEPLACEMENT\n GAUCHE : Q DROITE : D \n ACCELERER CHUTE : S \n SAUVEGARDE PIECE : Z \n PIVOTER GAUCHE : A    PIVOTER DROITE : E \n \n JOUEUR 2 \n DEPLACEMENT\n FLECHE DIRECTIONNELLES : >-  -< \n ACCELERER CHUTE FLECHE DU BAS : \\/ \n SAUVEGARDER PIECE : FLECHE DU HAUT /\\ \n PIVOTER GAUCHE : O    PIVOTER DROITE : P");
+    MLV_get_size_of_adapted_text_box_with_font(touche_jeu, police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font( 50, text_height / 3, touche_jeu, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+
+    sprintf(but_jeu, "BUT \n GAGNER LA PARTIE \n \n BASES DE JEU \n FAIRE MINIMUM 4 BLOCS DE POYOS\nDE MEME COULEUR POUR DESTRUCTION \n \n COMBO \n ENCHAINEMENT DE DESTRUCTIONS \n BLOC DE POYOS SUPERIEUR A 4 \n \n DONNER MALUS ( POYO NOIR ) \n  FAIRE COMBO");
+    MLV_get_size_of_adapted_text_box_with_font(but_jeu, police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font( LX - text_width - 50, text_height / 3, but_jeu, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+
+    sprintf(specificite, "BONUS \n SI LE JOUEUR POSE UN POYO EN  MEME  TEMPS  QUE  LA  CREATION  D'UN  COUPLE  DE  MALUS  ALORS LA PIECE DETRUIT LE MALUS \n A VOUS D'OBTENIR LE TIMING !");
+    MLV_get_size_of_adapted_text_box_with_font(specificite, police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font( 50, LY - text_height - 175, specificite, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+
+    police = MLV_load_font("./game_over.ttf", 80);
+
+    cree_bouton(retour, nom_bouton_retour[0], 60, 1, police);
+    afficher_text(*retour, police);
+
+    i = 0;
+    image = MLV_load_image("assets/poyo_noir.png");
+    MLV_get_image_size(image, &image_width, &image_height);
+    MLV_resize_image_with_proportions(image, 80, 80);
+    MLV_draw_image(image, (LX - image_width) / 2 - 55, (LY - image_height) / 4);
+    MLV_free_image(image);
+    
+
+    image = MLV_load_image("assets/poyo_bleu.png");
+    MLV_resize_image_with_proportions(image, 80, 80);
+    MLV_draw_image(image, (LX - image_width) / 2 + 30, (LY - image_height) / 4);
+    MLV_free_image(image);
+    i += 85;
+    
+
+    image = MLV_load_image("assets/poyo_jaune.png");
+    MLV_resize_image_with_proportions(image, 80, 80);
+    MLV_draw_image(image, (LX - image_width) / 2 - 55, (LY - image_height) / 4 + i);
+    MLV_free_image(image);
+    
+
+    image = MLV_load_image("assets/poyo_rouge.png");
+    MLV_resize_image_with_proportions(image, 80, 80);
+    MLV_draw_image(image, (LX - image_width) / 2 + 30, (LY - image_height) / 4 + i);
+    i += 85;
+    
+    
+    image = MLV_load_image("assets/poyo_vert.png");
+    MLV_resize_image_with_proportions(image, 80, 80);
+    MLV_draw_image(image, (LX - image_width) / 2 - 55, (LY - image_height) / 4 + i);
+    MLV_free_image(image);
+    
+
+    image = MLV_load_image("assets/poyo_violet.png");
+    MLV_resize_image_with_proportions(image, 80, 80);
+    MLV_draw_image(image, (LX - image_width) / 2 + 30, (LY - image_height) / 4 + i);
+    MLV_free_image(image);
+    
+
+    MLV_free_font(police);
+    MLV_actualise_window();
+}
+
+    
 void menu_score(bouton *retour){
     char *nom_bouton_score[10] = {"1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"};
     char affichage[200];
-    char *nom_bouton_retour[1] = {"RETOUR"};
+    char *nom_bouton_retour[1] = {"BACK"};
     tjoueur je_score;
     int text_width, text_height, i, k;
     MLV_Font *police;
@@ -304,30 +449,30 @@ void menu_score(bouton *retour){
 
     /* Police */
    
-    police = MLV_load_font("./squaretype_b.ttf", 40);;
+    police = MLV_load_font("./game_over.ttf", 180);
     
     /* Titre */
-    MLV_get_size_of_adapted_text_box_with_font("MEILLEURS SCORES", police, 10, &text_width, &text_height);
-    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3, "MEILLEURS SCORES", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+    MLV_get_size_of_adapted_text_box_with_font("HIGHT SCORES", police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3 - 25, "HIGHT SCORES", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
     
-    police = MLV_load_font("squaretype_b.ttf", 30);
+    police = MLV_load_font("./game_over.ttf", 70);
 
     k = 0;
 
-     printf("la\n");
+    printf("la\n");
     if( recup_score( "./Saves/score.bin", je_score) == -1 ){
       fprintf(stderr, "Erreur lors de la reccuperation de score\n");
       return ;
     }
-     printf("la\n");
+    printf("la\n");
     for( i = 0 ; i < 10 ; i++ ){
-        sprintf(affichage, "%s   // Score =  %d //  Pseudo = %s", nom_bouton_score[i], je_score[i].score, je_score[i].pseudo);
+        sprintf(affichage, "%s     //     Score =  %d     //     Pseudo = %s", nom_bouton_score[i], je_score[i].score, je_score[i].pseudo);
         MLV_get_size_of_adapted_text_box_with_font(affichage, police, 10, &text_width, &text_height);
-        MLV_draw_adapted_text_box_with_font( LX / 5, text_height / 3 + 80 + k, affichage, police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
-        k += 55;
+        MLV_draw_adapted_text_box_with_font( LX / 5, text_height / 3 + 100 + k, affichage, police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+        k += 50;
     }
 
-    police = MLV_load_font("squaretype_b.ttf", 30);
+    police = MLV_load_font("./game_over.ttf", 80);
 
     cree_bouton(retour, nom_bouton_retour[0],
                 60, /* pour pas que le bouton retour soit trop à gauche */
@@ -347,17 +492,17 @@ void menu_pause(bouton t_bouton_pause[3]){
     int text_width, text_height, i;
 
     MLV_clear_window(MLV_COLOR_BEIGE);
-    police = MLV_load_font("squaretype_b.ttf", 90);
+    police = MLV_load_font("./game_over.ttf", 180);
 
     /* Titre */
     MLV_get_size_of_adapted_text_box_with_font("PAUSE", police, 10, &text_width, &text_height);
-    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3, "PAUSE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3 - 25, "PAUSE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
         
-    police = MLV_load_font("squaretype_b.ttf", 50);
+    police = MLV_load_font("./game_over.ttf", 100);
      
     /* bouton pause */
     for( i = 0 ; i < 3 ; i++){
-        cree_bouton(&t_bouton_pause[i], nom_bouton_pause[i], LX / 2, 150 + i * 100, police);
+        cree_bouton(&t_bouton_pause[i], nom_bouton_pause[i], LX / 2, 200 + i * 100, police);
         afficher_text(t_bouton_pause[i], police);
     }
 
@@ -366,76 +511,70 @@ void menu_pause(bouton t_bouton_pause[3]){
 }
 
 int pause_jeu( joueur *je, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp){
-  MLV_Keyboard_button touche;
-  bouton t_bouton_pause[3], t_bouton_save[5];
-  int pressed;
+    MLV_Keyboard_button touche;
+    bouton t_bouton_pause[3], t_bouton_save[5];
+    int pressed, continuer = 1, quitter = 1;
 
-  if(MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == MLV_KEY){
-    if(touche == MLV_KEYBOARD_ESCAPE){
-      while(1){
-	menu_pause(t_bouton_pause);
-	pressed = clic_bouton(t_bouton_pause, 3);
-	switch(pressed){
-	case 0:
-	  printf("Le jeu se relance \n");
-	  /* pause = 0; */
-	  return 1;
-	  break;
+    if(MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == MLV_KEY){
+        if(touche == MLV_KEYBOARD_ESCAPE){
+            while(continuer == 1){
+                menu_pause(t_bouton_pause);
+                pressed = clic_bouton(t_bouton_pause, 3);
+                switch(pressed){
+                case 0:
+                    printf("Le jeu se relance \n");
+                    continuer = 0;
+                    quitter = 1;
+                    break;
 
-	case 1:
-	  /* enregistrement de la partie dans une save, faudra que je regarde */
-	  menu_save(t_bouton_save);
-	  pressed = clic_bouton(t_bouton_save, 5);
+                case 1:
+                    menu_save(t_bouton_save);
+                    pressed = clic_bouton(t_bouton_save, 5);
 
-	  if(pressed == 0){ /* save 1 */
-	    gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
-	  }
-	  else if(pressed == 1){ /* save 2 */
-	    gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
-	  }
-	  else if(pressed == 2){ /* save 3 */
-	    gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
-	  }
-	  else if(pressed == 3){ /* save 4 */
-	    gestion_save_pause(t_bouton_save, je, gr, tpoyo, ptmp);
-	  }
-	  else if(pressed == 4){
-	    printf("Retour menu principal \n");
-	 
-	    /*pause = 0;  pour l'instant ça relance la partie mais c'est temporaire */
-	  }
-                        
-	  break;
-	case 2:
-	  printf("Menu \n"); /* on quitte la partie et on attérit dans le menu principal */
-	     return 0;
-	  break;
-	}
-      }
+                    if(pressed < 4){
+                        gestion_save_pause(je, gr, tpoyo, ptmp, pressed);
+                    }
+                    else if(pressed == 4){
+                        printf("Retour menu pause \n");
+                    }                     
+                    break;
+          
+                case 2:
+                    printf("Menu \n");/* on quitte la partie et on attérit dans le menu principal */
+                    continuer = 0;
+                    quitter = 0;
+                    break;
+                }
+            }
+        }
     }
-  }
-  return 1;
+    if(quitter == 1){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 
 /* -----------------------------Pause de 1 VS 1-------------------------------------------------- */
 
 void menu_pause_1vs1(bouton t_bouton_pause[2]){
-    char *nom_bouton_pause[2] = {"RESUME", "QUIT"};
+    char *nom_bouton_pause[2] = {"RESUME", "BACK"};
     MLV_Font *police;
     int text_width, text_height, i;
 
     MLV_clear_window(MLV_COLOR_BEIGE);
-    police = MLV_load_font("squaretype_b.ttf", 90);
+    police = MLV_load_font("./game_over.ttf", 180);
 
     /* Titre */
     MLV_get_size_of_adapted_text_box_with_font("PAUSE", police, 10, &text_width, &text_height);
-    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3, "PAUSE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+    MLV_draw_adapted_text_box_with_font( (LX - text_width) / 2, text_height / 3 - 25, "PAUSE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
         
-    police = MLV_load_font("squaretype_b.ttf", 50);
+    police = MLV_load_font("./game_over.ttf", 100);
      
     /* bouton pause */
     for( i = 0 ; i < 2 ; i++){
-        cree_bouton(&t_bouton_pause[i], nom_bouton_pause[i], LX / 2, 150 + i * 100, police);
+        cree_bouton(&t_bouton_pause[i], nom_bouton_pause[i], LX / 2, 200 + i * 100, police);
         afficher_text(t_bouton_pause[i], police);
     }
 
@@ -444,46 +583,53 @@ void menu_pause_1vs1(bouton t_bouton_pause[2]){
 }
 
 int pause_jeu_1vs1(){
-  MLV_Keyboard_button touche;
-  bouton t_bouton_pause[2];
-  int pressed;
+    MLV_Keyboard_button touche;
+    bouton t_bouton_pause[2];
+    int pressed, continuer = 1, quitter = 1;
 
-  if(MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == MLV_KEY){
-    if(touche == MLV_KEYBOARD_ESCAPE){
-      while(1){
-	menu_pause_1vs1(t_bouton_pause);
-	pressed = clic_bouton(t_bouton_pause, 2);
-	switch(pressed){
-	case 0:
-	  printf("Le jeu se relance \n");
-	  return 1;
-	  break;
+    if(MLV_get_event(&touche, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == MLV_KEY){
+        if(touche == MLV_KEYBOARD_ESCAPE){
+            while(continuer == 1){
+                menu_pause_1vs1(t_bouton_pause);
+                pressed = clic_bouton(t_bouton_pause, 2);
+                switch(pressed){
+                case 0:
+                    printf("Le jeu se relance \n");
+                    continuer = 0;
+                    quitter = 1;
+                    break;
 
-	case 1:
-	  printf("Menu \n"); /* on quitte la partie et on attérit dans le menu principal */
-	  return 0;
-	  break;
-	}
-      }
+                case 1:
+                    printf("Menu \n"); /* on quitte la partie et on attérit dans le menu principal */
+                    continuer = 0;
+                    quitter = 0;
+                    break;
+                }
+            }
+        }
     }
-  }
-  return 1;
+    if(quitter == 1){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 
 /* --------------------------------------------------------------------- */
 
 void menu_choix_mode( bouton t_bouton_choix_mode[3] ){
-    char *nom_bouton_choix_mode[3] = {"SOLO", "VERSUS", "QUIT"};
+    char *nom_bouton_choix_mode[3] = {"SOLO", "VERSUS", "BACK"};
     int text_width, text_height, i;
     MLV_Font *police;
 
     MLV_clear_window(MLV_COLOR_BEIGE);
-    police = MLV_load_font("squaretype_b.ttf", 90);
+    police = MLV_load_font("./game_over.ttf", 180);
 
-    MLV_get_size_of_adapted_text_box_with_font("CHOISIR UN MODE", police, 10, &text_width, &text_height);
-    MLV_draw_adapted_text_box_with_font((LX - text_width) / 2, text_height / 3, "CHOISIR UN MODE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+    MLV_get_size_of_adapted_text_box_with_font("SELECT MODE", police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font((LX - text_width) / 2, text_height / 3 - 25, "SELECT MODE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
 
-    police = MLV_load_font("squaretype_b.ttf", 60);
+    police = MLV_load_font("./game_over.ttf", 100);
 
     for (i = 0; i < 3; i++) {
         cree_bouton(&t_bouton_choix_mode[i], nom_bouton_choix_mode[i], LX / 2, 200 + i * 150, police);
@@ -497,7 +643,6 @@ void menu_choix_mode( bouton t_bouton_choix_mode[3] ){
 int choix_mode_jeu(){
     bouton t_bouton_choix_mode[3];
     int pressed;
-  
 
     menu_choix_mode(t_bouton_choix_mode);
 
@@ -505,24 +650,56 @@ int choix_mode_jeu(){
     return pressed;
 }
 
+void menu_choix_regles( bouton t_bouton_choix_regles[3] ){
+    char *nom_bouton_choix_regles[3] = {"RULES", "RULES 1V1", "BACK"};
+    int text_width, text_height, i;
+    MLV_Font *police;
+
+     MLV_clear_window(MLV_COLOR_BEIGE);
+    police = MLV_load_font("./game_over.ttf", 180);
+
+    MLV_get_size_of_adapted_text_box_with_font("SELECT RULE", police, 10, &text_width, &text_height);
+    MLV_draw_adapted_text_box_with_font((LX - text_width) / 2, text_height / 3 - 25, "SELECT RULE", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+
+    police = MLV_load_font("./game_over.ttf", 100);
+
+    for (i = 0; i < 3; i++) {
+        cree_bouton(&t_bouton_choix_regles[i], nom_bouton_choix_regles[i], LX / 2, 200 + i * 150, police);
+        afficher_text(t_bouton_choix_regles[i], police);
+    }
+
+    MLV_free_font(police);
+    MLV_actualise_window();
+}
+
+
+int choix_regle(){
+    bouton t_bouton_choix_regles[3];
+    int pressed;
+
+    menu_choix_regles(t_bouton_choix_regles);
+
+    pressed = clic_bouton(t_bouton_choix_regles, 3);
+    return pressed;
+}
 
 void fonctionnement(){
-  bouton t_bouton_menu[4], t_bouton_save[5];
+  bouton t_bouton_menu[5], t_bouton_save[5];
   char *nom_save[4] = { "./Saves/save1.bin", "./Saves/save2.bin", "./Saves/save3.bin" ,"./Saves/save4.bin"};
   char text[200];
   bouton retour;
-  int pressed, mode_jeu; /* bouton pressé */
-  int n = 10, m = 6, ok = 1;
-  int retour_menu_p = 1;
+  int pressed, mode_jeu, regles;
+  int n = 10, m = 6;
+  int retour_menu_p = 1, retour_menu_regle = 1;
   grille gr1, gr2;
   joueur j1, j2;
   c_poyo tpoyo1[4], ptmp, tpoyo2[4];
 
   menu(t_bouton_menu);
   
-  while(ok == 1){
+  while(retour_menu_p == 1){
     menu(t_bouton_menu);
-    pressed = clic_bouton(t_bouton_menu, 4);
+    pressed = clic_bouton(t_bouton_menu, 5);
 
     switch(pressed){
     case 0:
@@ -561,10 +738,10 @@ void fonctionnement(){
 	    jeu(&gr1, &j1, tpoyo1, &ptmp);
 	    retour_menu_p = 0;
 	  }else{
-	    sprintf(text, "Il n'y a pas de donnée(s) de sauvegardes ici : Save %d", pressed+1);
-	    affiche_box(text, pressed, 20);
-	    retour_menu_p = 0;
-	  }
+              sprintf(text, "Il n'y a pas de donnée(s) de sauvegardes dans la Save %d", pressed+1);
+              affiche_box(text, pressed, 80);
+              retour_menu_p = 0;
+          }
 	}
 	else if(pressed == 4){
 	  printf("Menu principal \n");
@@ -574,18 +751,46 @@ void fonctionnement(){
       break;
             
     case 2:
-      printf("Menu score \n");
-      menu_score(&retour);
-      while(retour_menu_p == 1){
-	pressed = clic_bouton(&retour, 1);
-	if(pressed == 0){
-	  retour_menu_p = 0;
-	}
-      }
-      break;
+        while(retour_menu_regle == 1){
+            printf("Choix des règles \n");
+            regles = choix_regle();
+            
+            if(regles == 0){
+                printf("Règle mode solo \n");
+                menu_rules_1_joueur(&retour);
+                pressed = clic_bouton(&retour, 1);
+                if(pressed == 0){
+                    regles = -1;
+                }
+            }else if(regles == 1){
+                printf("Règle mode 1v1 \n");
+                menu_rules_2_joueur(&retour);
+                pressed = clic_bouton(&retour, 1);
+                if(pressed == 0){
+                    regles = -1;
+                }
+            }
+            else if(regles == 2){
+                retour_menu_regle = 0;
+                retour_menu_p = 0;
+            }
+        }
+        retour_menu_regle = 1;
+        break;
+        
     case 3:
-      printf("Au revoir \n");
-      return ;
+        printf("Menu score \n");
+        menu_score(&retour);
+        while(retour_menu_p == 1){
+            pressed = clic_bouton(&retour, 1);
+            if(pressed == 0){
+                retour_menu_p = 0;
+            }
+        }
+        break;
+    case 4:
+        printf("Au revoir \n");
+        return ;
     }
     retour_menu_p = 1;
   }

@@ -8,6 +8,7 @@
 #define TAILLE_PSEUDO 5
 #define NUM_IMAGES 5
 #define NUM_IMAGES_1VS1 6
+#define NUM_CROIX 3
 #define T_J 10
 
 typedef struct{

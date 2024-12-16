@@ -290,8 +290,15 @@ void menu_rules_1_joueur(bouton *retour){
     MLV_Font *police;
     char touche_jeu[300], but_jeu[300];
     char *nom_bouton_retour[1] = {"BACK"};
-    int text_width, text_height, image_width, image_height, i, j;
-    MLV_Image *image;
+    int text_width, text_height, image_width, image_height, x, y, i;
+    MLV_Image *images[NUM_IMAGES];
+    char *noms_images[NUM_IMAGES] = {
+        "./assets/poyo_bleu.png",
+        "./assets/poyo_jaune.png",
+        "./assets/poyo_rouge.png",
+        "./assets/poyo_vert.png",
+        "./assets/poyo_violet.png"
+    };
 
     MLV_clear_window(MLV_COLOR_GREY);
 
@@ -302,7 +309,7 @@ void menu_rules_1_joueur(bouton *retour){
 
     police = MLV_load_font("./game_over.ttf", 40);
 
-    sprintf(touche_jeu, "TOUCHE DE JEU \n \n DEPLACEMENT FLECHES DIRECTIONNELLES : {-  -}\n ACCELERER CHUTE FLECHE DU BAS : V \n SAUVEGARDE PIECE ESPACE \n PIVOTER GAUCHE : Q    PIVOTER DROITE : D \n POUR METTRE EN PAUSE : ECHAP \n POYO BLEU\n POYO JAUNE\n POYO ROUGE\n POYO VERT\n POYO VIOLET");
+    sprintf(touche_jeu, "TOUCHE DE JEU \n \n DEPLACEMENT FLECHES DIRECTIONNELLES : >-  -< \n ACCELERER CHUTE FLECHE DU BAS : \\/ \n SAUVEGARDE PIECE : ESPACE \n PIVOTER GAUCHE : Q    PIVOTER DROITE : D \n POUR METTRE EN PAUSE : ECHAP \n POYO BLEU\n POYO JAUNE\n POYO ROUGE\n POYO VERT\n POYO VIOLET");
     MLV_get_size_of_adapted_text_box_with_font(touche_jeu, police, 10, &text_width, &text_height);
     MLV_draw_adapted_text_box_with_font( 50, text_height / 3, touche_jeu, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
 
@@ -314,48 +321,19 @@ void menu_rules_1_joueur(bouton *retour){
 
     cree_bouton(retour, nom_bouton_retour[0], 60, 1, police);
     afficher_text(*retour, police);
-    i = 408;
-    j = 560;
-
-    image = MLV_load_image("assets/poyo_bleu.png");
-
-    MLV_get_image_size(image, &image_width, &image_height);
     
-    MLV_resize_image_with_proportions(image, 25, 25);
-    MLV_draw_image(image, LX - image_width - 560, LY - image_height - i);
-    MLV_free_image(image);
-    i -= 33;
+    x = 408;
+    y = 560;
 
-    image = MLV_load_image("assets/poyo_jaune.png");
-
-    MLV_get_image_size(image, &image_width, &image_height);
-    MLV_resize_image_with_proportions(image, 25, 25);
-    MLV_draw_image(image, LX - image_width - j, LY - image_height - i);
-    MLV_free_image(image);
-    i -= 33;
-
-    image = MLV_load_image("assets/poyo_rouge.png");
-
-    MLV_get_image_size(image, &image_width, &image_height);
-    MLV_resize_image_with_proportions(image, 25, 25);
-    MLV_draw_image(image, LX - image_width - j, LY - image_height - i);
-    i -= 33;
+    for( i = 0 ; i < NUM_IMAGES ; i++ ){
+        images[i] = MLV_load_image(noms_images[i]);
+        MLV_get_image_size(images[i], &image_width, &image_height);
+        MLV_resize_image_with_proportions(images[i], 25, 25);
+        MLV_draw_image(images[i], LX - image_width - y, LY - image_height - x);
+        x -= 33;
+        MLV_free_image(images[i]);
+    }
     
-    image = MLV_load_image("assets/poyo_vert.png");
-
-    MLV_get_image_size(image, &image_width, &image_height);
-    MLV_resize_image_with_proportions(image, 25, 25);
-    MLV_draw_image(image, LX - image_width - j, LY - image_height - i);
-    MLV_free_image(image);
-    i -= 33;
-
-    image = MLV_load_image("assets/poyo_violet.png");
-
-    MLV_get_image_size(image, &image_width, &image_height);
-    MLV_resize_image_with_proportions(image, 25, 25);
-    MLV_draw_image(image, LX - image_width - j, LY - image_height - i);
-    MLV_free_image(image);
-
     MLV_free_font(police);
     MLV_actualise_window();
 }
@@ -364,8 +342,16 @@ void menu_rules_2_joueur(bouton *retour){
     MLV_Font *police;
     char touche_jeu[500], but_jeu[300];
     char *nom_bouton_retour[1] = {"BACK"};
-    int text_width, text_height, image_width, image_height, i;
-    MLV_Image *image;
+    int text_width, text_height, image_width, image_height, x, i;
+    MLV_Image *images[6];
+    char *noms_images[6] = {
+        "./assets/poyo_noir.png",
+        "./assets/poyo_bleu.png",
+        "./assets/poyo_jaune.png",
+        "./assets/poyo_rouge.png",
+        "./assets/poyo_vert.png",
+        "./assets/poyo_violet.png"
+    };
 
     MLV_clear_window(MLV_COLOR_GREY);
 
@@ -389,44 +375,20 @@ void menu_rules_2_joueur(bouton *retour){
     cree_bouton(retour, nom_bouton_retour[0], 60, 1, police);
     afficher_text(*retour, police);
 
-    i = 0;
-    image = MLV_load_image("assets/poyo_noir.png");
-    MLV_get_image_size(image, &image_width, &image_height);
-    MLV_resize_image_with_proportions(image, 80, 80);
-    MLV_draw_image(image, (LX - image_width) / 2 - 55, (LY - image_height) / 4);
-    MLV_free_image(image);
-    
-
-    image = MLV_load_image("assets/poyo_bleu.png");
-    MLV_resize_image_with_proportions(image, 80, 80);
-    MLV_draw_image(image, (LX - image_width) / 2 + 30, (LY - image_height) / 4);
-    MLV_free_image(image);
-    i += 85;
-    
-
-    image = MLV_load_image("assets/poyo_jaune.png");
-    MLV_resize_image_with_proportions(image, 80, 80);
-    MLV_draw_image(image, (LX - image_width) / 2 - 55, (LY - image_height) / 4 + i);
-    MLV_free_image(image);
-    
-
-    image = MLV_load_image("assets/poyo_rouge.png");
-    MLV_resize_image_with_proportions(image, 80, 80);
-    MLV_draw_image(image, (LX - image_width) / 2 + 30, (LY - image_height) / 4 + i);
-    i += 85;
-    
-    
-    image = MLV_load_image("assets/poyo_vert.png");
-    MLV_resize_image_with_proportions(image, 80, 80);
-    MLV_draw_image(image, (LX - image_width) / 2 - 55, (LY - image_height) / 4 + i);
-    MLV_free_image(image);
-    
-
-    image = MLV_load_image("assets/poyo_violet.png");
-    MLV_resize_image_with_proportions(image, 80, 80);
-    MLV_draw_image(image, (LX - image_width) / 2 + 30, (LY - image_height) / 4 + i);
-    MLV_free_image(image);
-    
+    x = 0;
+    for( i = 0 ; i < 6 ; i++ ){
+        images[i] = MLV_load_image(noms_images[i]);
+        MLV_get_image_size(images[i], &image_width, &image_height);
+        MLV_resize_image_with_proportions(images[i], 80, 80);
+        if(i % 2 == 0){
+            MLV_draw_image(images[i], (LX - image_width) / 2 - 55, (LY - image_height) / 4 + x);
+        }
+        else if(i % 2 != 0){
+            MLV_draw_image(images[i], (LX - image_width) / 2 + 30, (LY - image_height) / 4 + x);
+            x += 85;
+        }
+        MLV_free_image(images[i]);
+    }    
 
     MLV_free_font(police);
     MLV_actualise_window();

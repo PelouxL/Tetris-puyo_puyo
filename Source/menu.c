@@ -362,7 +362,7 @@ void menu_rules_1_joueur(bouton *retour){
 
 void menu_rules_2_joueur(bouton *retour){
     MLV_Font *police;
-    char touche_jeu[500], but_jeu[300], specificite[300];
+    char touche_jeu[500], but_jeu[300];
     char *nom_bouton_retour[1] = {"BACK"};
     int text_width, text_height, image_width, image_height, i;
     MLV_Image *image;
@@ -383,10 +383,6 @@ void menu_rules_2_joueur(bouton *retour){
     sprintf(but_jeu, "BUT \n GAGNER LA PARTIE \n \n BASES DE JEU \n FAIRE MINIMUM 4 BLOCS DE POYOS\nDE MEME COULEUR POUR DESTRUCTION \n \n COMBO \n ENCHAINEMENT DE DESTRUCTIONS \n BLOC DE POYOS SUPERIEUR A 4 \n \n DONNER MALUS ( POYO NOIR ) \n  FAIRE COMBO");
     MLV_get_size_of_adapted_text_box_with_font(but_jeu, police, 10, &text_width, &text_height);
     MLV_draw_adapted_text_box_with_font( LX - text_width - 50, text_height / 3, but_jeu, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
-
-    sprintf(specificite, "BONUS \n SI LE JOUEUR POSE UN POYO EN  MEME  TEMPS  QUE  LA  CREATION  D'UN  COUPLE  DE  MALUS  ALORS LA PIECE DETRUIT LE MALUS \n A VOUS D'OBTENIR LE TIMING !");
-    MLV_get_size_of_adapted_text_box_with_font(specificite, police, 10, &text_width, &text_height);
-    MLV_draw_adapted_text_box_with_font( 50, LY - text_height - 175, specificite, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
 
     police = MLV_load_font("./game_over.ttf", 80);
 

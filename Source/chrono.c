@@ -1,3 +1,5 @@
+#ifndef _CHRONO_C_
+#define _CHRONO_C_
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -5,7 +7,6 @@
 #include "math.h"
 
 /* definition d'un chronometre */
-
 void chronometre(hms * chrono){
     if( chrono -> milis < 59){
         chrono -> milis += 1;
@@ -24,7 +25,7 @@ void chronometre(hms * chrono){
     }
 }
 
-
+/* inttialisation du type chrono */
 void ini_chrono( hms *chrono){
     chrono -> milis = 0;
     chrono -> secondes = 0;
@@ -32,6 +33,7 @@ void ini_chrono( hms *chrono){
     chrono -> heures = 0;
 }
 
+/* toutes les 30s augmente le niveau de la grille */
 void gestion_niveau_grille(grille *gr, hms chrono){
     static int dernier_avancement = 0;
     int temps_ecoule;
@@ -45,14 +47,15 @@ void gestion_niveau_grille(grille *gr, hms chrono){
 }
 
 
-
+/* accelere la vitesse de jeu */
 int gestion_vitesse_grille(grille *gr){
     int vitesse;
     vitesse = 1000 - (pow(gr -> niveau,0.75) * 100);
     return vitesse;
 }
 
-    
+#endif
+
 
     
     

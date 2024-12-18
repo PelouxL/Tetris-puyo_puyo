@@ -1,3 +1,5 @@
+#ifndef _SCORE_H_
+#define _SCORE_H_
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +13,7 @@
 void calcule_score(int destruction, joueur *je, hms chrono){
     int total = 0;
     total = chrono.milis + chrono.secondes + destruction *(chrono.minutes * 1.5) + 100000 * chrono.heures;
+    /* ne peut pas depasser le maximum autorise */
     if(je -> score + total < 99999999 ){
       je -> score += total;
     }
@@ -109,7 +112,7 @@ int tri_insertion( char *nom, joueur nouveau_score, tjoueur je_score ){
     
 }
 
-/* ------------------- peut-être le changer de module ? -------*/
+/* initialise une piece malus */
 void creation_malus(c_poyo *poyo_piege, grille *gr, int absisse){
   initialisation_cpoyo_vide( poyo_piege);
   poyo_piege -> p1.couleur = 6;
@@ -144,6 +147,7 @@ void decalage(int abscisse, grille *gr, c_poyo *poyo){
 }
 
 
+/* applique au joueur adverse */
 void appliquer_malus(int score, grille *gr, c_poyo *poyo){
   int abscisse;
   c_poyo poyo_piege;
@@ -157,5 +161,4 @@ void appliquer_malus(int score, grille *gr, c_poyo *poyo){
   }
 }
 
-
-    
+#endif

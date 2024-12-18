@@ -1,3 +1,5 @@
+#ifndef _AFFICHAGE_MLV_C_
+#define _AFFICHAGE_MLV_C_
 #include <stdio.h>
 #include <stdlib.h>
 #include <MLV/MLV_all.h>
@@ -41,6 +43,7 @@ void liberer_images(MLV_Image* images[NUM_IMAGES]){
   }
 }
 
+/* affiche état de la grille */
 void aff_etat(grille gr, joueur je, hms chrono, c_poyo poyo, MLV_Image *images[NUM_IMAGES],  MLV_Image *croix[NUM_CROIX]){
   int i, j;
   char texte[100], score[10], chronometre[20];
@@ -51,12 +54,13 @@ void aff_etat(grille gr, joueur je, hms chrono, c_poyo poyo, MLV_Image *images[N
   sprintf(score,"%d", je.score);
   strcat(texte, score);
 
-  
+  /* affiche chronometre */
   sprintf(chronometre, "%d:%d:%d:%d", chrono.heures, chrono.minutes, chrono.secondes, chrono.milis);
   MLV_draw_adapted_text_box(600 ,10, chronometre ,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
   
   MLV_draw_adapted_text_box(50,390, texte,10,  MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER); /* affichage du score du joueur */
 
+  /* affichage chaque case de la grille */
   for( i = 0 ; i < gr.n ; i++ ){
     for( j = 0; j < gr.m ; j++){
       if( i == 0 && (poyo.p1.x > 0 ) && (poyo.p2.x > 0 ) && (poyo.p1.y == j ||poyo.p2.y == j) ){
@@ -76,10 +80,11 @@ void aff_etat(grille gr, joueur je, hms chrono, c_poyo poyo, MLV_Image *images[N
   }
 }
 
-
+/* affichage des prochains poyos et du couple de poyo sauvegarde */
 void aff_poyos(c_poyo *tpoyo, c_poyo *sauvegarde, MLV_Image *images[NUM_IMAGES]){
     int i;
 
+    /* affichage des suivants */
     for(i = 0 ; i < 3 ; i++ ){
       MLV_draw_image( images[ (tpoyo[i + 1].p2.couleur) - 1 ] ,  700, 200+(i*110));
       MLV_draw_image( images[ (tpoyo[i + 1].p1.couleur) - 1 ] ,  700, 250+(i*110));
@@ -89,6 +94,7 @@ void aff_poyos(c_poyo *tpoyo, c_poyo *sauvegarde, MLV_Image *images[NUM_IMAGES])
     MLV_draw_text_box( 100, 100, 100, 20, "Sauvegarde", 10, MLV_COLOR_GREY, MLV_COLOR_BISQUE, MLV_COLOR_BLACK, MLV_TEXT_CENTER, MLV_HORIZONTAL_CENTER, MLV_VERTICAL_CENTER);
     MLV_draw_rectangle(100,  120, 100, 120, MLV_COLOR_BLACK);
 
+    /* affichage couple sauvegarde */
     if( sauvegarde -> p1.couleur > 0 ){
       if( sauvegarde -> p2.couleur != 0 ){
 	MLV_draw_image( images[ (sauvegarde -> p2.couleur) - 1 ] , 125, 130);
@@ -207,9 +213,9 @@ void aff_1vs1_poyos(c_poyo *tpoyo1, c_poyo *tpoyo2,  c_poyo *sauvegarde1, c_poyo
   if( sauvegarde1 -> p1.couleur > 0 ){
     if( sauvegarde1 -> p2.couleur != 0 ){
 
-      MLV_draw_image( images[ (sauvegarde1 -> p1.couleur) - 1],  30, 140); 
+      MLV_draw_image( images[ (sauvegarde1 -> p2.couleur) - 1],  30, 180); 
     }
-    MLV_draw_image( images[ (sauvegarde1 -> p2.couleur) - 1],  30, 180); 
+    MLV_draw_image( images[ (sauvegarde1 -> p1.couleur) - 1],  30, 140); 
   }
 
   /* ----------------------------------- j2 --------------------------------------------------- */
@@ -224,9 +230,11 @@ void aff_1vs1_poyos(c_poyo *tpoyo1, c_poyo *tpoyo2,  c_poyo *sauvegarde1, c_poyo
 
   if( sauvegarde2 -> p1.couleur > 0 ){
     if( sauvegarde2 -> p2.couleur != 0 ){
-      MLV_draw_image( images[ (sauvegarde2 -> p1.couleur) - 1],  430, 140); 
+      MLV_draw_image( images[ (sauvegarde2 -> p2.couleur) - 1],  430, 180); 
     }
-    MLV_draw_image( images[ (sauvegarde2 -> p2.couleur) - 1],  430, 180); 
+    MLV_draw_image( images[ (sauvegarde2 -> p1.couleur) - 1],  430, 140); 
   }
    
 }
+
+#endif

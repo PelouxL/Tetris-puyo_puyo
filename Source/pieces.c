@@ -1,3 +1,5 @@
+#ifndef _PIECE_C_
+#define _PIECE_C_
 #include <stdlib.h>
 #include <stdio.h>
 #include "types.h"
@@ -12,7 +14,7 @@ void apparition_piece(c_poyo * p, grille *gr){
   p -> apparait = 1;
 }
 
-
+/* actualise les poyos dans la grille */
 void actualisation_poyo(c_poyo *p, grille *gr){
   if( p -> apparait == 1){
     gr -> mat[p -> p1.x][p -> p1.y] = p -> p1.couleur;
@@ -21,7 +23,7 @@ void actualisation_poyo(c_poyo *p, grille *gr){
     }
   }
   
-} /* pas sur de l'utilité de cette, peux surement être supprimer pour en modif une autre */
+}
 
 int peux_bouger_droite(poyo p, grille gr){
   if( gr.mat[p.x][p.y+1] == 0 && p.y < gr.m-1 ){
@@ -44,7 +46,7 @@ int peux_bouger_bas(poyo p, grille gr){
   return 0;
 }
 
-
+/* permet de savoir comment sont positionnes les poyos */
 int disposition(c_poyo p){
   if( p.p1.x >= p.p2.x ){
     if( p.p1.y < p.p2.y ){ /* p2 a gauche de p1 */
@@ -60,7 +62,7 @@ int disposition(c_poyo p){
   return 4; /* p2 en dessous de p1 */
 }
 
-
+/* permet de faire descendre la piece */
 void avancement_piece(c_poyo * p, grille *gr){
   int d = -1;
   if( p -> p2.fantome == 1 ){
@@ -322,9 +324,7 @@ void deplacement(c_poyo *p, grille *gr){
 
 /* -------------------------------- fin des definition de deplacement -------------------------------------*/
 
-/* PROBLEME lors de la recuperation d'un poyo separer, il est encore EXISTANT a corriger ! */
-/* ok A OPTIMISER !!!, il suffit surement de mettre juste un poyo tmp */
-/* qu'on initialise a p1, et on change en fonction de si il est poser ou non */
+/* permet de sauvegarder une piece separee ou non */
 c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save ){
   c_poyo cptmp;
   /* permet de savoir quel poyo va être vide */
@@ -413,5 +413,9 @@ c_poyo sauvegarde_poyos(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *
   poyo_sauvegarde.p1.y = 0;
   poyo_sauvegarde.p2.x = -1;
   poyo_sauvegarde.p2.y = -1;
+  poyo_sauvegarde.p2.pos = 0;
+  poyo_sauvegarde.p1.pos = 0; 
   return poyo_sauvegarde;
 }
+
+#endif

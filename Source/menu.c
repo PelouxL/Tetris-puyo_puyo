@@ -1,3 +1,5 @@
+#ifndef _MENU_C_
+#define _MENU_C_
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -11,7 +13,7 @@
 #include "destruction.h"
 #include "score.h"
 
-
+/* verifie si on clique sur un bouton */
 int verif(bouton bouton, int coord_x, int coord_y){
     if((coord_x > bouton.x && coord_x < bouton.x + bouton.largeur) && (coord_y > bouton.y && coord_y < bouton.y + bouton.hauteur)){
         return 1;
@@ -19,7 +21,7 @@ int verif(bouton bouton, int coord_x, int coord_y){
     return 0;
 }
 
-
+/* renvoie la valeur bouton clique */
 int clic_bouton(bouton t_bouton[], int longueur){
     int i, s_x, s_y;
 
@@ -32,6 +34,7 @@ int clic_bouton(bouton t_bouton[], int longueur){
     return i;
 }
 
+/* cree un bouton */
 void cree_bouton(bouton *bouton, char* message, int x, int y, MLV_Font *police){
     int largeur, hauteur;
     MLV_get_size_of_adapted_text_box_with_font(message, police, 10, &largeur, &hauteur);
@@ -42,10 +45,12 @@ void cree_bouton(bouton *bouton, char* message, int x, int y, MLV_Font *police){
     strcpy(bouton -> txt, message);    
 }
 
+/* affiche le texte dun bouton */
 void afficher_text(bouton bouton , MLV_Font *police){
     MLV_draw_adapted_text_box_with_font( bouton.x, bouton.y, bouton.txt, police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER );
 }
 
+/* affichage du menu principal */
 void menu(bouton t_bouton_menu[5]){
     char *nom_bouton[5] = {"START", "SAVE", "RULES", "SCORE", "EXIT"}; 
     int text_width, text_height, i;
@@ -53,18 +58,19 @@ void menu(bouton t_bouton_menu[5]){
 
     
     MLV_clear_window(MLV_COLOR_BEIGE);
-    police = MLV_load_font("./game_over.ttf", 180);
-    /* Titre */
 
-    MLV_get_size_of_adapted_text_box_with_font("PUYO PUYO", police, 10, &text_width, &text_height); /* on récup la taille du texte écrit avec la largueur (width) et la hauteur (height) je traduis on sait jamais :) */
+    /* Titre */
+    police = MLV_load_font("./game_over.ttf", 180);
+
+    MLV_get_size_of_adapted_text_box_with_font("PUYO PUYO", police, 10, &text_width, &text_height);
   
-    MLV_draw_adapted_text_box_with_font((LX - text_width) / 2, text_height / 3 - 25 /* pour le mettre en haut */, "PUYO PUYO", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
+    MLV_draw_adapted_text_box_with_font((LX - text_width) / 2, text_height / 3 - 25, "PUYO PUYO", police, 10, MLV_ALPHA_TRANSPARENT, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
 
     police = MLV_load_font("./game_over.ttf", 100); /* je change la taille du texte pour faire une diff avec le titre */
 
     /* bouton menu départ */
     for( i = 0 ; i < 5 ; i++ ){
-        cree_bouton(&t_bouton_menu[i], nom_bouton[i], LX / 2, 150 + i * 100, police); /* le 200 c'est pour faire commencer en dessous du titre et le 100 c'est le décalage entre les boutons */
+        cree_bouton(&t_bouton_menu[i], nom_bouton[i], LX / 2, 150 + i * 100, police);
         afficher_text(t_bouton_menu[i], police);
     }
 
@@ -97,6 +103,7 @@ void menu_save(bouton t_bouton_save[5]){
     MLV_actualise_window();
 }
 
+/* permet dafficher une texte box */
 void affiche_box( char *message, int secondes, int taille_police ){
   int text_w, text_h, text_x, text_y;
   MLV_Font *police;
@@ -115,7 +122,7 @@ void affiche_box( char *message, int secondes, int taille_police ){
 
 }
   
-
+/* lit le fichier binaire et recupere les informations */
 int charger_save(char *nom, joueur *jr, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp){
   FILE * f;
   int i;
@@ -175,6 +182,7 @@ int charger_save(char *nom, joueur *jr, grille *gr, c_poyo tpoyo[4], c_poyo *ptm
   return 1;
 }
 
+/* ecrit le fichier binaire de sauvegarde */
 int save_partie(char *nom, joueur *jr, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp){
     FILE *f;
     int i;
@@ -251,6 +259,7 @@ int ecrasement_save(){
     return -1;
 }
 
+/* fonctionnement pour ecrasement et enregistrement dans les saves apres pause */
 void gestion_save_pause(joueur *j, grille *gr, c_poyo tpoyo[4], c_poyo *ptmp, int pressed){
     char *nom_save[4] = {"./Saves/save1.bin", "./Saves/save2.bin", "./Saves/save3.bin", "./Saves/save4.bin"};
     int ecrase;
@@ -309,6 +318,7 @@ void menu_rules_1_joueur(bouton *retour){
 
     police = MLV_load_font("./game_over.ttf", 40);
 
+    /* regle de jeu */
     sprintf(touche_jeu, "TOUCHE DE JEU \n \n DEPLACEMENT FLECHES DIRECTIONNELLES : >-  -< \n ACCELERER CHUTE FLECHE DU BAS : \\/ \n SAUVEGARDE PIECE : ESPACE \n PIVOTER GAUCHE : Q    PIVOTER DROITE : D \n POUR METTRE EN PAUSE : ECHAP \n POYO BLEU\n POYO JAUNE\n POYO ROUGE\n POYO VERT\n POYO VIOLET");
     MLV_get_size_of_adapted_text_box_with_font(touche_jeu, police, 10, &text_width, &text_height);
     MLV_draw_adapted_text_box_with_font( 50, text_height / 3, touche_jeu, police, 10, MLV_COLOR_BLACK, MLV_COLOR_BLACK, MLV_ALPHA_TRANSPARENT, MLV_TEXT_CENTER);
@@ -321,7 +331,7 @@ void menu_rules_1_joueur(bouton *retour){
 
     cree_bouton(retour, nom_bouton_retour[0], 60, 1, police);
     afficher_text(*retour, police);
-    
+
     x = 408;
     y = 560;
 
@@ -641,6 +651,7 @@ int choix_regle(){
     return pressed;
 }
 
+/* permet de gerer les menus du jeu */
 void fonctionnement(){
   bouton t_bouton_menu[5], t_bouton_save[5];
   char *nom_save[4] = { "./Saves/save1.bin", "./Saves/save2.bin", "./Saves/save3.bin" ,"./Saves/save4.bin"};
@@ -665,6 +676,7 @@ void fonctionnement(){
       mode_jeu = choix_mode_jeu();
       if( mode_jeu == 0){
 	printf("Mode SOLO\n");
+        j1.score = 0;
 	initialisation_cpoyo_vide(&ptmp);
 	gr1 = initialisation_grille(n, m);
 	ini_poyo_chaine(tpoyo1, 4);
@@ -754,3 +766,4 @@ void fonctionnement(){
   }
 }
 
+#endif

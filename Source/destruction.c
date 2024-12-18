@@ -1,11 +1,12 @@
+#ifndef _DESTRUCTION_C_
+#define _DESTRUCTION_C_
 #include <stdlib.h>
 #include <stdio.h>
 #include "types.h"
 #include "ini_poyo.h"
 #include <MLV/MLV_all.h>
 
-
-
+/* permet de savoir si une coordonnee a deja ete visite */
 int est_deja_visiter( coordonne *est_visiter, int taille_visiter, coordonne coord){
     int i;
     for( i = 0 ; i < taille_visiter ; i++ ){
@@ -16,7 +17,7 @@ int est_deja_visiter( coordonne *est_visiter, int taille_visiter, coordonne coor
     return 0;
 }
 
-
+/* prend 2 tableaux, les fusionnent et verifie les doublons */
 void fusion_coord(coordonne *tcord1, coordonne *tcord2, int *taille1, int taille2){
   int i, j, ajout;
 
@@ -37,6 +38,7 @@ void fusion_coord(coordonne *tcord1, coordonne *tcord2, int *taille1, int taille
   
 
 /* très content de cette fonction */
+/* verifie tous les poyos adjacents de memes couleurs */
 int est_a_coter(poyo *p, grille *gr, coordonne *tcoord, coordonne *est_visiter, int taille_visiter){
     int i, indice = 0;
     coordonne tmp;
@@ -55,9 +57,6 @@ int est_a_coter(poyo *p, grille *gr, coordonne *tcoord, coordonne *est_visiter, 
 
             
             if (!est_deja_visiter(est_visiter, taille_visiter, tmp)){
-                
-                printf("Vérification de la case (%d, %d) - ", tmp.x, tmp.y);
-                printf("Couleur trouvée: %d, Couleur cible: %d\n", gr->mat[tmp.x][tmp.y], p->couleur);
                 tcoord[indice] = tmp;
                 indice++;
             }
@@ -66,6 +65,7 @@ int est_a_coter(poyo *p, grille *gr, coordonne *tcoord, coordonne *est_visiter, 
     return indice;
 }
 
+/* fais un tableau de coordonnes des poyos de meme couleur cote a cote */
 int recup_coord(poyo *p, grille *gr, coordonne *tcord){
     int taille_nouvelle , taille_visiter = 1, indice = 1, i;
     coordonne est_visiter[100], nouvelle_coord[100];
@@ -84,12 +84,14 @@ int recup_coord(poyo *p, grille *gr, coordonne *tcord){
         for( i = 0 ; i < indice ; i++){
             tmp.x = tcord[i].x;
             tmp.y = tcord[i].y;
-            tmp.couleur = p -> couleur;
+            if(p -> couleur > 0){
+                tmp.couleur = p -> couleur;
 
             taille_nouvelle = est_a_coter( &tmp, gr, nouvelle_coord, est_visiter, taille_visiter);
             fusion_coord(tcord, nouvelle_coord, &indice, taille_nouvelle);
 
             fusion_coord(est_visiter, nouvelle_coord, &taille_visiter, taille_nouvelle);
+            }
             
         }
             
@@ -100,13 +102,11 @@ int recup_coord(poyo *p, grille *gr, coordonne *tcord){
 }
 
 
-/* penser a comment gerer le score */
+/* fais destruction des poyos */
 int destruction(coordonne *tcord, grille *gr, int taille_t){
   int i;
   if( taille_t >= 4 ){
-    printf("Destruction d'un groupe de %d Poyos.\n", taille_t);
     for( i = 0 ; i < taille_t ; i++){
-      printf("(%d, %d)\n", tcord[i].x, tcord[i].y);
       gr -> mat[tcord[i].x][tcord[i].y] = 0;
     }
   }else{
@@ -115,6 +115,7 @@ int destruction(coordonne *tcord, grille *gr, int taille_t){
   return taille_t;
 }
 
+/* fais la chute des poyos apres une destruction */
 void chutte_destruction(grille *gr){
   int i, j, k;
   /* on verifie pour chaque case du tableau */
@@ -136,6 +137,7 @@ void chutte_destruction(grille *gr){
   }
 }
 
+/* si destruction relance le principe de destruction */
 int post_destruction( grille *gr ){
   int taille_tcordall, detruite = 0, i, j;
   coordonne tcordall[100];
@@ -159,12 +161,13 @@ int post_destruction( grille *gr ){
   return detruite;
 }
 
+/* gestion de la chute et de la destruction */
 int chute_et_destruction(c_poyo *tpoyo, grille *gr){
   int nb_dest1, nb_dest2, taille_tcord1 = 0, taille_tcord2 = 0, scorefac = 1, scoredest = 0, tmprecup, tot = 0;
   coordonne tcord1[100],tcord2[100];
     
   /* principe des coordonnées et de la destruction */
-  if(tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1 ){
+  if( tpoyo[0].p1.pos == 1 && tpoyo[0].p2.pos == 1){
     nb_dest1 = 0;
     nb_dest2 = 0;
     taille_tcord1 = recup_coord(&tpoyo[0].p1, gr, tcord1);           
@@ -195,3 +198,4 @@ int chute_et_destruction(c_poyo *tpoyo, grille *gr){
 }
 	      
 	    
+#endif

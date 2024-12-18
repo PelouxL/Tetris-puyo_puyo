@@ -32,7 +32,6 @@ typedef struct{
   int apparait;
 }c_poyo;
 
-
 typedef struct{
   char pseudo[TAILLE_PSEUDO];
   int score;

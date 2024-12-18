@@ -1,3 +1,5 @@
+#ifndef _DEPLACEMENT_1VS1_C
+#define _DEPLACEMENT_1VS1_C
 #include <stdio.h>
 #include <stdlib.h>
 #include <MLV/MLV_all.h>
@@ -8,6 +10,7 @@
 
 /* --------------------------- definition des fonction de deplacement du j1  ------------------------- */
 
+/* pivote la piece a droite du joueur 1 */
 void pivot_droit_j1(c_poyo *p, grille *gr){
   int d;
   d = disposition(*p);
@@ -46,6 +49,7 @@ void pivot_droit_j1(c_poyo *p, grille *gr){
   }
 }
 
+/* pivote la piece a gauche du joueur 1 */
 void pivot_gauche_j1(c_poyo *p, grille *gr){
   int d;
   d = disposition(*p);
@@ -84,6 +88,7 @@ void pivot_gauche_j1(c_poyo *p, grille *gr){
   }
 }
 
+/* deplace la piece a droite du joueur 1 */
 void deplacement_droit_j1( c_poyo *p, grille *gr){
   int d;
   poyo *ptmp = &p -> p1;
@@ -126,8 +131,7 @@ void deplacement_droit_j1( c_poyo *p, grille *gr){
   }
 }	
 
-
-
+/* deplace la piece a gauche du joueur 1 */
 void deplacement_gauche_j1( c_poyo *p, grille *gr){
   int d;
   poyo *ptmp = &p -> p1;
@@ -170,7 +174,7 @@ void deplacement_gauche_j1( c_poyo *p, grille *gr){
   }
 }	
 
-
+/* accelere la descente de la piece du joueur 1 */
 void deplacement_bas_j1( c_poyo *p, grille *gr){
   int d;
   poyo *ptmp = &p -> p1;
@@ -213,6 +217,7 @@ void deplacement_bas_j1( c_poyo *p, grille *gr){
   }
 }
 
+/* tous les deplacements de joueur 1 */
 void deplacement_j1(c_poyo *p, grille *gr){
     static int tmp_passer = 0;
     int tmp_act, attente;
@@ -232,9 +237,12 @@ void deplacement_j1(c_poyo *p, grille *gr){
     }
 }
 
+/* sauvegarde la piece du joueur 1 */
 c_poyo sauvegarde_poyos_j1(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, int *est_save1){
     c_poyo cptmp;
     /* permet de savoir quel poyo va être vide */
+
+    
     
     if( MLV_get_keyboard_state(MLV_KEYBOARD_z) == MLV_PRESSED && *est_save1 == 0){
         *est_save1 = 1;
@@ -264,7 +272,7 @@ c_poyo sauvegarde_poyos_j1(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, in
                     roulement_poyo(tpoyo, gr);
                 }
             }else{
-                /* deux pieces imcomplette s'echange */
+                /* deux pieces imcomplete s'echange */
                 if ( (poyo_sauvegarde.p2.couleur == 0 || poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0].p2.pos == 1) {
                     cptmp.p1 = tpoyo[0].p1;
                     cptmp.p2.couleur = 0;
@@ -275,7 +283,7 @@ c_poyo sauvegarde_poyos_j1(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, in
                    
                 
                 }
-                /* deux pieces imcomplette s'echange */
+                /* deux pieces imcomplete s'echange */
                 else if( (poyo_sauvegarde.p1.couleur == 0 ||  poyo_sauvegarde.p1.couleur == 0 ) && tpoyo[0].p1.pos == 1) {
                     cptmp.p1 = tpoyo[0].p2;
                     cptmp.p2.couleur = 0;
@@ -318,6 +326,8 @@ c_poyo sauvegarde_poyos_j1(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, in
     poyo_sauvegarde.p1.y = 0;
     poyo_sauvegarde.p2.x = -1;
     poyo_sauvegarde.p2.y = -1;
+    poyo_sauvegarde.p2.pos = 0;
+    poyo_sauvegarde.p1.pos = 0;
     return poyo_sauvegarde;
 }
 
@@ -636,6 +646,9 @@ c_poyo sauvegarde_poyos_j2(c_poyo *tpoyo, c_poyo poyo_sauvegarde, grille *gr, in
     poyo_sauvegarde.p1.y = 0;
     poyo_sauvegarde.p2.x = -1;
     poyo_sauvegarde.p2.y = -1;
+    poyo_sauvegarde.p2.pos = 0;
+    poyo_sauvegarde.p1.pos = 0;
     return poyo_sauvegarde;
 }
 
+#endif

@@ -1,6 +1,5 @@
-#ifndef GRILLE_H
-#define GRILLE_H
-
+#ifndef _GRILLE_H_
+#define _GRILLE_H_
 
 /* affiche la grille de jeu sur le terminal */
 void aff_grille(grille gr);

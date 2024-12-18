@@ -1,3 +1,5 @@
+#ifndef _FIN_PARTIE_C_
+#define _FIN_PARTIE_C_
 #include <stdlib.h>
 #include <stdio.h>
 #include <MLV/MLV_all.h>
@@ -5,6 +7,7 @@
 #include "score.h"
 #include "destruction.h"
 
+/* verifie si la partie est terminee */
 int verif_fin( c_poyo poyo, grille gr ){
   int j;
   /* on verifie si un poyo a ete poser a l'endroit de l'initialisation */
@@ -16,8 +19,8 @@ int verif_fin( c_poyo poyo, grille gr ){
   
   return 0;
 }
-/* permet de finir une partie et de mettre a jour le tableau score */
 
+/* permet de finir une partie et de mettre a jour le tableau score */
 int fin_solo( c_poyo poyo, joueur je, grille gr, int dest ){
   tjoueur tmp_tjoueur;
   char *pseudo = NULL;
@@ -26,7 +29,7 @@ int fin_solo( c_poyo poyo, joueur je, grille gr, int dest ){
     MLV_clear_window(MLV_COLOR_BEIGE);
 
     /* boite pour ecrire le pseudo */
-    MLV_wait_input_box( 100, 100, 300, 50,  MLV_COLOR_WHITE, MLV_COLOR_BLACK, MLV_COLOR_WHITE, "Entrez votre pseudo : ", &pseudo );
+    MLV_wait_input_box( LX / 2 - 100, LY / 2 - 100, 300, 50,  MLV_COLOR_WHITE, MLV_COLOR_BLACK, MLV_COLOR_WHITE, "Entrez votre pseudo de 4 lettres max : ", &pseudo );
     
     /* on verifie si il y a une erreur */
     if (pseudo == NULL) {
@@ -34,7 +37,9 @@ int fin_solo( c_poyo poyo, joueur je, grille gr, int dest ){
       return -1;
     }
 
+    /* permet de recopier le pseudo marque par le joueur dans sa structure */
     strncpy(je.pseudo, pseudo, sizeof(je.pseudo) - 1);
+    /* gestion de la taille du pseudo */
     je.pseudo[sizeof(je.pseudo) - 1] = '\0'; 
 
     free(pseudo );
@@ -88,3 +93,5 @@ int fin_1vs1( c_poyo poyo1, c_poyo poyo2, joueur je1, joueur je2, grille gr1, gr
   /* la partie n'est pas fini */
   return 0;
 }
+
+#endif

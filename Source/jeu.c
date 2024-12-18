@@ -26,7 +26,7 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
   clock_gettime( CLOCK_REALTIME, &dernier_avancement );
   charger_croix( croix );
   charger_img( images );
-    
+  
   while(1){
 
     dest = 0;
@@ -67,13 +67,10 @@ void jeu(grille *gr, joueur *je, c_poyo tpoyo[4], c_poyo *ptmp){
     /* affichage de la grille et des poyos */
     aff_etat(*gr, *je, chrono, tpoyo[0], images, croix);
     aff_poyos(tpoyo, ptmp, images);
-    
-    printf("\n");
 
     deplacement(&tpoyo[0], gr);
     *ptmp = sauvegarde_poyos(tpoyo, *ptmp, gr, &est_save);
     
-    affiche_c_poyo(&tpoyo[0]);
     actualisation_poyo(&tpoyo[0], gr);
 
     /* principe des coordonnées, destruction et destrucion */
@@ -178,23 +175,17 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
         }
 
         /* affichage de la grille et des poyos */
-        aff_grille( *gr1);
         aff_1vs1_etat( *gr1, *gr2, *je1, *je2, chrono, tpoyo1[0], tpoyo2[0], images, croix );
     
         /* aff_poyos(tpoyo, &ptmp); */
         aff_1vs1_poyos(tpoyo1, tpoyo2, &ptmp1, &ptmp2, images);
-    
-        printf("\n");
 
         deplacement_j1(&tpoyo1[0], gr1);
         deplacement_j2(&tpoyo2[0], gr2);
     
         ptmp1 = sauvegarde_poyos_j1(tpoyo1, ptmp1, gr1, &est_save1);
         ptmp2 = sauvegarde_poyos_j2(tpoyo2, ptmp2, gr2, &est_save2);
-
-        /* c koi ca deja */
-        affiche_c_poyo(&tpoyo1[0]);
-    
+        
         actualisation_poyo(&tpoyo1[0], gr1);
         actualisation_poyo(&tpoyo2[0], gr2);
 
@@ -213,8 +204,7 @@ void jeu_1vs1(grille *gr1, grille *gr2, joueur *je1, joueur *je2, c_poyo tpoyo1[
             appliquer_malus(tmpscore2, gr1, &tpoyo1[0]);
             calcule_score(tmpscore2, je2, chrono);   
         }
-
-        printf("%d et %d\n", dest1, dest2);
+        
         if( fin_1vs1( tpoyo1[0], tpoyo2[0], *je1, *je2, *gr1, *gr2, dest1, dest2) == 1){
             return ;
         }

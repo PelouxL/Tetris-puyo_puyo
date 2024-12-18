@@ -1,7 +1,10 @@
+#ifndef _GRILLE_C_
+#define _GRILLE_C_
 #include <stdlib.h>
 #include <stdio.h>
 #include "types.h"
 
+/* affiche grille sur terminal */
 void aff_grille(grille gr){
   int i,j;
   for(i = 0 ; i < gr.n ; i++){
@@ -12,6 +15,7 @@ void aff_grille(grille gr){
   }
 }
 
+/* initialise la structure de la grille */
 grille initialisation_grille( int n, int m){
   int i, j;
   grille gr;
@@ -26,6 +30,6 @@ grille initialisation_grille( int n, int m){
   return gr;
 }
 
-
+#endif
 
 

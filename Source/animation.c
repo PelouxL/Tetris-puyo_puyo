@@ -1,3 +1,5 @@
+#ifndef _ANIMATION_C_
+#define _ANIMATION_C_
 #include <stdlib.h>
 #include <stdio.h>
 #include <MLV/MLV_all.h>
@@ -68,6 +70,7 @@ int main(){
 
 */
 
+/* charge les frames de lanimation */
 int charger_croix( MLV_Image *croix[NUM_CROIX] ){
   int i;
   char *noms_croix[NUM_CROIX] = {
@@ -86,6 +89,7 @@ int charger_croix( MLV_Image *croix[NUM_CROIX] ){
   return 1;
 }
 
+/* toutes les 15 frames on affiche une nouvelle frame */
 void animation_croix( hms chrono, MLV_Image *croix[NUM_CROIX], int x, int y ){
   static int nb_img = 0;
   
@@ -98,3 +102,5 @@ void animation_croix( hms chrono, MLV_Image *croix[NUM_CROIX], int x, int y ){
   }
    MLV_draw_image(croix[nb_img], x, y );
 }
+
+#endif
